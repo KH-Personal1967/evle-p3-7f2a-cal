@@ -1190,6 +1190,36 @@ function App(){
     })();
   },[]);
 
+   
+// AUTO-REFRESH USEEFFECT
+useEffect(() => {
+  const base = SAVE_SERVICE_BASE.replace(/\/+$/, "");
+  const intervalMs = 120000;
+
+  const tick = async () => {
+    if (editMode || editing || saveBusy) return;
+
+    try {
+      const ev = await fetchJson(`${base}/events`);
+      if (ev?.events && ev.updatedUtc && (!sharedUpdatedUtc || new Date(ev.updatedUtc) > new Date(sharedUpdatedUtc))) {
+        setEvents(ev.events);
+        setSharedUpdatedUtc(ev.updatedUtc);
+
+        const maxId = ev.events.reduce((m,x)=>Math.max(m, Number(x.id)||0), 0);
+        setNextId(Math.max(300, maxId+1));
+      }
+    } catch {}
+
+    try {
+      const c = await fetchJson(`${base}/cats`);
+      if (c && typeof c === "object") setCats(c);
+    } catch {}
+  };
+
+  const id = setInterval(tick, intervalMs);
+  return () => clearInterval(id);
+}, [editMode, editing, saveBusy, sharedUpdatedUtc]);
+
   // Keep filters in sync with cats (add new keys)
   useEffect(()=>{
     setFilters(prev=>{
