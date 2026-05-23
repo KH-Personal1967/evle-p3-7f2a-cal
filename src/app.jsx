@@ -1759,9 +1759,4 @@ function Panel({events,dark,filters,lookahead,setLookahead,editMode,onEdit,today
   );
 }
 
-/* ============================
-   BOOTSTRAP
-   ============================ */
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+export default App;
