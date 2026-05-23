@@ -5,7 +5,7 @@
    - No localStorage dependence
 */
 
-const { useState, useMemo, useEffect, useRef, useContext, createContext } = React;
+import React, { useState, useMemo, useEffect, useRef, useContext, createContext } from "react";
 
 /* ============================
    CONFIG
