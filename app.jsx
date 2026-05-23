@@ -17,7 +17,7 @@ const { useState, useMemo, useEffect, useRef, useContext, createContext } = Reac
 //   PUT  {base}/events  (JSON body) with header X-Editor-Key
 //   GET  {base}/cats    -> { ...catsObject... }
 //   PUT  {base}/cats    (JSON body) with header X-Editor-Key
-const SAVE_SERVICE_BASE = "https://evle-calendar-api.newbauer.workers.dev/";
+const SAVE_SERVICE_BASE = "https://evle-calendar-api.newbauer.workers.dev";
 
 // Casual edit protection only (prevents accidental edits).
 // Not a security boundary (view-source reveals it).
