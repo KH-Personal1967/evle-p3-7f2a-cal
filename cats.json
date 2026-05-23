@@ -1,17 +1,62 @@
 {
-  "holiday": {"label":"Holiday","hex":"#64748b"},
-  "freeze": {"label":"File Freeze","hex":"#ef4444"},
-  "disc_freeze":{"label":"Discipline Freeze","hex":"#f97316"},
-  "milestone":{"label":"Milestone / Submittal","hex":"#f59e0b"},
-  "rollplot":{"label":"Roll Plots","hex":"#2563eb"},
-  "kh_review":{"label":"KH Consistency Review","hex":"#10b981"},
-  "idr":{"label":"IDR Roll Plots / Memo","hex":"#8b5cf6"},
-  "plans_qc":{"label":"Plans QC / QA","hex":"#ec4899"},
-  "bod":{"label":"BOD","hex":"#a78bfa"},
-  "st_review":{"label":"ST Review","hex":"#14b8a6"},
-  "comment":{"label":"Comment Resolution","hex":"#6366f1"},
-  "row":{"label":"ROW","hex":"#94a3b8"},
-  "stn_wb":{"label":"Station Workbook / WP QC","hex":"#84cc16"},
-  "mor":{"label":"MOR Meetings / Memo","hex":"#d97706"},
-  "meeting":{"label":"Meeting / Workshop","hex":"#f43f5e"}
+  "holiday": {
+    "label": "Holiday",
+    "hex": "#64748b"
+  },
+  "freeze": {
+    "label": "File Freeze",
+    "hex": "#ef4444"
+  },
+  "disc_freeze": {
+    "label": "Discipline Freeze",
+    "hex": "#f97316"
+  },
+  "milestone": {
+    "label": "Milestone / Submittal",
+    "hex": "#f59e0b"
+  },
+  "rollplot": {
+    "label": "Roll Plots",
+    "hex": "#2563eb"
+  },
+  "kh_review": {
+    "label": "KH Consistency Review",
+    "hex": "#10b981"
+  },
+  "idr": {
+    "label": "IDR Roll Plots / Memo",
+    "hex": "#8b5cf6"
+  },
+  "plans_qc": {
+    "label": "Plans QC / QA",
+    "hex": "#ec4899"
+  },
+  "bod": {
+    "label": "BOD",
+    "hex": "#a78bfa"
+  },
+  "st_review": {
+    "label": "ST Review",
+    "hex": "#14b8a6"
+  },
+  "comment": {
+    "label": "Comment Resolution",
+    "hex": "#6366f1"
+  },
+  "row": {
+    "label": "ROW",
+    "hex": "#94a3b8"
+  },
+  "stn_wb": {
+    "label": "Station Workbook / WP QC",
+    "hex": "#84cc16"
+  },
+  "mor": {
+    "label": "MOR Meetings / Memo",
+    "hex": "#d97706"
+  },
+  "meeting": {
+    "label": "Meeting / Workshop",
+    "hex": "#f43f5e"
+  }
 }
