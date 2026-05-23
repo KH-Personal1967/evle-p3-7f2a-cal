@@ -1,0 +1,6 @@
+{
+  "updatedUtc": "2026-05-21T00:00:00Z",
+  "events": [
+    { "id": 1, "label": "Draft Internal Roll Plots Due", "start": "2026-05-15", "end": "2026-05-15", "cat": "rollplot", "crit": true }
+  ]
+}
