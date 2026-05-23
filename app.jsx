@@ -1391,7 +1391,7 @@ useEffect(() => {
 
   return(
     <CatsCtx.Provider value={cats}>
-      <div style={{fontFamily:"'IBM Plex Sans','Segoe UI',sans-serif",background:th.bg,color:th.text,height:"100%",display:"flex",flexDirection:"column",fontSize:14}}>
+      <div style={{fontFamily:"'IBM Plex Sans','Segoe UI',sans-serif",background:th.bg,color:th.text,height:"100vh",display:"flex",flexDirection:"column",overflow:"hidden",fontSize:14}}>
 
         {/* TOPBAR */}
         <div className="noprint" style={{display:"flex",alignItems:"center",gap:10,padding:"10px 18px",background:th.card,borderBottom:`1px solid ${th.border}`,flexWrap:"wrap",flexShrink:0}}>
