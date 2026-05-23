@@ -1,0 +1,10 @@
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans","Segoe UI",sans-serif;
+  font-size: 14px;
+}
