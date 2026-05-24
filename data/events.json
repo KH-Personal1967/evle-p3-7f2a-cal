@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-21T00:00:00Z",
+  "updatedUtc": "2026-05-24T21:28:44.236Z",
   "events": [
     {
       "id": 1,
@@ -11,7 +11,7 @@
     },
     {
       "id": 2,
-      "label": "O&M Meetings \u2013 ST Ops & Maintenance",
+      "label": "O&M Meetings – ST Ops & Maintenance",
       "start": "2026-05-18",
       "end": "2026-05-22",
       "cat": "meeting",
@@ -27,7 +27,7 @@
     },
     {
       "id": 4,
-      "label": "O&M Meetings \u2013 ST Ops & Maintenance",
+      "label": "O&M Meetings – ST Ops & Maintenance",
       "start": "2026-05-26",
       "end": "2026-05-29",
       "cat": "meeting",
@@ -291,7 +291,7 @@
     },
     {
       "id": 37,
-      "label": "IDR Roll Plots Due \u2013 Virtual Review",
+      "label": "IDR Roll Plots Due – Virtual Review",
       "start": "2027-04-22",
       "end": "2027-04-22",
       "cat": "idr",
@@ -843,7 +843,7 @@
     },
     {
       "id": 106,
-      "label": "Revise & Resubmit \u2013 Non-Compliance",
+      "label": "Revise & Resubmit – Non-Compliance",
       "start": "2027-12-17",
       "end": "2027-12-17",
       "cat": "milestone",
@@ -864,6 +864,14 @@
       "end": "2027-12-25",
       "cat": "holiday",
       "crit": false
+    },
+    {
+      "label": "",
+      "start": "2026-05-24",
+      "end": "2026-05-24",
+      "cat": "milestone",
+      "crit": true,
+      "id": 300
     }
   ]
 }
