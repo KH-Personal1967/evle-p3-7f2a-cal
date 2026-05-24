@@ -11,7 +11,7 @@ import React, { useState, useMemo, useEffect, useRef, useContext, createContext 
    CONFIG
    ============================ */
 
-// Set this to your deployed Save Service base URL (Cloudflare Worker / Azure Function).
+// Set this to your deployed Save Service base URL (Cloudflare Worker).
 // Must implement:
 //   GET  {base}/events  -> { updatedUtc, events: [...] }
 //   PUT  {base}/events  (JSON body) with header X-Editor-Key
@@ -400,8 +400,10 @@ function EventBar({bar,dark,onClick}){
       title={ev.label+(ev.start!==ev.end?durLabel(ev.start,ev.end):"")}
       style={{
         position:"absolute",
-        left:`${colStart*100/7}%`,
-        width:`${(colEnd-colStart+1)*100/7}%`,
+        left: `${colStart * 100 / 7}%`,
+        right: `${(6 - colEnd) * 100 / 7}%`,
+        width: "auto",
+        boxSizing: "border-box",
         top:track*LH,
         height:LH-2,
         background:dark?`${hex}2e`:`${hex}20`,
@@ -488,7 +490,7 @@ function WeekRow({week,events,dark,onSelect,editMode,onEdit}){
       <div style={{position:"relative",height:eaH,flexShrink:0,overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,display:"grid",gridTemplateColumns:"repeat(7,1fr)",zIndex:0,pointerEvents:"none"}}>
           {[0,1,2,3,4,5,6].map(i=>(
-            <div key={i} style={{borderRight:`1px solid ${th.grid}`}} />
+            <div key={i} style={{borderRight:`1px solid ${th.border}`}} />
           ))}
         </div>
         {visible.map(bar=>(
