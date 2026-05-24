@@ -596,17 +596,18 @@ function PasswordModal({onSuccess,onClose,dark}){
           onChange={e=>setPw(e.target.value)}
           onKeyDown={e=>e.key==="Enter"&&attempt()}
           placeholder="Password"
-          style={{
-            width:"100%",
-            background:th.card2,
-            border:`1px solid ${err?"#ef4444":th.border}`,
-            borderRadius:6,
-            padding:"9px 12px",
-            color:th.text,
-            fontSize:14,
-            outline:"none",
-            marginBottom:err?6:14
-          }}
+         style={{
+           width:"100%",
+           boxSizing:"border-box",
+           background:th.card2,
+           border:`1px solid ${err?"#ef4444":th.border}`,
+           borderRadius:6,
+           padding:"9px 12px",
+           color:th.text,
+           fontSize:14,
+           outline:"none",
+           marginBottom:err?6:14
+         }}
         />
         {err && <div style={{fontSize:12,color:"#ef4444",marginBottom:10}}>Incorrect password. Try again.</div>}
         <div style={{display:"flex",gap:9}}>
