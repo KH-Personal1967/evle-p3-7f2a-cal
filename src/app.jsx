@@ -691,7 +691,9 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
     color:th.text,
     fontSize:13,
     outline:"none",
-    width:"100%"
+    width:"100%",
+    boxSizing:"border-box",
+    minWidth:0
   };
 
   return(
@@ -702,7 +704,15 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
         <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:5}}>Event Name</label>
         <input value={label} onChange={e=>setLabel(e.target.value)} style={{...inp,marginBottom:12}} />
 
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12}}>
+        <div style={{
+          display:"grid",
+          gridTemplateColumns:"minmax(0,1fr) minmax(0,1fr)",
+          columnGap:14,
+          rowGap:12,
+          marginBottom:12,
+          width:"100%",
+          boxSizing:"border-box"
+        }}>
           <div>
             <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:5}}>Start</label>
             <input type="date" value={start} onChange={e=>setStart(e.target.value)} style={inp}/>
