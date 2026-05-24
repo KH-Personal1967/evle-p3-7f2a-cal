@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-24T21:28:44.236Z",
+  "updatedUtc": "2026-05-24T21:28:55.823Z",
   "events": [
     {
       "id": 1,
@@ -866,7 +866,7 @@
       "crit": false
     },
     {
-      "label": "",
+      "label": "Test",
       "start": "2026-05-24",
       "end": "2026-05-24",
       "cat": "milestone",
