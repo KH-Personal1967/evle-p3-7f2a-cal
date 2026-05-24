@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-24T21:28:55.823Z",
+  "updatedUtc": "2026-05-24T22:00:00.188Z",
   "events": [
     {
       "id": 1,
@@ -872,6 +872,14 @@
       "cat": "milestone",
       "crit": true,
       "id": 300
+    },
+    {
+      "label": "Do stuff",
+      "start": "2026-05-25",
+      "end": "2026-06-03",
+      "cat": "rollplot",
+      "crit": false,
+      "id": 301
     }
   ]
 }
