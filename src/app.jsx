@@ -506,7 +506,7 @@ function WeekRow({week,events,dark,onSelect,editMode,onEdit}){
       <div style={{flex:1,position:"relative"}}>
         <div style={{position:"absolute",inset:0,display:"grid",gridTemplateColumns:"repeat(7,1fr)",pointerEvents:"none"}}>
           {[0,1,2,3,4,5,6].map(i=>(
-            <div key={i} style={{borderRight:`1px solid ${th.grid}`}} />
+            <div key={i} style={{borderRight:`1px solid ${th.border}`}} />
           ))}
         </div>
       </div>
