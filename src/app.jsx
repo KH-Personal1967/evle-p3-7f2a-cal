@@ -466,6 +466,7 @@ function WeekRow({week,events,dark,onSelect,editMode,onEdit}){
                 alignItems:"center",
                 justifyContent:"space-between",
                 padding:"0 6px",
+                boxSizing:"border-box",
                 background:day.isToday
                   ? (dark?"rgba(59,130,246,0.12)":"rgba(59,130,246,0.09)")
                   : isWknd ? th.wkndBg : th.card,
@@ -528,7 +529,7 @@ function MonthGrid({year,month,events,dark,onSelect,editMode,onEdit,todayStr}){
       flexDirection:"column",
       boxShadow:dark?"0 2px 12px rgba(0,0,0,.4)":"0 1px 6px rgba(0,0,0,.08)"
     }}>
-      <div style={{background:th.hdrBg,padding:"9px 14px",flexShrink:0}}>
+      <div style={{background:th.hdrBg,padding:"9px 14px",boxSizing:"border-box",flexShrink:0}}>
         <span style={{fontWeight:700,fontSize:16,color:th.hdrText,letterSpacing:"-.01em"}}>
           {MN[month]} {year}
         </span>
@@ -539,6 +540,7 @@ function MonthGrid({year,month,events,dark,onSelect,editMode,onEdit,todayStr}){
           <div key={d} style={{
             textAlign:"center",
             padding:"5px 0",
+            boxSizing:"border-box",
             fontSize:11,
             fontWeight:700,
             color:th.wkHdrText,
@@ -583,7 +585,7 @@ function PasswordModal({onSuccess,onClose,dark}){
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:600}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${err?"#ef4444":th.border}`,borderRadius:10,padding:28,width:340,boxShadow:"0 20px 60px rgba(0,0,0,.4)",transition:"border-color .2s"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${err?"#ef4444":th.border}`,borderRadius:10,padding:28,width:340,maxWidth:"calc(100vw - 32px)",boxSizing:"border-box",boxShadow:"0 20px 60px rgba(0,0,0,.4)",transition:"border-color .2s"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:22,marginBottom:6}}>🔐</div>
         <div style={{fontWeight:700,fontSize:16,color:th.text,marginBottom:4}}>Edit Access</div>
         <div style={{fontSize:13,color:th.muted,marginBottom:18,lineHeight:1.5}}>
@@ -633,7 +635,7 @@ function EventDetailPopup({ev,onClose,onEdit,editMode,dark,todayD}){
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:450}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,padding:26,width:400,boxShadow:"0 20px 60px rgba(0,0,0,.35)",maxWidth:"94vw"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,padding:26,width:400,boxSizing:"border-box",boxShadow:"0 20px 60px rgba(0,0,0,.35)",maxWidth:"94vw"}} onClick={e=>e.stopPropagation()}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
           <span style={{fontSize:11,fontWeight:800,color:hex,textTransform:"uppercase",letterSpacing:".1em",background:`${hex}1e`,border:`1px solid ${hex}55`,borderRadius:4,padding:"3px 9px"}}>
             {cats?.[ev.cat]?.label ?? ev.cat}
@@ -699,7 +701,7 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.55)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:500}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:10,padding:26,width:410,boxShadow:"0 20px 60px rgba(0,0,0,.5)",maxHeight:"92vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:10,padding:26,width:410,maxWidth:"calc(100vw - 32px)",boxSizing:"border-box",boxShadow:"0 20px 60px rgba(0,0,0,.5)",maxHeight:"92vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontWeight:700,fontSize:17,color:th.text,marginBottom:18}}>{ev._new?"Add Event":"Edit Event"}</div>
 
         <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:5}}>Event Name</label>
@@ -787,11 +789,11 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
     onSave(out);
   }
 
-  const inp={background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"6px 10px",color:th.text,fontSize:13,outline:"none"};
+  const inp={background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"6px 10px",color:th.text,fontSize:13,outline:"none",boxSizing:"border-box",minWidth:0};
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"flex-start",justifyContent:"center",zIndex:500,paddingTop:44,paddingBottom:44,overflowY:"auto"}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(620px,96vw)",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(620px,96vw)",boxSizing:"border-box",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
         <div style={{padding:"16px 20px",borderBottom:`1px solid ${th.border}`,display:"flex",alignItems:"center",gap:10}}>
           <div style={{flex:1}}>
             <div style={{fontWeight:700,fontSize:16,color:th.text}}>Manage Categories</div>
@@ -804,7 +806,7 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
           {draft.map((d,i)=>(
             <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 0",borderBottom:`1px solid ${th.border}`}}>
               <input type="color" value={d.hex} onChange={e=>updateDraft(i,"hex",e.target.value)} title="Change color"
-                style={{width:34,height:34,border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent"}}/>
+                style={{width:34,height:34,boxSizing:"border-box",border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent"}}/>
               <input value={d.label} onChange={e=>updateDraft(i,"label",e.target.value)} style={{...inp,flex:1}}/>
               <span style={{fontSize:11,color:th.sub,minWidth:36,textAlign:"right"}}>{evCountByKey[d.key]||0}ev</span>
               <button onClick={()=>removeDraft(i)} title="Remove this category" style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:5,padding:"5px 9px",color:"#ef4444",fontSize:12}}>✕</button>
@@ -815,7 +817,7 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
             <div style={{fontSize:11,fontWeight:700,color:th.muted,textTransform:"uppercase",letterSpacing:".09em",marginBottom:10}}>Add New Category</div>
             <div style={{display:"flex",gap:9,alignItems:"center"}}>
               <input type="color" value={newHex} onChange={e=>setNewHex(e.target.value)} title="Pick color"
-                style={{width:38,height:36,border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent",flexShrink:0}}/>
+                style={{width:38,height:36,boxSizing:"border-box",border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent",flexShrink:0}}/>
               <input value={newLabel} onChange={e=>setNewLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addNew()} placeholder="Category name…"
                 style={{...inp,flex:1}}/>
               <button onClick={addNew} style={{background:"#1e40af",border:"none",borderRadius:6,padding:"7px 16px",color:"#fff",fontSize:13,fontWeight:700,flexShrink:0}}>Add</button>
@@ -850,14 +852,14 @@ function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onReset,onClose,
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"flex-start",justifyContent:"center",zIndex:350,paddingTop:44,paddingBottom:44,overflowY:"auto"}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(980px,96vw)",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(980px,96vw)",boxSizing:"border-box",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
         <div style={{padding:"16px 20px",borderBottom:`1px solid ${th.border}`,display:"flex",alignItems:"center",gap:9,flexWrap:"wrap"}}>
           <div style={{flex:1}}>
             <div style={{fontWeight:700,fontSize:16,color:th.text}}>Admin Table</div>
             <div style={{fontSize:12,color:th.muted,marginTop:1}}>{filtered.length} of {events.length} events</div>
           </div>
           <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search…"
-            style={{background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"7px 11px",color:th.text,fontSize:13,outline:"none",width:180}} />
+            style={{background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"7px 11px",color:th.text,fontSize:13,outline:"none",width:180,boxSizing:"border-box"}} />
           <button onClick={onAdd} style={{background:"#1e40af",border:"none",borderRadius:6,padding:"7px 14px",color:"#fff",fontSize:13,fontWeight:700}}>+ Add Event</button>
           <button onClick={onManageCats} style={{background:dark?"#1a0c2e":"#ede9fe",border:"1px solid #8b5cf6",borderRadius:6,padding:"7px 14px",color:"#8b5cf6",fontSize:13,fontWeight:700}}>🎨 Categories</button>
           <button onClick={onExport} style={{background:dark?"#0c2a0c":"#dcfce7",border:"1px solid #16a34a",borderRadius:6,padding:"7px 14px",color:"#16a34a",fontSize:13,fontWeight:700}}>↓ Export CSV</button>
@@ -876,7 +878,7 @@ function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onReset,onClose,
         </div>
 
         <div style={{overflowY:"auto",flex:1}}>
-          <table style={{width:"100%",borderCollapse:"collapse"}}>
+          <table style={{width:"100%",borderCollapse:"collapse",boxSizing:"border-box"}}>
             <thead style={{position:"sticky",top:0,zIndex:2}}>
               <tr>
                 <th style={{...th2,width:34}} onClick={()=>setSort("crit")}>⚡</th>
@@ -1034,7 +1036,7 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
       <div style={{flex:1,overflow:"auto",minHeight:0,minWidth:0}}>
         <div style={{minWidth:TL_LABEL_W+totalW,position:"relative"}}>
           <div style={{position:"sticky",top:0,display:"flex",zIndex:20,borderBottom:`1px solid ${th.border}`,height:TL_HDR_H}}>
-            <div style={{width:TL_LABEL_W,flexShrink:0,position:"sticky",left:0,zIndex:21,background:th.hdrBg,display:"flex",alignItems:"center",padding:"0 14px",borderRight:`1px solid rgba(255,255,255,0.15)`}}>
+            <div style={{width:TL_LABEL_W,boxSizing:"border-box",flexShrink:0,position:"sticky",left:0,zIndex:21,background:th.hdrBg,display:"flex",alignItems:"center",padding:"0 14px",borderRight:`1px solid rgba(255,255,255,0.15)`}}>
               <span style={{fontSize:11,fontWeight:700,color:th.hdrText,textTransform:"uppercase",letterSpacing:".09em"}}>Workflow Category</span>
             </div>
             <div style={{position:"relative",flex:1,background:th.wkHdrBg,overflow:"hidden"}}>
@@ -1057,7 +1059,7 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
 
           {laneData.map((lane,li)=>(
             <div key={lane.id} style={{display:"flex",height:lane.height,borderBottom:`1px solid ${th.border}`,background:li%2===0?th.card:th.card2}}>
-              <div style={{width:TL_LABEL_W,flexShrink:0,position:"sticky",left:0,zIndex:10,background:li%2===0?th.card:th.card2,borderRight:`1px solid ${th.border}`,display:"flex",alignItems:"center",padding:"0 14px"}}>
+              <div style={{width:TL_LABEL_W,boxSizing:"border-box",flexShrink:0,position:"sticky",left:0,zIndex:10,background:li%2===0?th.card:th.card2,borderRight:`1px solid ${th.border}`,display:"flex",alignItems:"center",padding:"0 14px"}}>
                 <span style={{fontSize:13,fontWeight:600,color:th.text,lineHeight:1.3}}>{lane.label}</span>
               </div>
 
@@ -1083,6 +1085,7 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
                       style={{
                         position:"absolute",
                         left:evL,width:evW,
+                        boxSizing:"border-box",
                         top:TL_PAD+bar.track*TL_TRACK_H,
                         height:TL_BAR_H,
                         background:dark?`${hex}30`:`${hex}20`,
@@ -1679,7 +1682,7 @@ function Panel({events,dark,filters,lookahead,setLookahead,editMode,onEdit,today
   const urg = d => d<=7 ? "#ef4444" : d<=21 ? "#f59e0b" : "#64748b";
 
   return(
-    <div style={{width:278,display:"flex",flexDirection:"column",background:th.card,borderLeft:`1px solid ${th.border}`,flexShrink:0,overflow:"hidden"}}>
+    <div style={{width:278,boxSizing:"border-box",display:"flex",flexDirection:"column",background:th.card,borderLeft:`1px solid ${th.border}`,flexShrink:0,overflow:"hidden"}}>
 
       {nextCrit && (
         <div style={{padding:"11px 15px",background:dark?"#1c0a00":"#fff7ed",borderBottom:`1px solid ${dark?"#7c2d12":"#fdba74"}`,flexShrink:0}}>
@@ -1761,7 +1764,7 @@ function Panel({events,dark,filters,lookahead,setLookahead,editMode,onEdit,today
           <button
             onClick={()=>onEdit({_new:true,label:"",start:toS(todayD),end:toS(todayD),cat:"milestone",crit:false})}
             title="Add a new event"
-            style={{width:"100%",background:"#1e40af",border:"none",borderRadius:6,padding:"9px 0",color:"#fff",fontSize:13,fontWeight:700}}
+            style={{width:"100%",boxSizing:"border-box",background:"#1e40af",border:"none",borderRadius:6,padding:"9px 0",color:"#fff",fontSize:13,fontWeight:700}}
           >
             + Add New Event
           </button>
