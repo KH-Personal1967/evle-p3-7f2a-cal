@@ -1,0 +1,28 @@
+name: Apply Patch File
+on:
+  workflow_dispatch:
+    inputs:
+      patch_content:
+        description: 'Paste the entire content of your .patch file here'
+        required: true
+
+jobs:
+  apply-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Apply Patch
+        run: |
+          echo "${{ github.event.inputs.patch_content }}" > temp.patch
+          git apply temp.patch
+          rm temp.patch
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Apply patch via GitHub Actions Web Interface"
+          git push
