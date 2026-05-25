@@ -19,16 +19,8 @@ import React, { useState, useMemo, useEffect, useRef, useContext, createContext 
 //   PUT  {base}/cats    (JSON body) with header X-Editor-Key
 const SAVE_SERVICE_BASE = "https://evle-calendar-api.newbauer.workers.dev";
 
-// Casual edit protection only (prevents accidental edits).
-// Not a security boundary (view-source reveals it).
-const EDIT_PASSWORD = "EVLE2026";
-
 // Debounce (ms) for autosave after edits to prevent excessive commits.
 const SAVE_DEBOUNCE_MS = 900;
-
-// Timeline range (leave as-is unless your schedule range changes)
-const TL_START = new Date(2026, 4, 1);   // May 1, 2026
-const TL_END   = new Date(2027, 11, 31); // Dec 31, 2027
 
 /* ============================
    THEME
@@ -54,143 +46,10 @@ const TH = {
 };
 
 /* ============================
-   DEFAULT CATEGORIES + SEED EVENTS
-   ============================ */
-
-const DEFAULT_CATS = {
-  holiday:    { label: "Holiday",                 hex: "#64748b" },
-  freeze:     { label: "File Freeze",             hex: "#ef4444" },
-  disc_freeze:{ label: "Discipline Freeze",       hex: "#f97316" },
-  milestone:  { label: "Milestone / Submittal",   hex: "#f59e0b" },
-  rollplot:   { label: "Roll Plots",              hex: "#2563eb" },
-  kh_review:  { label: "KH Consistency Review",   hex: "#10b981" },
-  idr:        { label: "IDR Roll Plots / Memo",   hex: "#8b5cf6" },
-  plans_qc:   { label: "Plans QC / QA",           hex: "#ec4899" },
-  bod:        { label: "BOD",                     hex: "#a78bfa" },
-  st_review:  { label: "ST Review",               hex: "#14b8a6" },
-  comment:    { label: "Comment Resolution",      hex: "#6366f1" },
-  row:        { label: "ROW",                     hex: "#94a3b8" },
-  stn_wb:     { label: "Station Workbook / WP QC",hex: "#84cc16" },
-  mor:        { label: "MOR Meetings / Memo",     hex: "#d97706" },
-  meeting:    { label: "Meeting / Workshop",      hex: "#f43f5e" },
-};
-
-const SEED = [
-  {id:1,  label:"Draft Internal Roll Plots Due",          start:"2026-05-15",end:"2026-05-15",cat:"rollplot", crit:true},
-  {id:2,  label:"O&M Meetings – ST Ops & Maintenance",    start:"2026-05-18",end:"2026-05-22",cat:"meeting"},
-  {id:3,  label:"Memorial Day",                           start:"2026-05-25",end:"2026-05-25",cat:"holiday"},
-  {id:4,  label:"O&M Meetings – ST Ops & Maintenance",    start:"2026-05-26",end:"2026-05-29",cat:"meeting"},
-  {id:5,  label:"ST Roll Plots Due",                      start:"2026-06-12",end:"2026-06-12",cat:"rollplot"},
-  {id:6,  label:"Juneteenth",                             start:"2026-06-19",end:"2026-06-19",cat:"holiday"},
-  {id:7,  label:"Independence Day (observed)",            start:"2026-07-03",end:"2026-07-03",cat:"holiday"},
-  {id:8,  label:"30% Track Input Freeze",                 start:"2026-07-13",end:"2026-07-17",cat:"freeze",  crit:true},
-  {id:9,  label:"CATEX Approved",                         start:"2026-07-31",end:"2026-07-31",cat:"milestone",crit:true},
-  {id:10, label:"30% Track Pencils Down",                 start:"2026-08-10",end:"2026-08-14",cat:"freeze",  crit:true},
-  {id:11, label:"ST Roll Plots Due",                      start:"2026-08-18",end:"2026-08-18",cat:"rollplot"},
-  {id:12, label:"Labor Day",                              start:"2026-09-07",end:"2026-09-07",cat:"holiday"},
-  {id:13, label:"Publish DEIS",                           start:"2026-09-18",end:"2026-09-18",cat:"milestone",crit:true},
-  {id:14, label:"ST Roll Plots Due",                      start:"2026-10-09",end:"2026-10-09",cat:"rollplot"},
-  {id:15, label:"RFIF",                                   start:"2026-10-09",end:"2026-10-09",cat:"milestone"},
-  {id:16, label:"Columbus Day",                           start:"2026-10-13",end:"2026-10-13",cat:"holiday"},
-  {id:17, label:"Veterans Day",                           start:"2026-11-11",end:"2026-11-11",cat:"holiday"},
-  {id:18, label:"ST Roll Plots Due",                      start:"2026-11-20",end:"2026-11-20",cat:"rollplot"},
-  {id:19, label:"Thanksgiving",                           start:"2026-11-26",end:"2026-11-26",cat:"holiday"},
-  {id:20, label:"30% Major Design Input Freeze",          start:"2026-12-04",end:"2026-12-04",cat:"freeze",  crit:true},
-  {id:21, label:"ST Roll Plots Due",                      start:"2026-12-18",end:"2026-12-18",cat:"rollplot"},
-  {id:22, label:"PM/CM On Board",                         start:"2026-12-18",end:"2026-12-18",cat:"milestone"},
-  {id:23, label:"Christmas",                              start:"2026-12-25",end:"2026-12-25",cat:"holiday"},
-  {id:24, label:"New Year's Day",                         start:"2027-01-01",end:"2027-01-01",cat:"holiday"},
-  {id:25, label:"MLK Jr. Day",                            start:"2027-01-19",end:"2027-01-19",cat:"holiday"},
-  {id:26, label:"All Full Parcel Acquisitions Known",     start:"2027-01-19",end:"2027-01-19",cat:"row",     crit:true},
-  {id:27, label:"Board Confirms / IDs PA",                start:"2027-01-27",end:"2027-01-27",cat:"milestone",crit:true},
-  {id:28, label:"Construction Packages Determined",       start:"2027-01-29",end:"2027-01-29",cat:"milestone",crit:true},
-  {id:29, label:"30% Minor Design Input Freeze",          start:"2027-02-05",end:"2027-02-05",cat:"freeze",  crit:true},
-  {id:30, label:"Presidents Day",                         start:"2027-02-15",end:"2027-02-15",cat:"holiday"},
-  {id:31, label:"ST Roll Plots Due",                      start:"2027-02-19",end:"2027-02-19",cat:"rollplot"},
-  {id:32, label:"All Discipline Preliminary PL Freeze",   start:"2027-02-26",end:"2027-02-26",cat:"freeze",  crit:true},
-  {id:33, label:"Consistency Review Plans Due",           start:"2027-04-14",end:"2027-04-16",cat:"milestone",crit:true},
-  {id:34, label:"ST Roll Plots Due",                      start:"2027-04-16",end:"2027-04-16",cat:"rollplot"},
-  {id:35, label:"All Disciplines File Freeze (IDR)",      start:"2027-04-19",end:"2027-04-21",cat:"freeze",  crit:true},
-  {id:36, label:"KH Consistency Review of Plans",         start:"2027-04-19",end:"2027-05-07",cat:"kh_review"},
-  {id:37, label:"IDR Roll Plots Due – Virtual Review",    start:"2027-04-22",end:"2027-04-22",cat:"idr",     crit:true},
-  {id:38, label:"Virtual IDR Review of Roll Plots",       start:"2027-04-26",end:"2027-04-30",cat:"idr"},
-  {id:39, label:"Review IDR Comments / Travel",           start:"2027-05-03",end:"2027-05-04",cat:"idr"},
-  {id:40, label:"In-Person IDR Workshop",                 start:"2027-05-05",end:"2027-05-07",cat:"meeting", crit:true},
-  {id:41, label:"Survey Basefile Freeze",                 start:"2027-05-17",end:"2027-05-17",cat:"freeze",  crit:true},
-  {id:42, label:"Ecosystems Freeze",                      start:"2027-05-24",end:"2027-05-24",cat:"disc_freeze"},
-  {id:43, label:"Traffic Freeze",                         start:"2027-05-25",end:"2027-05-25",cat:"disc_freeze"},
-  {id:44, label:"Utilities Freeze",                       start:"2027-05-26",end:"2027-05-26",cat:"disc_freeze"},
-  {id:45, label:"Stations & Systems Freeze",              start:"2027-05-28",end:"2027-05-28",cat:"disc_freeze"},
-  {id:46, label:"Memorial Day",                           start:"2027-05-31",end:"2027-05-31",cat:"holiday"},
-  {id:47, label:"Drainage & Structures Freeze",           start:"2027-06-01",end:"2027-06-02",cat:"disc_freeze"},
-  {id:48, label:"Roadway & Corridor Grading Freeze",      start:"2027-06-07",end:"2027-06-07",cat:"disc_freeze"},
-  {id:49, label:"Demo Freeze",                            start:"2027-06-09",end:"2027-06-09",cat:"disc_freeze"},
-  {id:50, label:"ST Roll Plots Due",                      start:"2027-06-11",end:"2027-06-11",cat:"rollplot"},
-  {id:51, label:"All Temp & Partial Acquisitions Known",  start:"2027-06-17",end:"2027-06-17",cat:"row"},
-  {id:52, label:"Juneteenth",                             start:"2027-06-19",end:"2027-06-19",cat:"holiday"},
-  {id:53, label:"Demo Wipeout Freeze",                    start:"2027-06-21",end:"2027-06-21",cat:"disc_freeze"},
-  {id:54, label:"Develop IDR Memo",                       start:"2027-06-23",end:"2027-06-30",cat:"idr"},
-  {id:55, label:"Final ROW Freeze",                       start:"2027-06-25",end:"2027-06-25",cat:"freeze",  crit:true},
-  {id:56, label:"QC Basefile & Sheet Index Freeze",       start:"2027-06-28",end:"2027-06-29",cat:"freeze",  crit:true},
-  {id:57, label:"IDR Memo QA Review",                     start:"2027-06-28",end:"2027-07-02",cat:"idr"},
-  {id:58, label:"BOD Input Due",                          start:"2027-07-01",end:"2027-07-02",cat:"bod",     crit:true},
-  {id:59, label:"CAD to GIS / Revit Transfer",            start:"2027-07-02",end:"2027-07-02",cat:"milestone"},
-  {id:60, label:"Independence Day",                       start:"2027-07-04",end:"2027-07-04",cat:"holiday"},
-  {id:61, label:"BOD SME Final Input & Exhibits",         start:"2027-07-05",end:"2027-07-09",cat:"bod"},
-  {id:62, label:"QC Plans Due & QC Packaging",            start:"2027-07-07",end:"2027-07-09",cat:"plans_qc",crit:true},
-  {id:63, label:"QC Checker Onboarding",                  start:"2027-07-07",end:"2027-07-11",cat:"plans_qc"},
-  {id:64, label:"Plans General / Title Block QC Check",   start:"2027-07-12",end:"2027-07-18",cat:"plans_qc"},
-  {id:65, label:"BOD QC Check",                           start:"2027-07-12",end:"2027-07-18",cat:"bod"},
-  {id:66, label:"GC/CM's On Board",                       start:"2027-07-16",end:"2027-07-16",cat:"milestone"},
-  {id:67, label:"Plans Technical QC Check",               start:"2027-07-19",end:"2027-08-01",cat:"plans_qc"},
-  {id:68, label:"BOD QC Back Check",                      start:"2027-07-25",end:"2027-07-25",cat:"bod"},
-  {id:69, label:"BOD QC Correct",                         start:"2027-07-26",end:"2027-08-01",cat:"bod"},
-  {id:70, label:"Plans QC Back Check",                    start:"2027-08-02",end:"2027-08-13",cat:"plans_qc"},
-  {id:71, label:"BOD QC Format",                          start:"2027-08-02",end:"2027-08-08",cat:"bod"},
-  {id:72, label:"Plans QC Rejected/Deferred Comments",    start:"2027-08-11",end:"2027-08-15",cat:"plans_qc"},
-  {id:73, label:"BOD QC Verify",                          start:"2027-08-09",end:"2027-08-15",cat:"bod"},
-  {id:74, label:"Plans QC Corrections",                   start:"2027-08-16",end:"2027-08-29",cat:"plans_qc"},
-  {id:75, label:"BOD QA Review / Final Corrections",      start:"2027-08-16",end:"2027-08-22",cat:"bod"},
-  {id:76, label:"Finalize Design Deviation Requests",     start:"2027-08-28",end:"2027-08-30",cat:"milestone"},
-  {id:77, label:"BOD Packaging",                          start:"2027-08-23",end:"2027-08-29",cat:"bod"},
-  {id:78, label:"Plans Verification",                     start:"2027-08-30",end:"2027-09-05",cat:"plans_qc"},
-  {id:79, label:"Roll Plot QC Check / Back Check",        start:"2027-08-30",end:"2027-09-10",cat:"rollplot"},
-  {id:80, label:"Labor Day",                              start:"2027-09-01",end:"2027-09-01",cat:"holiday"},
-  {id:81, label:"Stations Workbook QC Review",            start:"2027-09-01",end:"2027-09-12",cat:"stn_wb"},
-  {id:82, label:"MOR Memo Development",                   start:"2027-09-08",end:"2027-09-12",cat:"mor"},
-  {id:83, label:"Plans QA Review / Final Corrections",    start:"2027-09-08",end:"2027-09-15",cat:"plans_qc"},
-  {id:84, label:"Roll Plot Correct / Verify",             start:"2027-09-08",end:"2027-09-12",cat:"rollplot"},
-  {id:85, label:"MOR QA Review",                          start:"2027-09-11",end:"2027-09-12",cat:"mor"},
-  {id:86, label:"Plans Packaging",                        start:"2027-09-13",end:"2027-09-16",cat:"plans_qc"},
-  {id:87, label:"Roll Plot QA & Packaging",               start:"2027-09-13",end:"2027-09-16",cat:"rollplot"},
-  {id:88, label:"SUBMIT 30% Plans / BOD / Roll Plots / Workbook / Memos",start:"2027-09-17",end:"2027-09-17",cat:"milestone",crit:true},
-  {id:89, label:"ST Review: 30% Submittal",               start:"2027-09-20",end:"2027-10-08",cat:"st_review"},
-  {id:90, label:"ST 30% SME Review Comments Due",         start:"2027-10-08",end:"2027-10-08",cat:"milestone",crit:true},
-  {id:91, label:"Columbus Day",                           start:"2027-10-13",end:"2027-10-13",cat:"holiday"},
-  {id:92, label:"ST: Design Manager Review of Comments",  start:"2027-10-12",end:"2027-10-24",cat:"st_review"},
-  {id:93, label:"Consultant: Draft Comment Responses",    start:"2027-10-13",end:"2027-10-22",cat:"plans_qc"},
-  {id:94, label:"Responses & Flagged Comments Due",       start:"2027-10-22",end:"2027-10-22",cat:"milestone"},
-  {id:95, label:"Comment Resolution Meetings (Major)",    start:"2027-10-22",end:"2027-11-05",cat:"comment"},
-  {id:96, label:"ST: SME Reviewer Response Disposition",  start:"2027-10-22",end:"2027-11-12",cat:"st_review"},
-  {id:97, label:"Veterans Day",                           start:"2027-11-11",end:"2027-11-11",cat:"holiday"},
-  {id:98, label:"Comment Resolution Meetings (Minor)",    start:"2027-11-01",end:"2027-11-19",cat:"comment"},
-  {id:99, label:"Publish FEIS",                           start:"2027-11-19",end:"2027-11-19",cat:"milestone",crit:true},
-  {id:100,label:"Update Plans per Comment Resolution",    start:"2027-11-22",end:"2027-11-28",cat:"plans_qc"},
-  {id:101,label:"Thanksgiving",                           start:"2027-11-25",end:"2027-11-25",cat:"holiday"},
-  {id:102,label:"Checkers Review Updated Plans",          start:"2027-11-29",end:"2027-12-05",cat:"plans_qc"},
-  {id:103,label:"Back Check Review & Implement Corrections",start:"2027-12-01",end:"2027-12-05",cat:"plans_qc"},
-  {id:104,label:"Verify & Package for QA Review",         start:"2027-12-06",end:"2027-12-12",cat:"plans_qc"},
-  {id:105,label:"QA Review & Final Corrections",          start:"2027-12-13",end:"2027-12-17",cat:"plans_qc"},
-  {id:106,label:"Revise & Resubmit – Non-Compliance",     start:"2027-12-17",end:"2027-12-17",cat:"milestone"},
-  {id:107,label:"Board Selects Project to Be Built",      start:"2027-12-21",end:"2027-12-21",cat:"milestone",crit:true},
-  {id:108,label:"Christmas",                              start:"2027-12-25",end:"2027-12-25",cat:"holiday"},
-];
-
-/* ============================
    CATEGORIES CONTEXT
    ============================ */
 
-const CatsCtx = createContext(DEFAULT_CATS);
+const CatsCtx = createContext({});
 const useCats = () => useContext(CatsCtx);
 const useCatHex = () => { const cats = useCats(); return c => cats?.[c]?.hex ?? "#888"; };
 
@@ -212,6 +71,24 @@ function durLabel(s,e){
   if(s===e) return "";
   const d = Math.round((toD(e)-toD(s))/86400000)+1;
   return ` (${d} days)`;
+}
+function truncateText(value, maxLen=250){
+  const text = String(value || "").trim();
+  if(text.length <= maxLen) return text;
+  return text.slice(0, maxLen).trimEnd() + "...";
+}
+function eventTooltip(ev){
+  const details = truncateText(ev.details || "", 250);
+  return `${ev.label}${ev.start!==ev.end?durLabel(ev.start,ev.end):""}\n${dispDate(ev.start)}${ev.start!==ev.end?" - "+dispDate(ev.end):""}${details?`\n\n${details}`:""}`;
+}
+function sortedCatEntries(cats){
+  return Object.entries(cats || {}).sort((a,b)=>String(a[1]?.label || a[0]).localeCompare(String(b[1]?.label || b[0])));
+}
+function monthStart(d){ return new Date(d.getFullYear(), d.getMonth(), 1); }
+function monthEnd(d){ return new Date(d.getFullYear(), d.getMonth()+1, 0); }
+function addMonthsDate(d,n){ return new Date(d.getFullYear(), d.getMonth()+n, 1); }
+function monthCountInclusive(start,end){
+  return (end.getFullYear()-start.getFullYear())*12 + (end.getMonth()-start.getMonth()) + 1;
 }
 function advM({year,month},n){
   let m=month+n, y=year;
@@ -256,6 +133,14 @@ async function saveSharedEvents(payload, editorKey){
 }
 async function saveSharedCats(payload, editorKey){
   return putJson(`${SAVE_SERVICE_BASE}/cats`, payload, editorKey);
+}
+async function verifyEditorKey(editorKey){
+  const r = await fetch(`${SAVE_SERVICE_BASE}/auth`, {
+    method: "POST",
+    headers: { "X-Editor-Key": editorKey || "" },
+    cache: "no-store"
+  });
+  return r.ok;
 }
 
 /* ============================
@@ -336,14 +221,15 @@ function parseCSVLine(line){
 }
 
 function exportCSV(events){
-  const hdr="id,label,start,end,cat,crit";
+  const hdr="id,label,start,end,cat,crit,details";
   const rows = events.map(e=>[
     e.id,
     `"${(e.label||"").replace(/"/g,'""')}"`,
     e.start,
     e.end,
     e.cat,
-    e.crit?"TRUE":"FALSE"
+    e.crit?"TRUE":"FALSE",
+    `"${(e.details||"").replace(/"/g,'""')}"`
   ].join(","));
   const blob = new Blob([[hdr,...rows].join("\r\n")], {type:"text/csv;charset=utf-8;"});
   const url=URL.createObjectURL(blob);
@@ -366,13 +252,15 @@ function parseImportCSV(text, cats){
 
     if(!label || !start.match(/^\d{4}-\d{2}-\d{2}$/)) return;
     if(id>maxId) maxId=id;
+    const details = (f[6]||"").replace(/^"|"$/g,"").replace(/""/g,'"').trim();
     evs.push({
       id,
       label,
       start,
       end: end>=start ? end : start,
       cat: cats?.[cat] ? cat : "milestone",
-      crit
+      crit,
+      details
     });
   });
   return evs.length>0 ? { evs, maxId } : null;
@@ -397,7 +285,7 @@ function EventBar({bar,dark,onClick}){
   return (
     <div
       onClick={e=>{e.stopPropagation(); onClick(ev);}}
-      title={ev.label+(ev.start!==ev.end?durLabel(ev.start,ev.end):"")}
+      title={eventTooltip(ev)}
       style={{
         position:"absolute",
         left: `${colStart * 100 / 7}%`,
@@ -466,7 +354,6 @@ function WeekRow({week,events,dark,onSelect,editMode,onEdit}){
                 alignItems:"center",
                 justifyContent:"space-between",
                 padding:"0 6px",
-                boxSizing:"border-box",
                 background:day.isToday
                   ? (dark?"rgba(59,130,246,0.12)":"rgba(59,130,246,0.09)")
                   : isWknd ? th.wkndBg : th.card,
@@ -529,7 +416,7 @@ function MonthGrid({year,month,events,dark,onSelect,editMode,onEdit,todayStr}){
       flexDirection:"column",
       boxShadow:dark?"0 2px 12px rgba(0,0,0,.4)":"0 1px 6px rgba(0,0,0,.08)"
     }}>
-      <div style={{background:th.hdrBg,padding:"9px 14px",boxSizing:"border-box",flexShrink:0}}>
+      <div style={{background:th.hdrBg,padding:"9px 14px",flexShrink:0}}>
         <span style={{fontWeight:700,fontSize:16,color:th.hdrText,letterSpacing:"-.01em"}}>
           {MN[month]} {year}
         </span>
@@ -540,7 +427,6 @@ function MonthGrid({year,month,events,dark,onSelect,editMode,onEdit,todayStr}){
           <div key={d} style={{
             textAlign:"center",
             padding:"5px 0",
-            boxSizing:"border-box",
             fontSize:11,
             fontWeight:700,
             color:th.wkHdrText,
@@ -571,53 +457,64 @@ function PasswordModal({onSuccess,onClose,dark}){
   const th=dark?TH.dark:TH.light;
   const [pw,setPw]=useState("");
   const [err,setErr]=useState(false);
+  const [showPw,setShowPw]=useState(false);
+  const [checking,setChecking]=useState(false);
   const inp=useRef();
 
   useEffect(()=>{ setTimeout(()=>inp.current&&inp.current.focus(),60); },[]);
 
-  function attempt(){
-    if(pw===EDIT_PASSWORD) onSuccess();
-    else{
-      setErr(true); setPw("");
+  async function attempt(){
+    if(!pw.trim()){
+      setErr(true);
       setTimeout(()=>setErr(false),1400);
+      return;
+    }
+    setChecking(true);
+    const ok = await onSuccess(pw);
+    setChecking(false);
+    if(!ok){
+      setErr(true);
+      setPw("");
+      setTimeout(()=>setErr(false),1800);
     }
   }
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:600}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${err?"#ef4444":th.border}`,borderRadius:10,padding:28,width:340,maxWidth:"calc(100vw - 32px)",boxSizing:"border-box",boxShadow:"0 20px 60px rgba(0,0,0,.4)",transition:"border-color .2s"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${err?"#ef4444":th.border}`,borderRadius:10,padding:28,width:340,boxShadow:"0 20px 60px rgba(0,0,0,.4)",transition:"border-color .2s"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:22,marginBottom:6}}>🔐</div>
         <div style={{fontWeight:700,fontSize:16,color:th.text,marginBottom:4}}>Edit Access</div>
         <div style={{fontSize:13,color:th.muted,marginBottom:18,lineHeight:1.5}}>
-          Enter the edit password to enable schedule editing.
+          Enter the editor key to enable schedule editing.
         </div>
         <input
           ref={inp}
-          type="password"
+          type={showPw?"text":"password"}
           value={pw}
           onChange={e=>setPw(e.target.value)}
           onKeyDown={e=>e.key==="Enter"&&attempt()}
           placeholder="Password"
-         style={{
-           width:"100%",
-           boxSizing:"border-box",
-           background:th.card2,
-           border:`1px solid ${err?"#ef4444":th.border}`,
-           borderRadius:6,
-           padding:"9px 12px",
-           color:th.text,
-           fontSize:14,
-           outline:"none",
-           marginBottom:err?6:14
-         }}
+          style={{
+            width:"100%",
+            boxSizing:"border-box",
+            background:th.card2,
+            border:`1px solid ${err?"#ef4444":th.border}`,
+            borderRadius:6,
+            padding:"9px 12px",
+            color:th.text,
+            fontSize:14,
+            outline:"none",
+            marginBottom:8
+          }}
         />
-        {err && <div style={{fontSize:12,color:"#ef4444",marginBottom:10}}>Incorrect password. Try again.</div>}
+        <label style={{display:"flex",alignItems:"center",gap:8,fontSize:12,color:th.muted,marginBottom:err?6:14,cursor:"pointer"}}>
+          <input type="checkbox" checked={showPw} onChange={e=>setShowPw(e.target.checked)} />
+          Show password
+        </label>
+        {err && <div style={{fontSize:12,color:"#ef4444",marginBottom:10}}>Incorrect editor key.</div>}
         <div style={{display:"flex",gap:9}}>
-          <button onClick={attempt} style={{flex:1,background:"#1e40af",border:"none",borderRadius:6,padding:"10px 0",color:"#fff",fontSize:13,fontWeight:700}}>Unlock</button>
+          <button onClick={attempt} disabled={checking} style={{flex:1,background:"#1e40af",border:"none",borderRadius:6,padding:"10px 0",color:"#fff",fontSize:13,fontWeight:700,opacity:checking ? 0.65 : 1}}>{checking?"Checking...":"Unlock"}</button>
           <button onClick={onClose} style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:6,padding:"10px 14px",color:th.muted,fontSize:13}}>Cancel</button>
-        </div>
-        <div style={{marginTop:14,fontSize:11,color:th.sub,lineHeight:1.5}}>
-          Tip: this is casual access control to prevent accidental edits.
         </div>
       </div>
     </div>
@@ -635,7 +532,7 @@ function EventDetailPopup({ev,onClose,onEdit,editMode,dark,todayD}){
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:450}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,padding:26,width:400,boxSizing:"border-box",boxShadow:"0 20px 60px rgba(0,0,0,.35)",maxWidth:"94vw"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,padding:26,width:400,boxShadow:"0 20px 60px rgba(0,0,0,.35)",maxWidth:"94vw"}} onClick={e=>e.stopPropagation()}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
           <span style={{fontSize:11,fontWeight:800,color:hex,textTransform:"uppercase",letterSpacing:".1em",background:`${hex}1e`,border:`1px solid ${hex}55`,borderRadius:4,padding:"3px 9px"}}>
             {cats?.[ev.cat]?.label ?? ev.cat}
@@ -667,6 +564,12 @@ function EventDetailPopup({ev,onClose,onEdit,editMode,dark,todayD}){
           </>}
         </div>
 
+        {ev.details && (
+          <div style={{fontSize:13,color:th.text,lineHeight:1.45,background:th.card2,border:`1px solid ${th.border}`,borderRadius:7,padding:"10px 12px",marginBottom:18,whiteSpace:"pre-wrap"}}>
+            {ev.details}
+          </div>
+        )}
+
         <div style={{display:"flex",gap:9}}>
           {editMode && <button onClick={()=>{onClose();onEdit(ev);}} style={{flex:1,background:"#1e40af",border:"none",borderRadius:6,padding:"9px 0",color:"#fff",fontSize:13,fontWeight:700}}>Edit Event</button>}
           <button onClick={onClose} style={{flex:1,background:"transparent",border:`1px solid ${th.border}`,borderRadius:6,padding:"9px 0",color:th.muted,fontSize:13}}>Close</button>
@@ -685,6 +588,7 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
   const [end,setEnd]=useState(ev.end);
   const [cat,setCat]=useState(ev.cat);
   const [crit,setCrit]=useState(!!ev.crit);
+  const [details,setDetails]=useState(ev.details || "");
 
   const inp={
     background:th.card2,
@@ -701,7 +605,7 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.55)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:500}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:10,padding:26,width:410,maxWidth:"calc(100vw - 32px)",boxSizing:"border-box",boxShadow:"0 20px 60px rgba(0,0,0,.5)",maxHeight:"92vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:10,padding:26,width:410,boxShadow:"0 20px 60px rgba(0,0,0,.5)",maxHeight:"92vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontWeight:700,fontSize:17,color:th.text,marginBottom:18}}>{ev._new?"Add Event":"Edit Event"}</div>
 
         <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:5}}>Event Name</label>
@@ -728,10 +632,13 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
 
         <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:5}}>Category</label>
         <select value={cat} onChange={e=>setCat(e.target.value)} style={{...inp,cursor:"pointer",marginBottom:14}}>
-          {Object.entries(cats||{}).map(([k,v])=>(
+          {sortedCatEntries(cats).map(([k,v])=>(
             <option key={k} value={k}>{v.label}</option>
           ))}
         </select>
+
+        <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:5}}>Details</label>
+        <textarea value={details} onChange={e=>setDetails(e.target.value)} rows={4} placeholder="Optional details..." style={{...inp,resize:"vertical",lineHeight:1.35,marginBottom:14}} />
 
         <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:22}}>
           <input type="checkbox" id="mc" checked={crit} onChange={e=>setCrit(e.target.checked)} style={{accentColor:"#f59e0b",width:15,height:15}}/>
@@ -739,8 +646,8 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
         </div>
 
         <div style={{display:"flex",gap:9}}>
-          <button onClick={()=>onSave({...ev,label,start,end:end>=start?end:start,cat,crit})} style={{flex:1,background:"#1e40af",border:"none",borderRadius:6,padding:"10px 0",color:"#fff",fontSize:13,fontWeight:700}}>Save</button>
-          {!ev._new && <button onClick={()=>onDelete(ev)} style={{background:"#7f1d1d",border:"none",borderRadius:6,padding:"10px 14px",color:"#fca5a5",fontSize:13,fontWeight:700}}>Delete</button>}
+          <button onClick={()=>onSave({...ev,label,start,end:end>=start?end:start,cat,crit,details:details.trim()})} style={{flex:1,background:"#1e40af",border:"none",borderRadius:6,padding:"10px 0",color:"#fff",fontSize:13,fontWeight:700}}>Save</button>
+          {!ev._new && <button onClick={()=>{ if(window.confirm(`Delete "${ev.label}"? This cannot be undone.`)) onDelete(ev); }} style={{background:"#7f1d1d",border:"none",borderRadius:6,padding:"10px 14px",color:"#fca5a5",fontSize:13,fontWeight:700}}>Delete</button>}
           <button onClick={onClose} style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:6,padding:"10px 14px",color:th.muted,fontSize:13}}>Cancel</button>
         </div>
       </div>
@@ -751,7 +658,7 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
 function CategoryManager({cats,events,onSave,onClose,dark}){
   const th=dark?TH.dark:TH.light;
 
-  const [draft,setDraft]=useState(()=>Object.entries(cats||{}).map(([k,v])=>({key:k,label:v.label,hex:v.hex,_orig:k})));
+  const [draft,setDraft]=useState(()=>sortedCatEntries(cats).map(([k,v])=>({key:k,label:v.label,hex:v.hex,_orig:k})));
   const [newLabel,setNewLabel]=useState("");
   const [newHex,setNewHex]=useState("#3b82f6");
 
@@ -789,11 +696,11 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
     onSave(out);
   }
 
-  const inp={background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"6px 10px",color:th.text,fontSize:13,outline:"none",boxSizing:"border-box",minWidth:0};
+  const inp={background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"6px 10px",color:th.text,fontSize:13,outline:"none"};
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"flex-start",justifyContent:"center",zIndex:500,paddingTop:44,paddingBottom:44,overflowY:"auto"}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(620px,96vw)",boxSizing:"border-box",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(620px,96vw)",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
         <div style={{padding:"16px 20px",borderBottom:`1px solid ${th.border}`,display:"flex",alignItems:"center",gap:10}}>
           <div style={{flex:1}}>
             <div style={{fontWeight:700,fontSize:16,color:th.text}}>Manage Categories</div>
@@ -806,7 +713,7 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
           {draft.map((d,i)=>(
             <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 0",borderBottom:`1px solid ${th.border}`}}>
               <input type="color" value={d.hex} onChange={e=>updateDraft(i,"hex",e.target.value)} title="Change color"
-                style={{width:34,height:34,boxSizing:"border-box",border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent"}}/>
+                style={{width:34,height:34,border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent"}}/>
               <input value={d.label} onChange={e=>updateDraft(i,"label",e.target.value)} style={{...inp,flex:1}}/>
               <span style={{fontSize:11,color:th.sub,minWidth:36,textAlign:"right"}}>{evCountByKey[d.key]||0}ev</span>
               <button onClick={()=>removeDraft(i)} title="Remove this category" style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:5,padding:"5px 9px",color:"#ef4444",fontSize:12}}>✕</button>
@@ -817,7 +724,7 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
             <div style={{fontSize:11,fontWeight:700,color:th.muted,textTransform:"uppercase",letterSpacing:".09em",marginBottom:10}}>Add New Category</div>
             <div style={{display:"flex",gap:9,alignItems:"center"}}>
               <input type="color" value={newHex} onChange={e=>setNewHex(e.target.value)} title="Pick color"
-                style={{width:38,height:36,boxSizing:"border-box",border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent",flexShrink:0}}/>
+                style={{width:38,height:36,border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent",flexShrink:0}}/>
               <input value={newLabel} onChange={e=>setNewLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addNew()} placeholder="Category name…"
                 style={{...inp,flex:1}}/>
               <button onClick={addNew} style={{background:"#1e40af",border:"none",borderRadius:6,padding:"7px 16px",color:"#fff",fontSize:13,fontWeight:700,flexShrink:0}}>Add</button>
@@ -852,14 +759,14 @@ function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onReset,onClose,
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"flex-start",justifyContent:"center",zIndex:350,paddingTop:44,paddingBottom:44,overflowY:"auto"}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(980px,96vw)",boxSizing:"border-box",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(980px,96vw)",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
         <div style={{padding:"16px 20px",borderBottom:`1px solid ${th.border}`,display:"flex",alignItems:"center",gap:9,flexWrap:"wrap"}}>
           <div style={{flex:1}}>
-            <div style={{fontWeight:700,fontSize:16,color:th.text}}>Admin Table</div>
+            <div style={{fontWeight:700,fontSize:16,color:th.text}}>Event Editor</div>
             <div style={{fontSize:12,color:th.muted,marginTop:1}}>{filtered.length} of {events.length} events</div>
           </div>
           <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search…"
-            style={{background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"7px 11px",color:th.text,fontSize:13,outline:"none",width:180,boxSizing:"border-box"}} />
+            style={{background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"7px 11px",color:th.text,fontSize:13,outline:"none",width:180}} />
           <button onClick={onAdd} style={{background:"#1e40af",border:"none",borderRadius:6,padding:"7px 14px",color:"#fff",fontSize:13,fontWeight:700}}>+ Add Event</button>
           <button onClick={onManageCats} style={{background:dark?"#1a0c2e":"#ede9fe",border:"1px solid #8b5cf6",borderRadius:6,padding:"7px 14px",color:"#8b5cf6",fontSize:13,fontWeight:700}}>🎨 Categories</button>
           <button onClick={onExport} style={{background:dark?"#0c2a0c":"#dcfce7",border:"1px solid #16a34a",borderRadius:6,padding:"7px 14px",color:"#16a34a",fontSize:13,fontWeight:700}}>↓ Export CSV</button>
@@ -874,11 +781,11 @@ function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onReset,onClose,
         </div>
 
         <div style={{padding:"7px 20px",background:dark?"#0a1218":"#f0fdf4",borderBottom:`1px solid ${th.border}`,fontSize:11,color:dark?"#4b8a5a":"#166534",fontFamily:"'IBM Plex Mono',monospace"}}>
-          CSV format: id, label, start (YYYY-MM-DD), end (YYYY-MM-DD), cat, crit (TRUE/FALSE)
+          CSV format: id, label, start (YYYY-MM-DD), end (YYYY-MM-DD), cat, crit (TRUE/FALSE), details
         </div>
 
         <div style={{overflowY:"auto",flex:1}}>
-          <table style={{width:"100%",borderCollapse:"collapse",boxSizing:"border-box"}}>
+          <table style={{width:"100%",borderCollapse:"collapse"}}>
             <thead style={{position:"sticky",top:0,zIndex:2}}>
               <tr>
                 <th style={{...th2,width:34}} onClick={()=>setSort("crit")}>⚡</th>
@@ -927,7 +834,6 @@ function Toast({msg,dark}){
    TIMELINE SUPPORT
    ============================ */
 
-const TL_DAYS = Math.round((TL_END - TL_START)/86400000) + 1;
 const TL_BAR_H=22;
 const TL_TRACK_H=TL_BAR_H+4;
 const TL_PAD=10;
@@ -989,64 +895,107 @@ function JumpTodayBtn({dark,onClick}){
 function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
   const th=dark?TH.dark:TH.light;
   const catHex=useCatHex();
-  const [zoom,setZoom]=useState(3);
-  const totalW=TL_DAYS*zoom;
+  const [visibleMonths,setVisibleMonths]=useState(6);
+
+  const range = useMemo(()=>{
+    const dated = (events||[]).filter(e=>e.start && e.end);
+    if(!dated.length){
+      const s = monthStart(todayD);
+      return {start:s, end:monthEnd(addMonthsDate(s,5)), totalMonths:6};
+    }
+    const minStart = dated.reduce((m,e)=>toD(e.start)<m?toD(e.start):m, toD(dated[0].start));
+    const maxEnd = dated.reduce((m,e)=>toD(e.end)>m?toD(e.end):m, toD(dated[0].end));
+    const start = monthStart(minStart);
+    const end = monthEnd(maxEnd);
+    return {start, end, totalMonths:Math.max(1, monthCountInclusive(start,end))};
+  },[events,todayD]);
+
+  useEffect(()=>{
+    setVisibleMonths(v=>Math.min(Math.max(1,v), range.totalMonths));
+  },[range.totalMonths]);
+
+  const clampedVisibleMonths = Math.min(Math.max(1, visibleMonths), range.totalMonths);
+  const days = Math.round((range.end - range.start)/86400000) + 1;
+  const pxPerDay = Math.max(2.5, 1120 / (clampedVisibleMonths * 30.4375));
+  const totalW = Math.max(1120, Math.round(days * pxPerDay));
+
+  function zoomIn(){
+    setVisibleMonths(v=>Math.max(1, v<=6 ? v-1 : 6));
+  }
+  function zoomOut(){
+    setVisibleMonths(v=>Math.min(range.totalMonths, v<6 ? v+1 : v+3));
+  }
 
   const monthTicks=useMemo(()=>{
     const ms=[];
-    let d=new Date(TL_START);
-    while(d<=TL_END){
-      const dim=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+    let d=new Date(range.start);
+    while(d<=range.end){
+      const next=addMonthsDate(d,1);
+      const dim=Math.round((next-d)/86400000);
       ms.push({
         y:d.getFullYear(),
         m:d.getMonth(),
-        left:Math.round((d-TL_START)/86400000)*zoom,
-        width:dim*zoom
+        left:Math.round((d-range.start)/86400000)*pxPerDay,
+        width:dim*pxPerDay
       });
-      d=new Date(d.getFullYear(),d.getMonth()+1,1);
+      d=next;
     }
     return ms;
-  },[zoom]);
+  },[range.start, range.end, pxPerDay]);
 
-  const todayX=Math.round((todayD - TL_START)/86400000)*zoom;
+  const todayX=Math.round((todayD - range.start)/86400000)*pxPerDay;
+
+  const laneDefs = useMemo(()=>[...SWIM_LANE_DEFS].sort((a,b)=>a.label.localeCompare(b.label)),[]);
 
   const laneData=useMemo(()=>{
-    return SWIM_LANE_DEFS.map(lane=>{
+    return laneDefs.map(lane=>{
       const evs = events.filter(e=>lane.cats.includes(e.cat) && filters.has(e.cat));
       const {bars, lanes:numTracks} = layoutLane(evs);
-      const height=Math.max(52, numTracks*TL_TRACK_H + TL_PAD*2);
+      const height=Math.max(70, numTracks*TL_TRACK_H + TL_PAD*2 + 16);
       return {...lane, bars, numTracks, height};
     });
-  },[events,filters]);
+  },[events,filters,laneDefs]);
+
+  const dateRangeLabel = `${MN[range.start.getMonth()]} ${range.start.getFullYear()} - ${MN[range.end.getMonth()]} ${range.end.getFullYear()}`;
+
+  function diamondLabelVisible(label, x, y, placed){
+    const w = Math.min(220, Math.max(50, String(label||"").length * 6 + 18));
+    const h = 14;
+    const box = {left:x - w/2, right:x + w/2, top:y - h - 8, bottom:y - 4};
+    const overlap = placed.some(b=>!(box.right < b.left || box.left > b.right || box.bottom < b.top || box.top > b.bottom));
+    if(overlap) return null;
+    placed.push(box);
+    return box;
+  }
 
   return(
     <div style={{display:"flex",flexDirection:"column",flex:1,overflow:"hidden",minHeight:0}}>
       <div style={{display:"flex",alignItems:"center",gap:8,padding:"6px 16px",background:th.card2,borderBottom:`1px solid ${th.border}`,flexShrink:0}}>
-        <span style={{fontSize:11,fontWeight:700,color:th.muted,textTransform:"uppercase",letterSpacing:".09em"}}>Zoom:</span>
-        <button onClick={()=>setZoom(z=>Math.max(1,z-1))} title="Zoom out" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 10px",color:th.text,fontSize:14,fontWeight:700}}>−</button>
-        <span style={{fontSize:12,fontWeight:600,color:th.text,minWidth:50,textAlign:"center"}}>
-          {zoom<=2?"Overview":zoom<=4?"Month":zoom<=7?"Detail":"Fine"} ({zoom}×)
+        <span style={{fontSize:11,fontWeight:700,color:th.muted,textTransform:"uppercase",letterSpacing:".09em"}}>Months shown:</span>
+        <button onClick={()=>setVisibleMonths(1)} title="Show 1 month" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 9px",color:th.text,fontSize:12,fontWeight:700}}>Min</button>
+        <button onClick={zoomIn} title="Zoom in" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 10px",color:th.text,fontSize:14,fontWeight:700}}>+</button>
+        <span style={{fontSize:12,fontWeight:600,color:th.text,minWidth:86,textAlign:"center"}}>
+          {clampedVisibleMonths} of {range.totalMonths}
         </span>
-        <button onClick={()=>setZoom(z=>Math.min(10,z+1))} title="Zoom in" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 10px",color:th.text,fontSize:14,fontWeight:700}}>+</button>
+        <button onClick={zoomOut} title="Zoom out" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 10px",color:th.text,fontSize:14,fontWeight:700}}>−</button>
+        <button onClick={()=>setVisibleMonths(range.totalMonths)} title="Show all months" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 9px",color:th.text,fontSize:12,fontWeight:700}}>Max</button>
         <div style={{marginLeft:8,height:16,width:1,background:th.border}}/>
-        <span style={{fontSize:11,color:th.muted}}>May 2026 – Dec 2027</span>
-        <span style={{marginLeft:"auto",fontSize:11,color:th.muted}}>Click any event to view details</span>
+        <span style={{fontSize:11,color:th.muted}}>{dateRangeLabel}</span>
+        <span style={{marginLeft:"auto",fontSize:11,color:th.muted}}>Single-day events are diamonds. Multi-day events are bars.</span>
       </div>
 
       <div style={{flex:1,overflow:"auto",minHeight:0,minWidth:0}}>
         <div style={{minWidth:TL_LABEL_W+totalW,position:"relative"}}>
           <div style={{position:"sticky",top:0,display:"flex",zIndex:20,borderBottom:`1px solid ${th.border}`,height:TL_HDR_H}}>
-            <div style={{width:TL_LABEL_W,boxSizing:"border-box",flexShrink:0,position:"sticky",left:0,zIndex:21,background:th.hdrBg,display:"flex",alignItems:"center",padding:"0 14px",borderRight:`1px solid rgba(255,255,255,0.15)`}}>
-              <span style={{fontSize:11,fontWeight:700,color:th.hdrText,textTransform:"uppercase",letterSpacing:".09em"}}>Workflow Category</span>
+            <div style={{width:TL_LABEL_W,flexShrink:0,position:"sticky",left:0,zIndex:21,background:th.hdrBg,display:"flex",alignItems:"center",padding:"0 14px",borderRight:`1px solid rgba(255,255,255,0.15)`}}>
+              <span style={{fontSize:11,fontWeight:700,color:th.hdrText,textTransform:"uppercase",letterSpacing:".09em"}}>Swim Lane</span>
             </div>
             <div style={{position:"relative",flex:1,background:th.wkHdrBg,overflow:"hidden"}}>
               {monthTicks.map((mt,i)=>(
                 <div key={i} style={{position:"absolute",left:mt.left,width:mt.width,height:"100%",display:"flex",alignItems:"center",paddingLeft:8,borderLeft:`1px solid ${th.border}`,overflow:"hidden"}}>
-                  {(zoom>=2||i%3===0) && (
-                    <span style={{fontSize:zoom<3?9:11,fontWeight:700,color:th.wkHdrText,whiteSpace:"nowrap"}}>
-                      {MN[mt.m].slice(0,zoom<3?1:3)} {String(mt.y).slice(2)}
-                    </span>
-                  )}
+                  <span style={{fontSize:clampedVisibleMonths>12?9:11,fontWeight:700,color:th.wkHdrText,whiteSpace:"nowrap"}}>
+                    {MN[mt.m].slice(0,clampedVisibleMonths>12?1:3)} {String(mt.y).slice(2)}
+                  </span>
                 </div>
               ))}
               {todayX>=0 && todayX<=totalW && (
@@ -1057,60 +1006,99 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
             </div>
           </div>
 
-          {laneData.map((lane,li)=>(
-            <div key={lane.id} style={{display:"flex",height:lane.height,borderBottom:`1px solid ${th.border}`,background:li%2===0?th.card:th.card2}}>
-              <div style={{width:TL_LABEL_W,boxSizing:"border-box",flexShrink:0,position:"sticky",left:0,zIndex:10,background:li%2===0?th.card:th.card2,borderRight:`1px solid ${th.border}`,display:"flex",alignItems:"center",padding:"0 14px"}}>
-                <span style={{fontSize:13,fontWeight:600,color:th.text,lineHeight:1.3}}>{lane.label}</span>
-              </div>
+          {laneData.map((lane,li)=>{
+            const placedLabels=[];
+            return(
+              <div key={lane.id} style={{display:"flex",height:lane.height,borderBottom:`1px solid ${th.border}`,background:li%2===0?th.card:th.card2}}>
+                <div style={{width:TL_LABEL_W,flexShrink:0,position:"sticky",left:0,zIndex:10,background:li%2===0?th.card:th.card2,borderRight:`1px solid ${th.border}`,display:"flex",alignItems:"center",padding:"0 14px"}}>
+                  <span style={{fontSize:13,fontWeight:600,color:th.text,lineHeight:1.3}}>{lane.label}</span>
+                </div>
 
-              <div style={{position:"relative",flex:1,overflow:"hidden"}}>
-                {monthTicks.map((mt,mi)=>(
-                  <div key={mi} style={{position:"absolute",left:mt.left,top:0,bottom:0,width:1,background:th.grid,pointerEvents:"none"}} />
-                ))}
-                {todayX>=0 && todayX<=totalW && (
-                  <div style={{position:"absolute",left:todayX,top:0,bottom:0,width:2,background:"rgba(239,68,68,0.45)",zIndex:3,pointerEvents:"none"}} />
-                )}
+                <div style={{position:"relative",flex:1,overflow:"hidden"}}>
+                  {monthTicks.map((mt,mi)=>(
+                    <div key={mi} style={{position:"absolute",left:mt.left,top:0,bottom:0,width:1,background:th.grid,pointerEvents:"none"}} />
+                  ))}
+                  {todayX>=0 && todayX<=totalW && (
+                    <div style={{position:"absolute",left:todayX,top:0,bottom:0,width:2,background:"rgba(239,68,68,0.45)",zIndex:3,pointerEvents:"none"}} />
+                  )}
 
-                {lane.bars.map((bar,bi)=>{
-                  const ev=bar.ev;
-                  const hex=catHex(ev.cat);
-                  const evL=Math.round((toD(ev.start)-TL_START)/86400000)*zoom;
-                  const evW=Math.max(zoom*2,Math.round((toD(ev.end)-toD(ev.start))/86400000+1)*zoom);
-                  const showLabel=evW>Math.max(30,zoom*5);
-                  return(
-                    <div
-                      key={bi}
-                      onClick={()=>editMode?onEdit(ev):onSelect(ev)}
-                      title={`${ev.label}${ev.start!==ev.end?durLabel(ev.start,ev.end):""}\n${dispDate(ev.start)}${ev.start!==ev.end?" - "+dispDate(ev.end):""}`}
-                      style={{
-                        position:"absolute",
-                        left:evL,width:evW,
-                        boxSizing:"border-box",
-                        top:TL_PAD+bar.track*TL_TRACK_H,
-                        height:TL_BAR_H,
-                        background:dark?`${hex}30`:`${hex}20`,
-                        border:`1.5px solid ${hex}`,
-                        borderRadius:5,
-                        display:"flex",
-                        alignItems:"center",
-                        paddingLeft:5,
-                        paddingRight:4,
-                        overflow:"hidden",
-                        cursor:"pointer",
-                        zIndex:2
-                      }}
-                    >
-                      {showLabel && (
-                        <span style={{fontSize:10,fontWeight:700,color:hex,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
-                          {ev.crit?"⚡ ":""}{ev.label}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
+                  {lane.bars.map((bar,bi)=>{
+                    const ev=bar.ev;
+                    const hex=catHex(ev.cat);
+                    const startX=Math.round((toD(ev.start)-range.start)/86400000)*pxPerDay;
+                    const durationDays=Math.round((toD(ev.end)-toD(ev.start))/86400000)+1;
+                    const y=TL_PAD+bar.track*TL_TRACK_H;
+                    const isSingle=ev.start===ev.end;
+                    const tooltip=eventTooltip(ev);
+
+                    if(isSingle){
+                      const cx=startX + Math.max(6, pxPerDay/2);
+                      const cy=y + 15;
+                      const labelBox = pxPerDay >= 7 ? diamondLabelVisible(ev.label, cx, cy, placedLabels) : null;
+                      return(
+                        <React.Fragment key={bi}>
+                          {labelBox && (
+                            <div style={{position:"absolute",left:labelBox.left,top:labelBox.top,width:labelBox.right-labelBox.left,height:14,textAlign:"center",fontSize:10,fontWeight:700,color:hex,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",zIndex:4,pointerEvents:"none"}}>
+                              {ev.crit?"⚡ ":""}{ev.label}
+                            </div>
+                          )}
+                          <div
+                            onClick={()=>editMode?onEdit(ev):onSelect(ev)}
+                            title={tooltip}
+                            style={{
+                              position:"absolute",
+                              left:cx-6,
+                              top:cy-6,
+                              width:12,
+                              height:12,
+                              background:hex,
+                              border:`1.5px solid ${dark?"#fff":"#fff"}`,
+                              transform:"rotate(45deg)",
+                              cursor:"pointer",
+                              zIndex:5,
+                              boxShadow:"0 1px 3px rgba(0,0,0,.25)"
+                            }}
+                          />
+                        </React.Fragment>
+                      );
+                    }
+
+                    const evW=Math.max(pxPerDay*durationDays, 6);
+                    const showLabel=evW > Math.max(42, String(ev.label||"").length*5.8);
+                    return(
+                      <div
+                        key={bi}
+                        onClick={()=>editMode?onEdit(ev):onSelect(ev)}
+                        title={tooltip}
+                        style={{
+                          position:"absolute",
+                          left:startX,width:evW,
+                          top:y,
+                          height:TL_BAR_H,
+                          background:dark?`${hex}30`:`${hex}20`,
+                          border:`1.5px solid ${hex}`,
+                          borderRadius:5,
+                          display:"flex",
+                          alignItems:"center",
+                          paddingLeft:5,
+                          paddingRight:4,
+                          overflow:"hidden",
+                          cursor:"pointer",
+                          zIndex:2
+                        }}
+                      >
+                        {showLabel && (
+                          <span style={{fontSize:10,fontWeight:700,color:hex,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                            {ev.crit?"⚡ ":""}{ev.label}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
@@ -1134,18 +1122,18 @@ function App(){
   const [vs,setVs]=useState(()=>({year: todayD.getFullYear(), month: todayD.getMonth()}));
 
   const [editMode,setEditMode]=useState(false);
-  const [editAuthorized,setEditAuthorized]=useState(false);
   const [showPwModal,setShowPwModal]=useState(false);
   const [showAdmin,setShowAdmin]=useState(false);
   const [showCatMgr,setShowCatMgr]=useState(false);
   const [showPanel,setShowPanel]=useState(true);
+  const panelStateBeforeTimelineRef = useRef(true);
 
-  const [cats,setCats]=useState(DEFAULT_CATS);
-  const [filters,setFilters]=useState(new Set(Object.keys(DEFAULT_CATS)));
+  const [cats,setCats]=useState({});
+  const [filters,setFilters]=useState(new Set());
   const [isolatedCat,setIsolatedCat]=useState(null);
   const [preIsolateFilters,setPreIsolateFilters]=useState(null);
 
-  const [events,setEvents]=useState(SEED);
+  const [events,setEvents]=useState([]);
   const [selected,setSelected]=useState(null);
   const [editing,setEditing]=useState(null);
   const [nextId,setNextId]=useState(300);
@@ -1156,6 +1144,8 @@ function App(){
 
   // Shared status
   const [sharedUpdatedUtc,setSharedUpdatedUtc]=useState(null);
+  const [loadBusy,setLoadBusy]=useState(true);
+  const [loadErr,setLoadErr]=useState("");
   const [saveBusy,setSaveBusy]=useState(false);
   const [saveErr,setSaveErr]=useState("");
   const editorKeyRef = useRef("");  // set after password unlock
@@ -1180,28 +1170,27 @@ function App(){
     toastRef.current=setTimeout(()=>setToast(null),2600);
   }
 
-  // Initial load (cats then events)
+  // Initial load: fail closed instead of rendering stale embedded fallback data.
   useEffect(()=>{
     (async ()=>{
+      setLoadBusy(true);
+      setLoadErr("");
       try{
-        const c = await loadSharedCats();
-        if(c && typeof c === "object") setCats(c);
-      }catch(e){
-        // fallback: DEFAULT_CATS
-      }
-      try{
-        const ev = await loadSharedEvents();
-        if(ev?.events && Array.isArray(ev.events)){
-          setEvents(ev.events);
-          if(ev.updatedUtc) setSharedUpdatedUtc(ev.updatedUtc);
-          // set nextId safely
-          const maxId = ev.events.reduce((m,x)=>Math.max(m, Number(x.id)||0), 0);
-          setNextId(Math.max(300, maxId+1));
-        }
-      }catch(e){
-        // fallback: SEED
-        const maxId = SEED.reduce((m,x)=>Math.max(m, Number(x.id)||0), 0);
+        const [c, ev] = await Promise.all([loadSharedCats(), loadSharedEvents()]);
+        if(!c || typeof c !== "object" || Array.isArray(c)) throw new Error("Invalid categories response.");
+        if(!ev?.events || !Array.isArray(ev.events)) throw new Error("Invalid events response.");
+
+        setCats(c);
+        setFilters(new Set(Object.keys(c)));
+        setEvents(ev.events);
+        if(ev.updatedUtc) setSharedUpdatedUtc(ev.updatedUtc);
+
+        const maxId = ev.events.reduce((m,x)=>Math.max(m, Number(x.id)||0), 0);
         setNextId(Math.max(300, maxId+1));
+      }catch(e){
+        setLoadErr(e?.message || String(e));
+      }finally{
+        setLoadBusy(false);
       }
     })();
   },[]);
@@ -1255,7 +1244,14 @@ useEffect(() => {
   },[vs,span]);
 
   /* -------- Filter pill logic with isolation -------- */
-  function handleFilterClick(k){
+  function handleFilterClick(k, additive=false){
+    if(additive){
+      const n=new Set(filters);
+      if(n.has(k)) n.delete(k); else n.add(k);
+      setFilters(n);
+      setIsolatedCat(null); setPreIsolateFilters(null);
+      return;
+    }
     if(isolatedCat===k){
       setFilters(preIsolateFilters || new Set(Object.keys(cats||{})));
       setIsolatedCat(null); setPreIsolateFilters(null);
@@ -1271,17 +1267,25 @@ useEffect(() => {
 
   /* -------- Edit mode with password -------- */
   function requestEditMode(){
-    if(editMode){ setEditMode(false); return; }
-    if(editAuthorized){ setEditMode(true); }
-    else { setShowPwModal(true); }
+    if(editMode){
+      setEditMode(false);
+      editorKeyRef.current = "";
+      return;
+    }
+    setShowPwModal(true);
   }
 
-  function onPasswordSuccess(){
-    setEditAuthorized(true);
-    setEditMode(true);
-    setShowPwModal(false);
-    // editor key for save service
-    editorKeyRef.current = EDIT_PASSWORD;
+  async function onPasswordSuccess(editorKey){
+    try{
+      const ok = await verifyEditorKey(editorKey);
+      if(!ok) return false;
+      editorKeyRef.current = editorKey;
+      setEditMode(true);
+      setShowPwModal(false);
+      return true;
+    }catch(e){
+      return false;
+    }
   }
 
   /* -------- Debounced persistence -------- */
@@ -1371,14 +1375,7 @@ useEffect(() => {
   }
 
   function handleReset(){
-    setEvents(SEED);
-    setCats(DEFAULT_CATS);
-    setNextId(300);
-    setFilters(new Set(Object.keys(DEFAULT_CATS)));
-    setIsolatedCat(null); setPreIsolateFilters(null);
-    schedulePersistCats(DEFAULT_CATS);
-    schedulePersistEvents(SEED);
-    showToast("Reset to original schedule.");
+    if(!window.confirm("Reset is disabled because embedded fallback data has been removed. Use CSV import or edit events directly.")) return;
   }
 
   function handleSaveCats(newCats){
@@ -1404,6 +1401,32 @@ useEffect(() => {
       return String(sharedUpdatedUtc);
     }
   },[sharedUpdatedUtc]);
+
+  useEffect(()=>{
+    if(view === "timeline"){
+      panelStateBeforeTimelineRef.current = showPanel;
+      setShowPanel(false);
+    } else {
+      setShowPanel(panelStateBeforeTimelineRef.current);
+    }
+  },[view]);
+
+  if(loadBusy){
+    return <div style={{fontFamily:"'IBM Plex Sans','Segoe UI',sans-serif",height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:th.bg,color:th.text}}>Loading calendar data...</div>;
+  }
+
+  if(loadErr){
+    return (
+      <div style={{fontFamily:"'IBM Plex Sans','Segoe UI',sans-serif",height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:th.bg,color:th.text,padding:24}}>
+        <div style={{maxWidth:560,background:th.card,border:`1px solid ${th.border}`,borderRadius:12,padding:24,boxShadow:"0 12px 36px rgba(0,0,0,.18)"}}>
+          <div style={{fontWeight:800,fontSize:18,marginBottom:8,color:"#b91c1c"}}>Calendar data could not be loaded</div>
+          <div style={{fontSize:14,lineHeight:1.5,color:th.text,marginBottom:12}}>The calendar did not load events or categories from the shared data source. To prevent stale information, no fallback schedule is being displayed.</div>
+          <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:12,color:th.muted,background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:10,whiteSpace:"pre-wrap"}}>{loadErr}</div>
+          <button onClick={()=>window.location.reload()} style={{marginTop:16,background:"#1e40af",border:"none",borderRadius:6,padding:"9px 14px",color:"#fff",fontSize:13,fontWeight:700}}>Retry</button>
+        </div>
+      </div>
+    );
+  }
 
   return(
     <CatsCtx.Provider value={cats}>
@@ -1470,12 +1493,12 @@ useEffect(() => {
             </button>
 
             <button onClick={requestEditMode} title={editMode?"Lock schedule":"Unlock schedule for editing (password)"} style={{background:editMode?(dark?"#1e3a6e":"#dbeafe"):"transparent",border:`1px solid ${editMode?"#3b82f6":th.border}`,borderRadius:5,padding:"6px 11px",color:editMode?"#3b82f6":th.muted,fontSize:12,fontWeight:600}}>
-              {editMode?"🔓 Editing":"🔒 View"}
+              {editMode?"🔓 Editing":"✎ Edit"}
             </button>
 
             {editMode && (
-              <button onClick={()=>setShowAdmin(true)} title="Open Admin Table" style={{background:dark?"#0c2a4a":"#eff6ff",border:"1px solid #3b82f6",borderRadius:5,padding:"6px 11px",color:"#3b82f6",fontSize:12,fontWeight:600}}>
-                📋 Admin Table
+              <button onClick={()=>setShowAdmin(true)} title="Open Event Editor" style={{background:dark?"#0c2a4a":"#eff6ff",border:"1px solid #3b82f6",borderRadius:5,padding:"6px 11px",color:"#3b82f6",fontSize:12,fontWeight:600}}>
+                📋 Event Editor
               </button>
             )}
 
@@ -1499,12 +1522,12 @@ useEffect(() => {
           <button onClick={()=>{setFilters(new Set(Object.keys(cats||{})));setIsolatedCat(null);setPreIsolateFilters(null);}} title="Show all" style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:20,padding:"3px 9px",fontSize:11,color:th.muted,fontWeight:600}}>All</button>
           <button onClick={()=>{setFilters(new Set());setIsolatedCat(null);setPreIsolateFilters(null);}} title="Hide all" style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:20,padding:"3px 9px",fontSize:11,color:th.muted,fontWeight:600}}>None</button>
 
-          {Object.entries(cats||{}).map(([k,v])=>{
+          {sortedCatEntries(cats).map(([k,v])=>{
             const active=filters.has(k);
             const isIsolated=isolatedCat===k;
             return(
-              <button key={k} onClick={()=>handleFilterClick(k)}
-                title={isIsolated ? "Click again to restore previous filters" : active ? `Click to isolate — show only ${v.label}` : `Click to show ${v.label}`}
+              <button key={k} onClick={e=>handleFilterClick(k, e.shiftKey)}
+                title={isIsolated ? "Click again to restore previous filters. Hold Shift to toggle multiple categories." : active ? `Click to isolate and show only ${v.label}. Hold Shift to toggle multiple categories.` : `Click to show ${v.label}. Hold Shift to toggle multiple categories.`}
                 style={{
                   background:active?`${v.hex}1e`:"transparent",
                   border:`${isIsolated?"2px":"1px"} solid ${active?v.hex:th.border}`,
@@ -1586,7 +1609,7 @@ useEffect(() => {
             <span style={{fontSize:13,color:th.muted}}>
               🔓 <strong style={{color:th.text}}>Edit mode</strong> — click any event to modify. Changes save automatically.
             </span>
-            <button onClick={()=>setEditMode(false)} title="Lock" style={{background:"#1e40af",border:"none",borderRadius:5,padding:"5px 14px",color:"#fff",fontSize:12,fontWeight:700}}>
+            <button onClick={()=>{setEditMode(false); editorKeyRef.current="";}} title="Lock" style={{background:"#1e40af",border:"none",borderRadius:5,padding:"5px 14px",color:"#fff",fontSize:12,fontWeight:700}}>
               Lock
             </button>
           </div>
@@ -1629,7 +1652,7 @@ useEffect(() => {
             events={events}
             dark={dark}
             onEdit={ev=>setEditing(ev)}
-            onAdd={()=>setEditing({_new:true,label:"",start:todayStr,end:todayStr,cat:"milestone",crit:false})}
+            onAdd={()=>setEditing({_new:true,label:"",start:todayStr,end:todayStr,cat:"milestone",crit:false,details:""})}
             onExport={handleExport}
             onImport={handleImport}
             onReset={handleReset}
@@ -1682,7 +1705,7 @@ function Panel({events,dark,filters,lookahead,setLookahead,editMode,onEdit,today
   const urg = d => d<=7 ? "#ef4444" : d<=21 ? "#f59e0b" : "#64748b";
 
   return(
-    <div style={{width:278,boxSizing:"border-box",display:"flex",flexDirection:"column",background:th.card,borderLeft:`1px solid ${th.border}`,flexShrink:0,overflow:"hidden"}}>
+    <div style={{width:278,display:"flex",flexDirection:"column",background:th.card,borderLeft:`1px solid ${th.border}`,flexShrink:0,overflow:"hidden"}}>
 
       {nextCrit && (
         <div style={{padding:"11px 15px",background:dark?"#1c0a00":"#fff7ed",borderBottom:`1px solid ${dark?"#7c2d12":"#fdba74"}`,flexShrink:0}}>
@@ -1750,7 +1773,7 @@ function Panel({events,dark,filters,lookahead,setLookahead,editMode,onEdit,today
       <div style={{borderTop:`1px solid ${th.border}`,padding:"10px 15px 12px",flexShrink:0,background:th.card2}}>
         <div style={{fontSize:10,fontWeight:700,color:th.muted,textTransform:"uppercase",letterSpacing:".1em",marginBottom:7}}>Legend</div>
         <div style={{display:"flex",flexWrap:"wrap",gap:"5px 12px"}}>
-          {Object.entries(cats||{}).map(([k,v])=>(
+          {sortedCatEntries(cats).map(([k,v])=>(
             <div key={k} style={{display:"flex",alignItems:"center",gap:5}}>
               <div style={{width:9,height:9,background:v.hex,borderRadius:2,flexShrink:0}} />
               <span style={{fontSize:10,color:th.sub,whiteSpace:"nowrap"}}>{v.label}</span>
@@ -1762,9 +1785,9 @@ function Panel({events,dark,filters,lookahead,setLookahead,editMode,onEdit,today
       {editMode && (
         <div style={{padding:"11px 15px",borderTop:`1px solid ${th.border}`,flexShrink:0}}>
           <button
-            onClick={()=>onEdit({_new:true,label:"",start:toS(todayD),end:toS(todayD),cat:"milestone",crit:false})}
+            onClick={()=>onEdit({_new:true,label:"",start:toS(todayD),end:toS(todayD),cat:"milestone",crit:false,details:""})}
             title="Add a new event"
-            style={{width:"100%",boxSizing:"border-box",background:"#1e40af",border:"none",borderRadius:6,padding:"9px 0",color:"#fff",fontSize:13,fontWeight:700}}
+            style={{width:"100%",background:"#1e40af",border:"none",borderRadius:6,padding:"9px 0",color:"#fff",fontSize:13,fontWeight:700}}
           >
             + Add New Event
           </button>
