@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-25T18:35:29.218Z",
+  "updatedUtc": "2026-05-25T22:03:45.173Z",
   "events": [
     {
       "id": 1,
@@ -871,7 +871,8 @@
       "end": "2026-05-24",
       "cat": "milestone",
       "crit": true,
-      "id": 300
+      "id": 300,
+      "details": "This is just a test event"
     }
   ]
 }
