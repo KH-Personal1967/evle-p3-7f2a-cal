@@ -1,14 +1,14 @@
 {
-  "updatedUtc": "2026-05-25T22:04:43.923Z",
+  "updatedUtc": "2026-05-25T23:50:55.333Z",
   "events": [
     {
       "id": 1,
-      "label": "Draft Internal Roll Plots Due",
+      "label": "Draft Internal Roll Plots",
       "start": "2026-05-15",
       "end": "2026-05-15",
       "cat": "rollplot",
       "crit": true,
-      "details": "Due by EOD"
+      "details": "Due by EOD on SharePoint"
     },
     {
       "id": 2,
@@ -16,7 +16,8 @@
       "start": "2026-05-18",
       "end": "2026-05-22",
       "cat": "meeting",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 3,
@@ -24,7 +25,8 @@
       "start": "2026-05-25",
       "end": "2026-05-25",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 4,
@@ -32,7 +34,8 @@
       "start": "2026-05-26",
       "end": "2026-05-29",
       "cat": "meeting",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 5,
@@ -40,7 +43,8 @@
       "start": "2026-06-12",
       "end": "2026-06-12",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 6,
@@ -48,7 +52,8 @@
       "start": "2026-06-19",
       "end": "2026-06-19",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 7,
@@ -56,7 +61,8 @@
       "start": "2026-07-03",
       "end": "2026-07-03",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 8,
@@ -64,7 +70,8 @@
       "start": "2026-07-13",
       "end": "2026-07-17",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 9,
@@ -72,7 +79,8 @@
       "start": "2026-07-31",
       "end": "2026-07-31",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 10,
@@ -80,7 +88,8 @@
       "start": "2026-08-10",
       "end": "2026-08-14",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 11,
@@ -88,7 +97,8 @@
       "start": "2026-08-18",
       "end": "2026-08-18",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 12,
@@ -96,7 +106,8 @@
       "start": "2026-09-07",
       "end": "2026-09-07",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 13,
@@ -104,7 +115,8 @@
       "start": "2026-09-18",
       "end": "2026-09-18",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 14,
@@ -112,7 +124,8 @@
       "start": "2026-10-09",
       "end": "2026-10-09",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 15,
@@ -120,7 +133,8 @@
       "start": "2026-10-09",
       "end": "2026-10-09",
       "cat": "milestone",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 16,
@@ -128,7 +142,8 @@
       "start": "2026-10-13",
       "end": "2026-10-13",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 17,
@@ -136,7 +151,8 @@
       "start": "2026-11-11",
       "end": "2026-11-11",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 18,
@@ -144,7 +160,8 @@
       "start": "2026-11-20",
       "end": "2026-11-20",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 19,
@@ -152,7 +169,8 @@
       "start": "2026-11-26",
       "end": "2026-11-26",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 20,
@@ -160,7 +178,8 @@
       "start": "2026-12-04",
       "end": "2026-12-04",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 21,
@@ -168,7 +187,8 @@
       "start": "2026-12-18",
       "end": "2026-12-18",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 22,
@@ -176,7 +196,8 @@
       "start": "2026-12-18",
       "end": "2026-12-18",
       "cat": "milestone",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 23,
@@ -184,7 +205,8 @@
       "start": "2026-12-25",
       "end": "2026-12-25",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 24,
@@ -192,7 +214,8 @@
       "start": "2027-01-01",
       "end": "2027-01-01",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 25,
@@ -200,7 +223,8 @@
       "start": "2027-01-19",
       "end": "2027-01-19",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 26,
@@ -208,7 +232,8 @@
       "start": "2027-01-19",
       "end": "2027-01-19",
       "cat": "row",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 27,
@@ -216,7 +241,8 @@
       "start": "2027-01-27",
       "end": "2027-01-27",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 28,
@@ -224,7 +250,8 @@
       "start": "2027-01-29",
       "end": "2027-01-29",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 29,
@@ -232,7 +259,8 @@
       "start": "2027-02-05",
       "end": "2027-02-05",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 30,
@@ -240,7 +268,8 @@
       "start": "2027-02-15",
       "end": "2027-02-15",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 31,
@@ -248,7 +277,8 @@
       "start": "2027-02-19",
       "end": "2027-02-19",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 32,
@@ -256,7 +286,8 @@
       "start": "2027-02-26",
       "end": "2027-02-26",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 33,
@@ -264,7 +295,8 @@
       "start": "2027-04-14",
       "end": "2027-04-16",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 34,
@@ -272,7 +304,8 @@
       "start": "2027-04-16",
       "end": "2027-04-16",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 35,
@@ -280,7 +313,8 @@
       "start": "2027-04-19",
       "end": "2027-04-21",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 36,
@@ -288,7 +322,8 @@
       "start": "2027-04-19",
       "end": "2027-05-07",
       "cat": "kh_review",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 37,
@@ -296,7 +331,8 @@
       "start": "2027-04-22",
       "end": "2027-04-22",
       "cat": "idr",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 38,
@@ -304,7 +340,8 @@
       "start": "2027-04-26",
       "end": "2027-04-30",
       "cat": "idr",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 39,
@@ -312,7 +349,8 @@
       "start": "2027-05-03",
       "end": "2027-05-04",
       "cat": "idr",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 40,
@@ -320,7 +358,8 @@
       "start": "2027-05-05",
       "end": "2027-05-07",
       "cat": "meeting",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 41,
@@ -328,7 +367,8 @@
       "start": "2027-05-17",
       "end": "2027-05-17",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 42,
@@ -336,7 +376,8 @@
       "start": "2027-05-24",
       "end": "2027-05-24",
       "cat": "disc_freeze",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 43,
@@ -344,7 +385,8 @@
       "start": "2027-05-25",
       "end": "2027-05-25",
       "cat": "disc_freeze",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 44,
@@ -352,7 +394,8 @@
       "start": "2027-05-26",
       "end": "2027-05-26",
       "cat": "disc_freeze",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 45,
@@ -360,7 +403,8 @@
       "start": "2027-05-28",
       "end": "2027-05-28",
       "cat": "disc_freeze",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 46,
@@ -368,7 +412,8 @@
       "start": "2027-05-31",
       "end": "2027-05-31",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 47,
@@ -376,7 +421,8 @@
       "start": "2027-06-01",
       "end": "2027-06-02",
       "cat": "disc_freeze",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 48,
@@ -384,7 +430,8 @@
       "start": "2027-06-07",
       "end": "2027-06-07",
       "cat": "disc_freeze",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 49,
@@ -392,7 +439,8 @@
       "start": "2027-06-09",
       "end": "2027-06-09",
       "cat": "disc_freeze",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 50,
@@ -400,7 +448,8 @@
       "start": "2027-06-11",
       "end": "2027-06-11",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 51,
@@ -408,7 +457,8 @@
       "start": "2027-06-17",
       "end": "2027-06-17",
       "cat": "row",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 52,
@@ -416,7 +466,8 @@
       "start": "2027-06-19",
       "end": "2027-06-19",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 53,
@@ -424,7 +475,8 @@
       "start": "2027-06-21",
       "end": "2027-06-21",
       "cat": "disc_freeze",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 54,
@@ -432,7 +484,8 @@
       "start": "2027-06-23",
       "end": "2027-06-30",
       "cat": "idr",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 55,
@@ -440,7 +493,8 @@
       "start": "2027-06-25",
       "end": "2027-06-25",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 56,
@@ -448,7 +502,8 @@
       "start": "2027-06-28",
       "end": "2027-06-29",
       "cat": "freeze",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 57,
@@ -456,7 +511,8 @@
       "start": "2027-06-28",
       "end": "2027-07-02",
       "cat": "idr",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 58,
@@ -464,7 +520,8 @@
       "start": "2027-07-01",
       "end": "2027-07-02",
       "cat": "bod",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 59,
@@ -472,7 +529,8 @@
       "start": "2027-07-02",
       "end": "2027-07-02",
       "cat": "milestone",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 60,
@@ -480,7 +538,8 @@
       "start": "2027-07-04",
       "end": "2027-07-04",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 61,
@@ -488,7 +547,8 @@
       "start": "2027-07-05",
       "end": "2027-07-09",
       "cat": "bod",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 62,
@@ -496,7 +556,8 @@
       "start": "2027-07-07",
       "end": "2027-07-09",
       "cat": "plans_qc",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 63,
@@ -504,7 +565,8 @@
       "start": "2027-07-07",
       "end": "2027-07-11",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 64,
@@ -512,7 +574,8 @@
       "start": "2027-07-12",
       "end": "2027-07-18",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 65,
@@ -520,7 +583,8 @@
       "start": "2027-07-12",
       "end": "2027-07-18",
       "cat": "bod",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 66,
@@ -528,7 +592,8 @@
       "start": "2027-07-16",
       "end": "2027-07-16",
       "cat": "milestone",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 67,
@@ -536,7 +601,8 @@
       "start": "2027-07-19",
       "end": "2027-08-01",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 68,
@@ -544,7 +610,8 @@
       "start": "2027-07-25",
       "end": "2027-07-25",
       "cat": "bod",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 69,
@@ -552,7 +619,8 @@
       "start": "2027-07-26",
       "end": "2027-08-01",
       "cat": "bod",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 70,
@@ -560,7 +628,8 @@
       "start": "2027-08-02",
       "end": "2027-08-13",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 71,
@@ -568,7 +637,8 @@
       "start": "2027-08-02",
       "end": "2027-08-08",
       "cat": "bod",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 72,
@@ -576,7 +646,8 @@
       "start": "2027-08-11",
       "end": "2027-08-15",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 73,
@@ -584,7 +655,8 @@
       "start": "2027-08-09",
       "end": "2027-08-15",
       "cat": "bod",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 74,
@@ -592,7 +664,8 @@
       "start": "2027-08-16",
       "end": "2027-08-29",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 75,
@@ -600,7 +673,8 @@
       "start": "2027-08-16",
       "end": "2027-08-22",
       "cat": "bod",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 76,
@@ -608,7 +682,8 @@
       "start": "2027-08-28",
       "end": "2027-08-30",
       "cat": "milestone",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 77,
@@ -616,7 +691,8 @@
       "start": "2027-08-23",
       "end": "2027-08-29",
       "cat": "bod",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 78,
@@ -624,7 +700,8 @@
       "start": "2027-08-30",
       "end": "2027-09-05",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 79,
@@ -632,7 +709,8 @@
       "start": "2027-08-30",
       "end": "2027-09-10",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 80,
@@ -640,7 +718,8 @@
       "start": "2027-09-01",
       "end": "2027-09-01",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 81,
@@ -648,7 +727,8 @@
       "start": "2027-09-01",
       "end": "2027-09-12",
       "cat": "stn_wb",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 82,
@@ -656,7 +736,8 @@
       "start": "2027-09-08",
       "end": "2027-09-12",
       "cat": "mor",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 83,
@@ -664,7 +745,8 @@
       "start": "2027-09-08",
       "end": "2027-09-15",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 84,
@@ -672,7 +754,8 @@
       "start": "2027-09-08",
       "end": "2027-09-12",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 85,
@@ -680,7 +763,8 @@
       "start": "2027-09-11",
       "end": "2027-09-12",
       "cat": "mor",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 86,
@@ -688,7 +772,8 @@
       "start": "2027-09-13",
       "end": "2027-09-16",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 87,
@@ -696,7 +781,8 @@
       "start": "2027-09-13",
       "end": "2027-09-16",
       "cat": "rollplot",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 88,
@@ -704,7 +790,8 @@
       "start": "2027-09-17",
       "end": "2027-09-17",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 89,
@@ -712,7 +799,8 @@
       "start": "2027-09-20",
       "end": "2027-10-08",
       "cat": "st_review",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 90,
@@ -720,7 +808,8 @@
       "start": "2027-10-08",
       "end": "2027-10-08",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 91,
@@ -728,7 +817,8 @@
       "start": "2027-10-13",
       "end": "2027-10-13",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 92,
@@ -736,7 +826,8 @@
       "start": "2027-10-12",
       "end": "2027-10-24",
       "cat": "st_review",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 93,
@@ -744,7 +835,8 @@
       "start": "2027-10-13",
       "end": "2027-10-22",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 94,
@@ -752,7 +844,8 @@
       "start": "2027-10-22",
       "end": "2027-10-22",
       "cat": "milestone",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 95,
@@ -760,7 +853,8 @@
       "start": "2027-10-22",
       "end": "2027-11-05",
       "cat": "comment",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 96,
@@ -768,7 +862,8 @@
       "start": "2027-10-22",
       "end": "2027-11-12",
       "cat": "st_review",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 97,
@@ -776,7 +871,8 @@
       "start": "2027-11-11",
       "end": "2027-11-11",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 98,
@@ -784,7 +880,8 @@
       "start": "2027-11-01",
       "end": "2027-11-19",
       "cat": "comment",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 99,
@@ -792,7 +889,8 @@
       "start": "2027-11-19",
       "end": "2027-11-19",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 100,
@@ -800,7 +898,8 @@
       "start": "2027-11-22",
       "end": "2027-11-28",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 101,
@@ -808,7 +907,8 @@
       "start": "2027-11-25",
       "end": "2027-11-25",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 102,
@@ -816,7 +916,8 @@
       "start": "2027-11-29",
       "end": "2027-12-05",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 103,
@@ -824,7 +925,8 @@
       "start": "2027-12-01",
       "end": "2027-12-05",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 104,
@@ -832,7 +934,8 @@
       "start": "2027-12-06",
       "end": "2027-12-12",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 105,
@@ -840,7 +943,8 @@
       "start": "2027-12-13",
       "end": "2027-12-17",
       "cat": "plans_qc",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 106,
@@ -848,7 +952,8 @@
       "start": "2027-12-17",
       "end": "2027-12-17",
       "cat": "milestone",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
       "id": 107,
@@ -856,7 +961,8 @@
       "start": "2027-12-21",
       "end": "2027-12-21",
       "cat": "milestone",
-      "crit": true
+      "crit": true,
+      "details": ""
     },
     {
       "id": 108,
@@ -864,15 +970,16 @@
       "start": "2027-12-25",
       "end": "2027-12-25",
       "cat": "holiday",
-      "crit": false
+      "crit": false,
+      "details": ""
     },
     {
+      "id": 300,
       "label": "Test",
       "start": "2026-05-24",
       "end": "2026-05-24",
       "cat": "milestone",
       "crit": true,
-      "id": 300,
       "details": "This is just a test event"
     }
   ]
