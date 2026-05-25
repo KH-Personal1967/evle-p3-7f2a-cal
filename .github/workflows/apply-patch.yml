@@ -14,8 +14,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Apply Patch
+        env:
+          PATCH_DATA: ${{ github.event.inputs.patch_content }}
         run: |
-          echo "${{ github.event.inputs.patch_content }}" > temp.patch
+          cat << 'EOF' > temp.patch
+          $PATCH_DATA
+          EOF
+          
+          # Strip out potential surrounding literal quotes from bash interpolation
+          sed -i '1s/^"//; $s/"$//' temp.patch
+          
           git apply temp.patch
           rm temp.patch
 
