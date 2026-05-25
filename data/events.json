@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-24T22:00:29.571Z",
+  "updatedUtc": "2026-05-25T18:35:29.218Z",
   "events": [
     {
       "id": 1,
@@ -872,14 +872,6 @@
       "cat": "milestone",
       "crit": true,
       "id": 300
-    },
-    {
-      "label": "Do stuff that's cool",
-      "start": "2026-05-25",
-      "end": "2026-06-03",
-      "cat": "rollplot",
-      "crit": false,
-      "id": 301
     }
   ]
 }
