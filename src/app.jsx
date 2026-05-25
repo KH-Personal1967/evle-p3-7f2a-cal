@@ -205,20 +205,87 @@ function layoutWeek(week,events){
    CSV UTILS (kept)
    ============================ */
 
-function parseCSVLine(line){
-  const res=[]; let cur="", inQ=false;
-  for(let i=0;i<line.length;i++){
-    const c=line[i];
+function parseCSV(text){
+  const rows=[];
+  let row=[];
+  let cur="";
+  let inQ=false;
+  const src=String(text || "").replace(/^\uFEFF/, "");
+
+  for(let i=0;i<src.length;i++){
+    const c=src[i];
     if(c==='"'){
-      if(inQ && line[i+1]==='"'){ cur+='"'; i++; }
-      else inQ=!inQ;
+      if(inQ && src[i+1]==='"'){
+        cur+='"';
+        i++;
+      } else {
+        inQ=!inQ;
+      }
     } else if(c===',' && !inQ){
-      res.push(cur); cur="";
-    } else cur+=c;
+      row.push(cur);
+      cur="";
+    } else if((c==='\n' || c==='\r') && !inQ){
+      if(c==='\r' && src[i+1]==='\n') i++;
+      row.push(cur);
+      if(row.some(v=>String(v).trim()!=="")) rows.push(row);
+      row=[];
+      cur="";
+    } else {
+      cur+=c;
+    }
   }
-  res.push(cur);
-  return res;
+
+  row.push(cur);
+  if(row.some(v=>String(v).trim()!=="")) rows.push(row);
+  return rows;
 }
+
+function normalizeCsvHeader(value){
+  const key=String(value || "").replace(/^\uFEFF/, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const aliases={
+    event:"label",
+    eventname:"label",
+    name:"label",
+    startdate:"start",
+    enddate:"end",
+    category:"cat",
+    categorykey:"cat",
+    critical:"crit",
+    criticalmilestone:"crit",
+    detail:"details",
+    notes:"details"
+  };
+  return aliases[key] || key;
+}
+
+function normalizeImportDate(value){
+  const raw=String(value || "").trim();
+  if(!raw) return "";
+
+  if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){
+    const d=toD(raw);
+    return toS(d)===raw ? raw : "";
+  }
+
+  const slash=raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
+  if(slash){
+    const m=Number(slash[1]);
+    const d=Number(slash[2]);
+    const y=Number(slash[3].length===2 ? `20${slash[3]}` : slash[3]);
+    const dt=new Date(y,m-1,d);
+    return dt.getFullYear()===y && dt.getMonth()===m-1 && dt.getDate()===d ? toS(dt) : "";
+  }
+
+  return "";
+}
+
+function normalizeImportCat(value, cats){
+  const raw=String(value || "").trim();
+  if(raw && cats?.[raw]) return raw;
+  const match=Object.entries(cats || {}).find(([,v])=>String(v?.label || "").toLowerCase()===raw.toLowerCase());
+  return match ? match[0] : "milestone";
+}
+
 
 function exportCSV(events){
   const hdr="id,label,start,end,cat,crit,details";
@@ -238,31 +305,56 @@ function exportCSV(events){
 }
 
 function parseImportCSV(text, cats){
-  const lines = text.split(/\r?\n/).filter(l=>l.trim());
-  if(lines.length<2) return null;
-  const evs=[]; let maxId=0;
-  lines.slice(1).forEach((line,i)=>{
-    const f=parseCSVLine(line); if(f.length<5) return;
-    const id = parseInt(f[0]) || (Date.now()+i);
-    const label = (f[1]||"").replace(/^"|"$/g,"").replace(/""/g,'"').trim();
-    const start = (f[2]||"").trim();
-    const end   = ((f[3]||"").trim() || start);
-    const cat   = (f[4]||"milestone").trim();
-    const crit  = (f[5]||"").trim().toUpperCase()==="TRUE" || (f[5]||"").trim()==="1";
+  const rows=parseCSV(text);
+  if(rows[0]?.length===1 && /^sep=/i.test(String(rows[0][0] || "").trim())) rows.shift();
+  if(rows.length<2) return null;
 
-    if(!label || !start.match(/^\d{4}-\d{2}-\d{2}$/)) return;
-    if(id>maxId) maxId=id;
-    const details = (f[6]||"").replace(/^"|"$/g,"").replace(/""/g,'"').trim();
+  const header=rows[0].map(normalizeCsvHeader);
+  const hasNamedHeaders=header.includes("label") && header.includes("start");
+  const indexOf=name=>header.indexOf(name);
+  const get=(row,name,fallbackIndex)=>{
+    const i=hasNamedHeaders ? indexOf(name) : -1;
+    return String(row[i>=0 ? i : fallbackIndex] ?? "").trim();
+  };
+
+  const evs=[];
+  const seenIds=new Set();
+  let maxId=0;
+
+  rows.slice(1).forEach(row=>{
+    const idRaw=Number.parseInt(get(row,"id",0),10);
+    const label=get(row,"label",1);
+    const start=normalizeImportDate(get(row,"start",2));
+    const endRaw=normalizeImportDate(get(row,"end",3)) || start;
+    const cat=normalizeImportCat(get(row,"cat",4), cats);
+    const critRaw=get(row,"crit",5).toLowerCase();
+    const crit=["true","1","yes","y","x"].includes(critRaw);
+    const details=get(row,"details",6);
+
+    if(!label || !start) return;
+
+    const id=Number.isFinite(idRaw) && idRaw>0 ? idRaw : null;
+    if(id && id>maxId) maxId=id;
+
     evs.push({
       id,
       label,
       start,
-      end: end>=start ? end : start,
-      cat: cats?.[cat] ? cat : "milestone",
+      end: endRaw>=start ? endRaw : start,
+      cat,
       crit,
       details
     });
   });
+
+  evs.forEach(ev=>{
+    if(!ev.id || seenIds.has(ev.id)){
+      maxId+=1;
+      ev.id=maxId;
+    }
+    seenIds.add(ev.id);
+  });
+
   return evs.length>0 ? { evs, maxId } : null;
 }
 
@@ -741,25 +833,30 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
   );
 }
 
-function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onReset,onClose,onManageCats}){
+function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onClose,onManageCats}){
   const th=dark?TH.dark:TH.light;
   const cats=useCats();
   const catHex=useCatHex();
   const [sort,setSort]=useState("start");
   const [q,setQ]=useState("");
-  const [confirmReset,setConfirmReset]=useState(false);
   const fileRef=useRef();
 
   const filtered=[...(events||[])]
-    .filter(e=>!q || e.label.toLowerCase().includes(q.toLowerCase()) || (cats?.[e.cat]?.label||"").toLowerCase().includes(q.toLowerCase()))
-    .sort((a,b)=>String(a[sort])<String(b[sort])?-1:1);
+    .filter(e=>{
+      const query=q.trim().toLowerCase();
+      if(!query) return true;
+      return String(e.label || "").toLowerCase().includes(query)
+        || String(e.details || "").toLowerCase().includes(query)
+        || String(cats?.[e.cat]?.label || "").toLowerCase().includes(query);
+    })
+    .sort((a,b)=>String(a[sort] ?? "")<String(b[sort] ?? "")?-1:1);
 
-  const th2={fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",color:th.muted,padding:"8px 12px",background:th.card2,borderBottom:`1px solid ${th.border}`,cursor:"pointer",userSelect:"none",whiteSpace:"nowrap"};
+  const th2={fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",color:th.muted,padding:"8px 12px",background:th.card2,borderBottom:`1px solid ${th.border}`,cursor:"pointer",userSelect:"none",whiteSpace:"nowrap",textAlign:"left"};
   const td ={fontSize:13,color:th.text,padding:"7px 12px",borderBottom:`1px solid ${th.border}`,verticalAlign:"middle"};
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"flex-start",justifyContent:"center",zIndex:350,paddingTop:44,paddingBottom:44,overflowY:"auto"}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(980px,96vw)",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(1120px,96vw)",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
         <div style={{padding:"16px 20px",borderBottom:`1px solid ${th.border}`,display:"flex",alignItems:"center",gap:9,flexWrap:"wrap"}}>
           <div style={{flex:1}}>
             <div style={{fontWeight:700,fontSize:16,color:th.text}}>Event Editor</div>
@@ -768,15 +865,11 @@ function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onReset,onClose,
           <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search…"
             style={{background:th.card2,border:`1px solid ${th.border}`,borderRadius:6,padding:"7px 11px",color:th.text,fontSize:13,outline:"none",width:180}} />
           <button onClick={onAdd} style={{background:"#1e40af",border:"none",borderRadius:6,padding:"7px 14px",color:"#fff",fontSize:13,fontWeight:700}}>+ Add Event</button>
-          <button onClick={onManageCats} style={{background:dark?"#1a0c2e":"#ede9fe",border:"1px solid #8b5cf6",borderRadius:6,padding:"7px 14px",color:"#8b5cf6",fontSize:13,fontWeight:700}}>🎨 Categories</button>
+          <button onClick={onManageCats} style={{background:dark?"#1a0c2e":"#ede9fe",border:"1px solid #8b5cf6",borderRadius:6,padding:"7px 14px",color:"#8b5cf6",fontSize:13,fontWeight:700}}>🎨 Manage Categories</button>
           <button onClick={onExport} style={{background:dark?"#0c2a0c":"#dcfce7",border:"1px solid #16a34a",borderRadius:6,padding:"7px 14px",color:"#16a34a",fontSize:13,fontWeight:700}}>↓ Export CSV</button>
           <button onClick={()=>fileRef.current.click()} style={{background:dark?"#1a1a0c":"#fefce8",border:"1px solid #ca8a04",borderRadius:6,padding:"7px 14px",color:"#ca8a04",fontSize:13,fontWeight:700}}>↑ Import CSV</button>
           <input ref={fileRef} type="file" accept=".csv" style={{display:"none"}}
             onChange={e=>{const f=e.target.files[0]; if(f) onImport(f); e.target.value="";}} />
-          {!confirmReset
-            ? <button onClick={()=>setConfirmReset(true)} style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:6,padding:"7px 12px",color:th.muted,fontSize:13}}>Reset</button>
-            : <button onClick={()=>{onReset();setConfirmReset(false);}} style={{background:"#7f1d1d",border:"none",borderRadius:6,padding:"7px 12px",color:"#fca5a5",fontSize:13,fontWeight:700}}>Confirm Reset</button>
-          }
           <button onClick={onClose} style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:6,padding:"7px 11px",color:th.muted,fontSize:13}}>✕</button>
         </div>
 
@@ -788,12 +881,13 @@ function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onReset,onClose,
           <table style={{width:"100%",borderCollapse:"collapse"}}>
             <thead style={{position:"sticky",top:0,zIndex:2}}>
               <tr>
-                <th style={{...th2,width:34}} onClick={()=>setSort("crit")}>⚡</th>
+                <th style={{...th2,width:34,textAlign:"center"}} onClick={()=>setSort("crit")}>⚡</th>
                 <th style={th2} onClick={()=>setSort("label")}>Event Name {sort==="label"?"↑":""}</th>
+                <th style={{...th2,width:260}} onClick={()=>setSort("details")}>Details {sort==="details"?"↑":""}</th>
                 <th style={th2} onClick={()=>setSort("start")}>Start {sort==="start"?"↑":""}</th>
                 <th style={th2} onClick={()=>setSort("end")}>End {sort==="end"?"↑":""}</th>
                 <th style={th2} onClick={()=>setSort("cat")}>Category {sort==="cat"?"↑":""}</th>
-                <th style={{...th2,width:60}}>Edit</th>
+                <th style={{...th2,width:60,textAlign:"center"}}>Edit</th>
               </tr>
             </thead>
             <tbody>
@@ -801,6 +895,11 @@ function AdminTable({events,dark,onEdit,onAdd,onImport,onExport,onReset,onClose,
                 <tr key={ev.id} onMouseEnter={e=>e.currentTarget.style.background=th.card2} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                   <td style={{...td,textAlign:"center"}}>{ev.crit?"⚡":""}</td>
                   <td style={td}>{ev.label}</td>
+                  <td style={{...td,maxWidth:260,color:ev.details?th.text:th.muted}}>
+                    <span title={ev.details || ""} style={{display:"block",maxWidth:240,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                      {ev.details ? truncateText(ev.details, 90) : "—"}
+                    </span>
+                  </td>
                   <td style={{...td,fontFamily:"'IBM Plex Mono',monospace",fontSize:12,whiteSpace:"nowrap"}}>{ev.start}</td>
                   <td style={{...td,fontFamily:"'IBM Plex Mono',monospace",fontSize:12,whiteSpace:"nowrap",color:ev.start!==ev.end?th.text:th.muted}}>{ev.start!==ev.end?ev.end:"—"}</td>
                   <td style={td}>
@@ -896,6 +995,24 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
   const th=dark?TH.dark:TH.light;
   const catHex=useCatHex();
   const [visibleMonths,setVisibleMonths]=useState(6);
+  const scrollRef=useRef(null);
+  const [timelineViewportW,setTimelineViewportW]=useState(1120);
+
+  useEffect(()=>{
+    const el=scrollRef.current;
+    if(!el) return;
+    const measure=()=>setTimelineViewportW(Math.max(360, el.clientWidth - TL_LABEL_W));
+    measure();
+
+    if(typeof ResizeObserver !== "undefined"){
+      const ro=new ResizeObserver(measure);
+      ro.observe(el);
+      return ()=>ro.disconnect();
+    }
+
+    window.addEventListener("resize", measure);
+    return ()=>window.removeEventListener("resize", measure);
+  },[]);
 
   const range = useMemo(()=>{
     const dated = (events||[]).filter(e=>e.start && e.end);
@@ -916,8 +1033,8 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
 
   const clampedVisibleMonths = Math.min(Math.max(1, visibleMonths), range.totalMonths);
   const days = Math.round((range.end - range.start)/86400000) + 1;
-  const pxPerDay = Math.max(2.5, 1120 / (clampedVisibleMonths * 30.4375));
-  const totalW = Math.max(1120, Math.round(days * pxPerDay));
+  const pxPerDay = Math.max(1.2, timelineViewportW / (clampedVisibleMonths * 30.4375));
+  const totalW = Math.max(timelineViewportW, Math.ceil(days * pxPerDay));
 
   function zoomIn(){
     setVisibleMonths(v=>Math.max(1, v<=6 ? v-1 : 6));
@@ -973,21 +1090,21 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
       <div style={{display:"flex",alignItems:"center",gap:8,padding:"6px 16px",background:th.card2,borderBottom:`1px solid ${th.border}`,flexShrink:0}}>
         <span style={{fontSize:11,fontWeight:700,color:th.muted,textTransform:"uppercase",letterSpacing:".09em"}}>Months shown:</span>
         <button onClick={()=>setVisibleMonths(1)} title="Show 1 month" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 9px",color:th.text,fontSize:12,fontWeight:700}}>Min</button>
-        <button onClick={zoomIn} title="Zoom in" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 10px",color:th.text,fontSize:14,fontWeight:700}}>+</button>
+        <button onClick={zoomIn} title="Show fewer months" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 10px",color:th.text,fontSize:14,fontWeight:700}}>−</button>
         <span style={{fontSize:12,fontWeight:600,color:th.text,minWidth:86,textAlign:"center"}}>
           {clampedVisibleMonths} of {range.totalMonths}
         </span>
-        <button onClick={zoomOut} title="Zoom out" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 10px",color:th.text,fontSize:14,fontWeight:700}}>−</button>
+        <button onClick={zoomOut} title="Show more months" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 10px",color:th.text,fontSize:14,fontWeight:700}}>+</button>
         <button onClick={()=>setVisibleMonths(range.totalMonths)} title="Show all months" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:4,padding:"3px 9px",color:th.text,fontSize:12,fontWeight:700}}>Max</button>
         <div style={{marginLeft:8,height:16,width:1,background:th.border}}/>
         <span style={{fontSize:11,color:th.muted}}>{dateRangeLabel}</span>
         <span style={{marginLeft:"auto",fontSize:11,color:th.muted}}>Single-day events are diamonds. Multi-day events are bars.</span>
       </div>
 
-      <div style={{flex:1,overflow:"auto",minHeight:0,minWidth:0}}>
+      <div ref={scrollRef} style={{flex:1,overflow:"auto",minHeight:0,minWidth:0}}>
         <div style={{minWidth:TL_LABEL_W+totalW,position:"relative"}}>
           <div style={{position:"sticky",top:0,display:"flex",zIndex:20,borderBottom:`1px solid ${th.border}`,height:TL_HDR_H}}>
-            <div style={{width:TL_LABEL_W,flexShrink:0,position:"sticky",left:0,zIndex:21,background:th.hdrBg,display:"flex",alignItems:"center",padding:"0 14px",borderRight:`1px solid rgba(255,255,255,0.15)`}}>
+            <div style={{width:TL_LABEL_W,boxSizing:"border-box",flexShrink:0,position:"sticky",left:0,zIndex:21,background:th.hdrBg,display:"flex",alignItems:"center",padding:"0 14px",borderRight:`1px solid rgba(255,255,255,0.15)`}}>
               <span style={{fontSize:11,fontWeight:700,color:th.hdrText,textTransform:"uppercase",letterSpacing:".09em"}}>Swim Lane</span>
             </div>
             <div style={{position:"relative",flex:1,background:th.wkHdrBg,overflow:"hidden"}}>
@@ -1010,7 +1127,7 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
             const placedLabels=[];
             return(
               <div key={lane.id} style={{display:"flex",height:lane.height,borderBottom:`1px solid ${th.border}`,background:li%2===0?th.card:th.card2}}>
-                <div style={{width:TL_LABEL_W,flexShrink:0,position:"sticky",left:0,zIndex:10,background:li%2===0?th.card:th.card2,borderRight:`1px solid ${th.border}`,display:"flex",alignItems:"center",padding:"0 14px"}}>
+                <div style={{width:TL_LABEL_W,boxSizing:"border-box",flexShrink:0,position:"sticky",left:0,zIndex:10,background:li%2===0?th.card:th.card2,borderRight:`1px solid ${th.border}`,display:"flex",alignItems:"center",padding:"0 14px"}}>
                   <span style={{fontSize:13,fontWeight:600,color:th.text,lineHeight:1.3}}>{lane.label}</span>
                 </div>
 
@@ -1064,7 +1181,7 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
                     }
 
                     const evW=Math.max(pxPerDay*durationDays, 6);
-                    const showLabel=evW > Math.max(42, String(ev.label||"").length*5.8);
+                    const showLabel=evW >= 34;
                     return(
                       <div
                         key={bi}
@@ -1291,7 +1408,8 @@ useEffect(() => {
   /* -------- Debounced persistence -------- */
 
   function schedulePersistEvents(nextEvents){
-    if(!editorKeyRef.current) return; // not authorized to write
+    const editorKey=editorKeyRef.current;
+    if(!editorKey) return; // not authorized to write
     pendingEventsRef.current = nextEvents;
 
     clearTimeout(saveEventsTimerRef.current);
@@ -1299,7 +1417,7 @@ useEffect(() => {
       const payload = { updatedUtc: new Date().toISOString(), events: pendingEventsRef.current || [] };
       setSaveBusy(true); setSaveErr("");
       try{
-        await saveSharedEvents(payload, editorKeyRef.current);
+        await saveSharedEvents(payload, editorKey);
         setSharedUpdatedUtc(payload.updatedUtc);
       }catch(e){
         setSaveErr(e?.message || String(e));
@@ -1309,15 +1427,37 @@ useEffect(() => {
     }, SAVE_DEBOUNCE_MS);
   }
 
+  async function persistEventsNow(nextEvents){
+    const editorKey=editorKeyRef.current;
+    if(!editorKey) return false;
+
+    clearTimeout(saveEventsTimerRef.current);
+    pendingEventsRef.current = nextEvents;
+
+    const payload = { updatedUtc: new Date().toISOString(), events: nextEvents || [] };
+    setSaveBusy(true); setSaveErr("");
+    try{
+      await saveSharedEvents(payload, editorKey);
+      setSharedUpdatedUtc(payload.updatedUtc);
+      return true;
+    }catch(e){
+      setSaveErr(e?.message || String(e));
+      return false;
+    }finally{
+      setSaveBusy(false);
+    }
+  }
+
   function schedulePersistCats(nextCats){
-    if(!editorKeyRef.current) return;
+    const editorKey=editorKeyRef.current;
+    if(!editorKey) return;
     pendingCatsRef.current = nextCats;
 
     clearTimeout(saveCatsTimerRef.current);
     saveCatsTimerRef.current = setTimeout(async ()=>{
       setSaveBusy(true); setSaveErr("");
       try{
-        await saveSharedCats(pendingCatsRef.current || {}, editorKeyRef.current);
+        await saveSharedCats(pendingCatsRef.current || {}, editorKey);
       }catch(e){
         setSaveErr(e?.message || String(e));
       }finally{
@@ -1367,15 +1507,12 @@ useEffect(() => {
       if(window.confirm(`Replace all ${events.length} events with ${res.evs.length} imported events?`)){
         setEvents(res.evs);
         setNextId(res.maxId+1);
-        schedulePersistEvents(res.evs);
-        showToast(`Imported ${res.evs.length} events.`);
+        persistEventsNow(res.evs).then(ok=>{
+          showToast(ok ? `Imported and saved ${res.evs.length} events.` : `Imported ${res.evs.length} events, but save failed.`);
+        });
       }
     };
     r.readAsText(file);
-  }
-
-  function handleReset(){
-    if(!window.confirm("Reset is disabled because embedded fallback data has been removed. Use CSV import or edit events directly.")) return;
   }
 
   function handleSaveCats(newCats){
@@ -1492,7 +1629,7 @@ useEffect(() => {
               {dark?"☀ Light":"🌙 Dark"}
             </button>
 
-            <button onClick={requestEditMode} title={editMode?"Lock schedule":"Unlock schedule for editing (password)"} style={{background:editMode?(dark?"#1e3a6e":"#dbeafe"):"transparent",border:`1px solid ${editMode?"#3b82f6":th.border}`,borderRadius:5,padding:"6px 11px",color:editMode?"#3b82f6":th.muted,fontSize:12,fontWeight:600}}>
+            <button onClick={requestEditMode} title={editMode?"Exit edit mode":"Unlock schedule for editing (password)"} style={{background:editMode?(dark?"#1e3a6e":"#dbeafe"):"transparent",border:`1px solid ${editMode?"#3b82f6":th.border}`,borderRadius:5,padding:"6px 11px",color:editMode?"#3b82f6":th.muted,fontSize:12,fontWeight:600}}>
               {editMode?"🔓 Editing":"✎ Edit"}
             </button>
 
@@ -1609,8 +1746,8 @@ useEffect(() => {
             <span style={{fontSize:13,color:th.muted}}>
               🔓 <strong style={{color:th.text}}>Edit mode</strong> — click any event to modify. Changes save automatically.
             </span>
-            <button onClick={()=>{setEditMode(false); editorKeyRef.current="";}} title="Lock" style={{background:"#1e40af",border:"none",borderRadius:5,padding:"5px 14px",color:"#fff",fontSize:12,fontWeight:700}}>
-              Lock
+            <button onClick={()=>{setEditMode(false); editorKeyRef.current="";}} title="Exit edit mode" style={{background:"#1e40af",border:"none",borderRadius:5,padding:"5px 14px",color:"#fff",fontSize:12,fontWeight:700}}>
+              Exit Edit Mode
             </button>
           </div>
         )}
@@ -1655,7 +1792,6 @@ useEffect(() => {
             onAdd={()=>setEditing({_new:true,label:"",start:todayStr,end:todayStr,cat:"milestone",crit:false,details:""})}
             onExport={handleExport}
             onImport={handleImport}
-            onReset={handleReset}
             onClose={()=>setShowAdmin(false)}
             onManageCats={()=>setShowCatMgr(true)}
           />
