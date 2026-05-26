@@ -1189,7 +1189,9 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
                         title={tooltip}
                         style={{
                           position:"absolute",
-                          left:startX,width:evW,
+                          left:startX,
+                          width:evW,
+                          boxSizing:"border-box",
                           top:y,
                           height:TL_BAR_H,
                           background:dark?`${hex}30`:`${hex}20`,
