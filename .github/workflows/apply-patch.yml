@@ -4,6 +4,7 @@ on:
     inputs:
       patch_content:
         description: 'Paste the entire content of your .patch file here'
+        type: text
         required: true
 
 jobs:
@@ -17,22 +18,23 @@ jobs:
         env:
           PATCH_DATA: ${{ github.event.inputs.patch_content }}
         run: |
-          # Write input exactly as-is to a temporary file
-          cat << 'EOF' > temp.raw
-          $PATCH_DATA
-          EOF
+          # Use a python inline script to safely dump multi-line text and clean up whitespace
+          python3 -c '
+          import os
+          data = os.environ.get("PATCH_DATA", "")
           
-          # Strip out potential surrounding literal quotes from bash interpolation
-          sed -i '1s/^"//; $s/"$//' temp.raw
+          # Replace web non-breaking space characters with standard ASCII spaces
+          data = data.replace("\u00a0", " ")
           
-          # Convert web non-breaking spaces (C2 A0 in UTF-8) to standard ASCII spaces
-          sed 's/\xca\xa0/ /g' temp.raw > temp.patch
-
-          # Apply the sanitized patch file
+          with open("temp.patch", "w", encoding="utf-8") as f:
+              f.write(data)
+          '
+          
+          # Apply the patch file
           git apply temp.patch
           
-          # Clean up temporary files
-          rm temp.raw temp.patch
+          # Clean up temporary file
+          rm temp.patch
 
       - name: Commit and Push Changes
         run: |
