@@ -84,6 +84,35 @@ function eventTooltip(ev){
 function sortedCatEntries(cats){
   return Object.entries(cats || {}).sort((a,b)=>String(a[1]?.label || a[0]).localeCompare(String(b[1]?.label || b[0])));
 }
+function safeTimelineLaneId(label){
+  const id = String(label || "timeline_lane").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"");
+  return id || "timeline_lane";
+}
+function getCatSortOrder(cat, fallback=999){
+  const n = Number(cat?.sortOrder);
+  return Number.isFinite(n) ? n : fallback;
+}
+function buildTimelineLaneDefs(cats){
+  const laneMap = {};
+
+  Object.entries(cats || {}).forEach(([catKey, cat])=>{
+    const label = String(cat?.timelineLane || cat?.label || catKey).trim() || catKey;
+    const order = getCatSortOrder(cat);
+    const idBase = safeTimelineLaneId(label);
+
+    if(!laneMap[label]){
+      laneMap[label] = { id:idBase, label, cats:[], sortOrder:order };
+    }
+
+    laneMap[label].cats.push(catKey);
+    laneMap[label].sortOrder = Math.min(laneMap[label].sortOrder, order);
+  });
+
+  return Object.values(laneMap).sort((a,b)=>{
+    if(a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
+    return a.label.localeCompare(b.label);
+  });
+}
 function monthStart(d){ return new Date(d.getFullYear(), d.getMonth(), 1); }
 function monthEnd(d){ return new Date(d.getFullYear(), d.getMonth()+1, 0); }
 function addMonthsDate(d,n){ return new Date(d.getFullYear(), d.getMonth()+n, 1); }
@@ -750,9 +779,21 @@ function EditModal({ev,onSave,onDelete,onClose,dark}){
 function CategoryManager({cats,events,onSave,onClose,dark}){
   const th=dark?TH.dark:TH.light;
 
-  const [draft,setDraft]=useState(()=>sortedCatEntries(cats).map(([k,v])=>({key:k,label:v.label,hex:v.hex,_orig:k})));
+  const [draft,setDraft]=useState(()=>sortedCatEntries(cats).map(([k,v])=>({
+    key:k,
+    label:v.label,
+    hex:v.hex,
+    timelineLane:v.timelineLane || v.label || k,
+    sortOrder:getCatSortOrder(v),
+    _orig:k
+  })));
   const [newLabel,setNewLabel]=useState("");
   const [newHex,setNewHex]=useState("#3b82f6");
+  const [newTimelineLane,setNewTimelineLane]=useState("");
+  const [newSortOrder,setNewSortOrder]=useState(()=>{
+    const orders=Object.values(cats || {}).map(c=>getCatSortOrder(c)).filter(n=>Number.isFinite(n));
+    return String((orders.length ? Math.max(...orders) : 0) + 10);
+  });
 
   const evCountByKey = useMemo(()=>{
     const m={}; (events||[]).forEach(e=>{ m[e.cat]=(m[e.cat]||0)+1; });
@@ -778,13 +819,24 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
     if(!newLabel.trim()) return;
     const key=newLabel.trim().toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"");
     const safe=draft.some(d=>d.key===key) ? key+"_"+Date.now() : key;
-    setDraft(d=>[...d,{key:safe,label:newLabel.trim(),hex:newHex,_orig:null}]);
-    setNewLabel(""); setNewHex("#3b82f6");
+    const orders=draft.map(d=>Number(d.sortOrder)).filter(n=>Number.isFinite(n));
+    const order=Number(newSortOrder);
+    const nextOrder=Number.isFinite(order) ? order : ((orders.length ? Math.max(...orders) : 0) + 10);
+    setDraft(d=>[...d,{key:safe,label:newLabel.trim(),hex:newHex,timelineLane:(newTimelineLane.trim() || newLabel.trim()),sortOrder:nextOrder,_orig:null}]);
+    setNewLabel(""); setNewHex("#3b82f6"); setNewTimelineLane(""); setNewSortOrder(String(nextOrder + 10));
   }
 
   function commit(){
     const out={};
-    draft.forEach(d=>{ out[d.key]={label:d.label,hex:d.hex}; });
+    draft.forEach(d=>{
+      const sortOrder=Number(d.sortOrder);
+      out[d.key]={
+        label:String(d.label || d.key).trim() || d.key,
+        hex:d.hex || "#888888",
+        timelineLane:String(d.timelineLane || d.label || d.key).trim() || d.key,
+        sortOrder:Number.isFinite(sortOrder) ? sortOrder : 999
+      };
+    });
     onSave(out);
   }
 
@@ -792,21 +844,23 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",display:"flex",alignItems:"flex-start",justifyContent:"center",zIndex:500,paddingTop:44,paddingBottom:44,overflowY:"auto"}} onClick={onClose}>
-      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(620px,96vw)",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:12,width:"min(860px,96vw)",display:"flex",flexDirection:"column",maxHeight:"88vh",boxShadow:"0 24px 64px rgba(0,0,0,.5)"}} onClick={e=>e.stopPropagation()}>
         <div style={{padding:"16px 20px",borderBottom:`1px solid ${th.border}`,display:"flex",alignItems:"center",gap:10}}>
           <div style={{flex:1}}>
             <div style={{fontWeight:700,fontSize:16,color:th.text}}>Manage Categories</div>
-            <div style={{fontSize:12,color:th.muted,marginTop:1}}>Edit labels, change colors, add or remove categories</div>
+            <div style={{fontSize:12,color:th.muted,marginTop:1}}>Edit labels, colors, timeline lanes, sort order, add or remove categories</div>
           </div>
           <button onClick={onClose} style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:6,padding:"7px 11px",color:th.muted,fontSize:13}}>✕</button>
         </div>
 
         <div style={{overflowY:"auto",flex:1,padding:"14px 20px"}}>
           {draft.map((d,i)=>(
-            <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 0",borderBottom:`1px solid ${th.border}`}}>
+            <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 0",borderBottom:`1px solid ${th.border}`,flexWrap:"wrap"}}>
               <input type="color" value={d.hex} onChange={e=>updateDraft(i,"hex",e.target.value)} title="Change color"
                 style={{width:34,height:34,border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent"}}/>
-              <input value={d.label} onChange={e=>updateDraft(i,"label",e.target.value)} style={{...inp,flex:1}}/>
+              <input value={d.label} onChange={e=>updateDraft(i,"label",e.target.value)} placeholder="Category label" style={{...inp,flex:"1 1 180px",minWidth:150}}/>
+              <input value={d.timelineLane} onChange={e=>updateDraft(i,"timelineLane",e.target.value)} placeholder="Timeline lane" title="Timeline swim lane label" style={{...inp,flex:"1 1 180px",minWidth:150}}/>
+              <input type="number" value={d.sortOrder} onChange={e=>updateDraft(i,"sortOrder",e.target.value)} title="Timeline lane sort order" style={{...inp,width:78}}/>
               <span style={{fontSize:11,color:th.sub,minWidth:36,textAlign:"right"}}>{evCountByKey[d.key]||0}ev</span>
               <button onClick={()=>removeDraft(i)} title="Remove this category" style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:5,padding:"5px 9px",color:"#ef4444",fontSize:12}}>✕</button>
             </div>
@@ -814,11 +868,15 @@ function CategoryManager({cats,events,onSave,onClose,dark}){
 
           <div style={{marginTop:16,padding:"14px",background:th.card2,borderRadius:8,border:`1px solid ${th.border}`}}>
             <div style={{fontSize:11,fontWeight:700,color:th.muted,textTransform:"uppercase",letterSpacing:".09em",marginBottom:10}}>Add New Category</div>
-            <div style={{display:"flex",gap:9,alignItems:"center"}}>
+            <div style={{display:"grid",gridTemplateColumns:"38px minmax(140px,1fr) minmax(140px,1fr) 90px auto",gap:9,alignItems:"center"}}>
               <input type="color" value={newHex} onChange={e=>setNewHex(e.target.value)} title="Pick color"
                 style={{width:38,height:36,border:`2px solid ${th.border}`,borderRadius:6,cursor:"pointer",padding:2,background:"transparent",flexShrink:0}}/>
               <input value={newLabel} onChange={e=>setNewLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addNew()} placeholder="Category name…"
-                style={{...inp,flex:1}}/>
+                style={{...inp,minWidth:0}}/>
+              <input value={newTimelineLane} onChange={e=>setNewTimelineLane(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addNew()} placeholder="Timeline lane…" title="Leave blank to use category name"
+                style={{...inp,minWidth:0}}/>
+              <input type="number" value={newSortOrder} onChange={e=>setNewSortOrder(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addNew()} placeholder="Order" title="Timeline sort order"
+                style={{...inp,minWidth:0}}/>
               <button onClick={addNew} style={{background:"#1e40af",border:"none",borderRadius:6,padding:"7px 16px",color:"#fff",fontSize:13,fontWeight:700,flexShrink:0}}>Add</button>
             </div>
           </div>
@@ -939,19 +997,6 @@ const TL_PAD=10;
 const TL_LABEL_W=170;
 const TL_HDR_H=40;
 
-const SWIM_LANE_DEFS = [
-  {id:"milestones",  label:"Milestones",          cats:["milestone"]},
-  {id:"freeze",      label:"File Freeze",         cats:["freeze"]},
-  {id:"disc_freeze", label:"Discipline Freezes",  cats:["disc_freeze"]},
-  {id:"row",         label:"ROW",                 cats:["row"]},
-  {id:"idr",         label:"IDR / Reviews",       cats:["idr","kh_review"]},
-  {id:"qc_qa",       label:"QC / QA",             cats:["plans_qc","bod"]},
-  {id:"rollplot",    label:"Roll Plots",          cats:["rollplot"]},
-  {id:"mor_mtg",     label:"MOR / Meetings",      cats:["mor","meeting"]},
-  {id:"st_review",   label:"ST Review",           cats:["st_review","comment"]},
-  {id:"stn_wb",      label:"Station Workbook",    cats:["stn_wb"]},
-  {id:"holidays",    label:"Holidays",            cats:["holiday"]},
-];
 
 function layoutLane(events){
   const sorted=[...events].sort((a,b)=>{
@@ -993,6 +1038,7 @@ function JumpTodayBtn({dark,onClick}){
 
 function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
   const th=dark?TH.dark:TH.light;
+  const cats=useCats();
   const catHex=useCatHex();
   const [visibleMonths,setVisibleMonths]=useState(6);
   const scrollRef=useRef(null);
@@ -1062,7 +1108,7 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
 
   const todayX=Math.round((todayD - range.start)/86400000)*pxPerDay;
 
-  const laneDefs = useMemo(()=>[...SWIM_LANE_DEFS].sort((a,b)=>a.label.localeCompare(b.label)),[]);
+  const laneDefs = useMemo(()=>buildTimelineLaneDefs(cats),[cats]);
 
   const laneData=useMemo(()=>{
     return laneDefs.map(lane=>{
