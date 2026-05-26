@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-26T03:20:52.843Z",
+  "updatedUtc": "2026-05-26T03:21:34.535Z",
   "events": [
     {
       "id": 1,
@@ -941,7 +941,7 @@
       "id": 105,
       "label": "QA Review & Final Corrections",
       "start": "2027-12-13",
-      "end": "2027-12-17",
+      "end": "2027-12-16",
       "cat": "plans_qc",
       "crit": false,
       "details": "As Necessary"
