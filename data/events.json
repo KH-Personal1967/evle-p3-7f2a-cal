@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-26T02:08:35.489Z",
+  "updatedUtc": "2026-05-26T03:20:52.843Z",
   "events": [
     {
       "id": 1,
@@ -944,7 +944,7 @@
       "end": "2027-12-17",
       "cat": "plans_qc",
       "crit": false,
-      "details": ""
+      "details": "As Necessary"
     },
     {
       "id": 106,
