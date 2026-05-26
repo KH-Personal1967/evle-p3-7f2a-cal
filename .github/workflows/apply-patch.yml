@@ -17,15 +17,22 @@ jobs:
         env:
           PATCH_DATA: ${{ github.event.inputs.patch_content }}
         run: |
-          cat << 'EOF' > temp.patch
+          # Write input exactly as-is to a temporary file
+          cat << 'EOF' > temp.raw
           $PATCH_DATA
           EOF
           
           # Strip out potential surrounding literal quotes from bash interpolation
-          sed -i '1s/^"//; $s/"$//' temp.patch
+          sed -i '1s/^"//; $s/"$//' temp.raw
           
+          # Convert web non-breaking spaces (C2 A0 in UTF-8) to standard ASCII spaces
+          sed 's/\xca\xa0/ /g' temp.raw > temp.patch
+
+          # Apply the sanitized patch file
           git apply temp.patch
-          rm temp.patch
+          
+          # Clean up temporary files
+          rm temp.raw temp.patch
 
       - name: Commit and Push Changes
         run: |
