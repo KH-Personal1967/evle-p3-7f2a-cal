@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-26T03:21:34.535Z",
+  "updatedUtc": "2026-05-26T03:22:16.602Z",
   "events": [
     {
       "id": 1,
@@ -948,12 +948,12 @@
     },
     {
       "id": 106,
-      "label": "Revise & Resubmit – Non-Compliance",
+      "label": "Revise & Resubmit",
       "start": "2027-12-17",
       "end": "2027-12-17",
       "cat": "milestone",
-      "crit": false,
-      "details": ""
+      "crit": true,
+      "details": "REVISE AND RESUBMIT ADDRESSED NON-COMPLIANCE COMMENTS"
     },
     {
       "id": 107,
