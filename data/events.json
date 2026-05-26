@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-05-26T03:22:16.602Z",
+  "updatedUtc": "2026-05-26T17:43:59.502Z",
   "events": [
     {
       "id": 1,
@@ -188,7 +188,7 @@
       "end": "2026-12-18",
       "cat": "rollplot",
       "crit": false,
-      "details": ""
+      "details": "By EOD"
     },
     {
       "id": 22,
