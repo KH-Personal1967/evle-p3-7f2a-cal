@@ -1114,7 +1114,7 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
     return laneDefs.map(lane=>{
       const evs = events.filter(e=>lane.cats.includes(e.cat) && filters.has(e.cat));
       const {bars, lanes:numTracks} = layoutLane(evs);
-      const height=Math.max(70, numTracks*TL_TRACK_H + TL_PAD*2 + 16);
+      const height=Math.max(42, numTracks*TL_TRACK_H + TL_PAD*2);
       return {...lane, bars, numTracks, height};
     });
   },[events,filters,laneDefs]);
@@ -1190,7 +1190,9 @@ function TimelineView({events,dark,filters,onSelect,editMode,onEdit,todayD}){
                     const hex=catHex(ev.cat);
                     const startX=Math.round((toD(ev.start)-range.start)/86400000)*pxPerDay;
                     const durationDays=Math.round((toD(ev.end)-toD(ev.start))/86400000)+1;
-                    const y=TL_PAD+bar.track*TL_TRACK_H;
+                    const contentHeight = Math.max(TL_TRACK_H, lane.numTracks * TL_TRACK_H);
+                    const yOffset = (lane.height - contentHeight) / 2;
+                    const y=yOffset+bar.track*TL_TRACK_H;
                     const isSingle=ev.start===ev.end;
                     const tooltip=eventTooltip(ev);
 
