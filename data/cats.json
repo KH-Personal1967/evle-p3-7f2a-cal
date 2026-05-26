@@ -1,63 +1,9 @@
 {
-  "holiday": {
-    "label": "Holiday",
-    "hex": "#64748b",
-    "timelineLane": "Holidays",
-    "sortOrder": 110
-  },
-  "freeze": {
-    "label": "File Freeze",
-    "hex": "#ef4444",
-    "timelineLane": "File Freeze",
-    "sortOrder": 20
-  },
-  "disc_freeze": {
-    "label": "Discipline Freeze",
-    "hex": "#f97316",
-    "timelineLane": "Discipline Freezes",
-    "sortOrder": 30
-  },
-  "milestone": {
-    "label": "Milestone / Submittal",
-    "hex": "#f59e0b",
-    "timelineLane": "Milestones",
-    "sortOrder": 10
-  },
-  "rollplot": {
-    "label": "Roll Plots",
-    "hex": "#2563eb",
-    "timelineLane": "Roll Plots",
-    "sortOrder": 70
-  },
-  "kh_review": {
-    "label": "KH Consistency Review",
-    "hex": "#10b981",
-    "timelineLane": "IDR / Reviews",
-    "sortOrder": 50
-  },
-  "idr": {
-    "label": "IDR Roll Plots / Memo",
-    "hex": "#8b5cf6",
-    "timelineLane": "IDR / Reviews",
-    "sortOrder": 50
-  },
-  "plans_qc": {
-    "label": "Plans QC / QA",
-    "hex": "#ec4899",
-    "timelineLane": "QC / QA",
-    "sortOrder": 60
-  },
   "bod": {
     "label": "BOD",
     "hex": "#a78bfa",
     "timelineLane": "QC / QA",
     "sortOrder": 60
-  },
-  "st_review": {
-    "label": "ST Review",
-    "hex": "#14b8a6",
-    "timelineLane": "ST Review",
-    "sortOrder": 90
   },
   "comment": {
     "label": "Comment Resolution",
@@ -65,17 +11,47 @@
     "timelineLane": "ST Review",
     "sortOrder": 90
   },
-  "row": {
-    "label": "ROW",
-    "hex": "#94a3b8",
-    "timelineLane": "ROW",
-    "sortOrder": 40
+  "disc_freeze": {
+    "label": "Discipline Freeze",
+    "hex": "#f97316",
+    "timelineLane": "Freeze Dates",
+    "sortOrder": 30
   },
-  "stn_wb": {
-    "label": "Station Workbook / WP QC",
-    "hex": "#84cc16",
-    "timelineLane": "Station Workbook",
-    "sortOrder": 100
+  "freeze": {
+    "label": "File Freeze",
+    "hex": "#f91a1a",
+    "timelineLane": "Freeze Dates",
+    "sortOrder": 20
+  },
+  "holiday": {
+    "label": "Holiday",
+    "hex": "#64748b",
+    "timelineLane": "Holidays",
+    "sortOrder": 110
+  },
+  "idr": {
+    "label": "IDR Roll Plots / Memo",
+    "hex": "#8b5cf6",
+    "timelineLane": "IDR / Reviews",
+    "sortOrder": 50
+  },
+  "kh_review": {
+    "label": "KH Consistency Review",
+    "hex": "#10b981",
+    "timelineLane": "IDR / Reviews",
+    "sortOrder": 50
+  },
+  "meeting": {
+    "label": "Meeting / Workshop",
+    "hex": "#f43f5e",
+    "timelineLane": "MOR / Meetings",
+    "sortOrder": 80
+  },
+  "milestone": {
+    "label": "Milestone / Submittal",
+    "hex": "#f59e0b",
+    "timelineLane": "Milestones",
+    "sortOrder": 10
   },
   "mor": {
     "label": "MOR Meetings / Memo",
@@ -83,10 +59,34 @@
     "timelineLane": "MOR / Meetings",
     "sortOrder": 80
   },
-  "meeting": {
-    "label": "Meeting / Workshop",
-    "hex": "#f43f5e",
-    "timelineLane": "MOR / Meetings",
-    "sortOrder": 80
+  "plans_qc": {
+    "label": "Plans QC / QA",
+    "hex": "#ec4899",
+    "timelineLane": "QC / QA",
+    "sortOrder": 60
+  },
+  "rollplot": {
+    "label": "Roll Plots",
+    "hex": "#2563eb",
+    "timelineLane": "Roll Plots",
+    "sortOrder": 70
+  },
+  "row": {
+    "label": "ROW",
+    "hex": "#94a3b8",
+    "timelineLane": "ROW",
+    "sortOrder": 40
+  },
+  "st_review": {
+    "label": "ST Review",
+    "hex": "#14b8a6",
+    "timelineLane": "ST Review",
+    "sortOrder": 90
+  },
+  "stn_wb": {
+    "label": "Station Workbook / WP QC",
+    "hex": "#84cc16",
+    "timelineLane": "Station Workbook",
+    "sortOrder": 100
   }
 }
