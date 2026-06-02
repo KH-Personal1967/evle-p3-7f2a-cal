@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-02T23:55:57.172Z",
+  "updatedUtc": "2026-06-02T23:57:03.935Z",
   "events": [
     {
       "id": 1,
@@ -984,8 +984,8 @@
     },
     {
       "label": "SSM Review",
-      "start": "2026-07-06",
-      "end": "2026-07-09",
+      "start": "2027-06-06",
+      "end": "2027-06-06",
       "cat": "plans_qc",
       "crit": false,
       "details": "",
