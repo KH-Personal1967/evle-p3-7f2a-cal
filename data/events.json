@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-02T23:37:05.885Z",
+  "updatedUtc": "2026-06-02T23:40:47.838Z",
   "events": [
     {
       "id": 1,
@@ -364,8 +364,8 @@
     {
       "id": 41,
       "label": "Survey Basefile Freeze",
-      "start": "2027-05-17",
-      "end": "2027-05-17",
+      "start": "2027-04-19",
+      "end": "2027-04-19",
       "cat": "freeze",
       "crit": true,
       "details": ""
