@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-02T23:40:47.838Z",
+  "updatedUtc": "2026-06-02T23:44:33.663Z",
   "events": [
     {
       "id": 1,
@@ -489,9 +489,9 @@
     },
     {
       "id": 55,
-      "label": "Final ROW Freeze",
-      "start": "2027-06-25",
-      "end": "2027-06-25",
+      "label": "Final ROW PL Freeze",
+      "start": "2027-06-17",
+      "end": "2027-06-17",
       "cat": "freeze",
       "crit": true,
       "details": ""
