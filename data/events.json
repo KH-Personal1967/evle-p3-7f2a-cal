@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:12:39.994Z",
+  "updatedUtc": "2026-06-03T01:13:53.188Z",
   "events": [
     {
       "id": 1,
@@ -489,9 +489,9 @@
     },
     {
       "id": 56,
-      "label": "QC Basefile & Sheet Index Freeze",
+      "label": "QC Basefile Freeze",
       "start": "2027-06-28",
-      "end": "2027-06-29",
+      "end": "2027-06-28",
       "cat": "freeze",
       "crit": true,
       "details": ""
