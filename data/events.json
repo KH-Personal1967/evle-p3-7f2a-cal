@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T18:00:38.917Z",
+  "updatedUtc": "2026-06-03T18:01:14.176Z",
   "events": [
     {
       "id": 1,
@@ -1031,7 +1031,7 @@
       "label": "Consultant: Comment Responses Due in BB Session (EOD)",
       "start": "2027-10-28",
       "end": "2027-10-28",
-      "cat": "milestone",
+      "cat": "consultant_comment_disposition",
       "crit": false,
       "details": "",
       "id": 318
