@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:41:25.989Z",
+  "updatedUtc": "2026-06-03T00:45:16.503Z",
   "events": [
     {
       "id": 1,
@@ -795,9 +795,9 @@
     },
     {
       "id": 89,
-      "label": "ST Review: 30% Submittal",
+      "label": "ST: SME Review",
       "start": "2027-09-20",
-      "end": "2027-10-08",
+      "end": "2027-10-11",
       "cat": "st_review",
       "crit": false,
       "details": ""
