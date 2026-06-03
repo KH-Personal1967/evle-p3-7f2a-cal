@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:24:42.528Z",
+  "updatedUtc": "2026-06-03T01:25:19.421Z",
   "events": [
     {
       "id": 1,
@@ -698,7 +698,7 @@
       "id": 79,
       "label": "Roll Plot QC Check / Back Check",
       "start": "2027-08-30",
-      "end": "2027-09-10",
+      "end": "2027-09-03",
       "cat": "rollplot",
       "crit": false,
       "details": ""
