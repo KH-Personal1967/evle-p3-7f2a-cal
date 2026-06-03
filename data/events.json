@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:05:49.664Z",
+  "updatedUtc": "2026-06-03T01:07:37.756Z",
   "events": [
     {
       "id": 1,
@@ -373,8 +373,8 @@
     {
       "id": 43,
       "label": "Traffic Freeze",
-      "start": "2027-05-25",
-      "end": "2027-05-25",
+      "start": "2027-05-26",
+      "end": "2027-05-26",
       "cat": "disc_freeze",
       "crit": false,
       "details": ""
