@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:03:58.158Z",
+  "updatedUtc": "2026-06-03T00:04:39.735Z",
   "events": [
     {
       "id": 1,
@@ -999,6 +999,15 @@
       "crit": false,
       "details": "",
       "id": 302
+    },
+    {
+      "label": "Specification Submittal ",
+      "start": "2027-10-08",
+      "end": "2027-10-08",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 303
     }
   ]
 }
