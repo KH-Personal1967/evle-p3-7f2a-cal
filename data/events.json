@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T18:11:17.366Z",
+  "updatedUtc": "2026-06-03T18:12:53.659Z",
   "events": [
     {
       "id": 1,
@@ -1121,7 +1121,7 @@
       "label": "Reviewer Responses Due in BB Session EOD (Minor)",
       "start": "2027-12-03",
       "end": "2027-12-03",
-      "cat": "milestone",
+      "cat": "st_design_reviewer_response_disposition",
       "crit": false,
       "details": "",
       "id": 329
