@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T18:09:51.112Z",
+  "updatedUtc": "2026-06-03T18:10:12.938Z",
   "events": [
     {
       "id": 1,
@@ -1085,7 +1085,7 @@
       "label": "AHJ Responses Due in BB Session ",
       "start": "2027-11-12",
       "end": "2027-11-12",
-      "cat": "milestone",
+      "cat": "consultant_ahj_comment_disposition",
       "crit": false,
       "details": "",
       "id": 325
