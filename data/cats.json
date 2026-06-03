@@ -83,16 +83,16 @@
     "timelineLane": "ST Review",
     "sortOrder": 90
   },
-  "stn_wb": {
-    "label": "Station Workbook / WP QC",
-    "hex": "#84cc16",
-    "timelineLane": "Station Workbook",
-    "sortOrder": 100
-  },
   "st_design_reviewer_response_disposition": {
     "label": "ST: Design Reviewer Response Disposition",
     "hex": "#3b82f6",
     "timelineLane": "ST: Design Reviewer Response Disposition",
     "sortOrder": 120
+  },
+  "stn_wb": {
+    "label": "Station Workbook / WP QC",
+    "hex": "#84cc16",
+    "timelineLane": "Station Workbook",
+    "sortOrder": 100
   }
 }
