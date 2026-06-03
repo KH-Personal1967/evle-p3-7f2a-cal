@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:15:58.949Z",
+  "updatedUtc": "2026-06-03T01:16:30.404Z",
   "events": [
     {
       "id": 1,
@@ -543,9 +543,9 @@
     },
     {
       "id": 62,
-      "label": "QC Plans Due & QC Packaging",
+      "label": "QC Plans Due",
       "start": "2027-07-07",
-      "end": "2027-07-09",
+      "end": "2027-07-07",
       "cat": "plans_qc",
       "crit": true,
       "details": ""
