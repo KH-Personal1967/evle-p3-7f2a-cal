@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:26:19.788Z",
+  "updatedUtc": "2026-06-03T16:38:45.230Z",
   "events": [
     {
       "id": 1,
@@ -1260,6 +1260,15 @@
       "crit": false,
       "details": "",
       "id": 343
+    },
+    {
+      "label": "Plans Verification Finish and Start Sending to QA for Review",
+      "start": "2027-09-01",
+      "end": "2027-09-03",
+      "cat": "plans_qc",
+      "crit": false,
+      "details": "",
+      "id": 344
     }
   ]
 }
