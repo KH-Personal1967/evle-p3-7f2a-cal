@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T18:00:18.051Z",
+  "updatedUtc": "2026-06-03T18:00:38.917Z",
   "events": [
     {
       "id": 1,
@@ -1040,7 +1040,7 @@
       "label": "Consultant: Consolidate Comments for Resolution ",
       "start": "2027-10-29",
       "end": "2027-10-29",
-      "cat": "milestone",
+      "cat": "consultant_comment_disposition",
       "crit": false,
       "details": "",
       "id": 319
