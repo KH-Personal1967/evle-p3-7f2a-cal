@@ -106,5 +106,11 @@
     "hex": "#84cc16",
     "timelineLane": "Station Workbook",
     "sortOrder": 100
+  },
+  "consultant_ahj_comment_disposition": {
+    "label": "Consultant AHJ Comment Disposition",
+    "hex": "#3beaf7",
+    "timelineLane": "Consultant AHJ Comment Disposition",
+    "sortOrder": 150
   }
 }
