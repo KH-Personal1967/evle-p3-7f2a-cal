@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:40:20.145Z",
+  "updatedUtc": "2026-06-03T00:41:11.644Z",
   "events": [
     {
       "id": 1,
@@ -1017,6 +1017,15 @@
       "crit": false,
       "details": "",
       "id": 304
+    },
+    {
+      "label": "Structures Freeze",
+      "start": "2027-06-01",
+      "end": "2027-06-01",
+      "cat": "disc_freeze",
+      "crit": false,
+      "details": "",
+      "id": 305
     }
   ]
 }
