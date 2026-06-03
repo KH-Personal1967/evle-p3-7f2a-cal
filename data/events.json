@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:36:07.876Z",
+  "updatedUtc": "2026-06-03T01:36:25.244Z",
   "events": [
     {
       "id": 1,
@@ -836,15 +836,6 @@
       "end": "2027-11-19",
       "cat": "milestone",
       "crit": true,
-      "details": ""
-    },
-    {
-      "id": 100,
-      "label": "Update Plans per Comment Resolution",
-      "start": "2027-11-22",
-      "end": "2027-11-28",
-      "cat": "plans_qc",
-      "crit": false,
       "details": ""
     },
     {
