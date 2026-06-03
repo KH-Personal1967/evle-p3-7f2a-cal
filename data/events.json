@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:09:57.447Z",
+  "updatedUtc": "2026-06-03T01:10:35.248Z",
   "events": [
     {
       "id": 1,
@@ -427,8 +427,8 @@
     {
       "id": 49,
       "label": "Demo Freeze",
-      "start": "2027-06-09",
-      "end": "2027-06-09",
+      "start": "2027-06-10",
+      "end": "2027-06-10",
       "cat": "disc_freeze",
       "crit": false,
       "details": ""
