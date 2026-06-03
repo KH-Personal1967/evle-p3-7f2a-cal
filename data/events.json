@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:07:37.756Z",
+  "updatedUtc": "2026-06-03T01:08:29.056Z",
   "events": [
     {
       "id": 1,
@@ -390,7 +390,7 @@
     },
     {
       "id": 45,
-      "label": "Stations & Systems Freeze",
+      "label": "Stations Freeze",
       "start": "2027-05-28",
       "end": "2027-05-28",
       "cat": "disc_freeze",
