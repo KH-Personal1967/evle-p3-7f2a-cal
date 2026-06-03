@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T15:54:56.215Z",
+  "updatedUtc": "2026-06-03T15:55:19.198Z",
   "events": [
     {
       "id": 1,
@@ -554,7 +554,7 @@
       "id": 63,
       "label": "QC Checker Onboarding",
       "start": "2027-07-07",
-      "end": "2027-07-11",
+      "end": "2027-07-09",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
