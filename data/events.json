@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:17:40.335Z",
+  "updatedUtc": "2026-06-03T16:17:51.306Z",
   "events": [
     {
       "id": 1,
@@ -1247,7 +1247,7 @@
       "label": "Plans QC Back Check Finish ",
       "start": "2027-08-09",
       "end": "2027-08-11",
-      "cat": "milestone",
+      "cat": "plans_qc",
       "crit": false,
       "details": "",
       "id": 341
