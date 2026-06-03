@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T17:44:42.174Z",
+  "updatedUtc": "2026-06-03T17:45:29.133Z",
   "events": [
     {
       "id": 1,
@@ -1120,7 +1120,7 @@
     {
       "label": "ST: Design Reviewer Response Disposition (Minor)",
       "start": "2027-11-15",
-      "end": "2027-12-03",
+      "end": "2027-12-02",
       "cat": "milestone",
       "crit": false,
       "details": "",
