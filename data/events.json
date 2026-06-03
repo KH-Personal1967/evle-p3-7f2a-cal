@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:13:53.188Z",
+  "updatedUtc": "2026-06-03T01:14:26.939Z",
   "events": [
     {
       "id": 1,
@@ -1098,6 +1098,15 @@
       "crit": false,
       "details": "",
       "id": 314
+    },
+    {
+      "label": "Sheet Index Freeze",
+      "start": "2027-06-29",
+      "end": "2027-06-29",
+      "cat": "freeze",
+      "crit": false,
+      "details": "",
+      "id": 315
     }
   ]
 }
