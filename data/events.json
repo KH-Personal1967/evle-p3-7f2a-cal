@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T18:01:14.176Z",
+  "updatedUtc": "2026-06-03T18:01:42.106Z",
   "events": [
     {
       "id": 1,
@@ -923,7 +923,7 @@
       "label": "BB Session Closed to Reviewers (EOD)",
       "start": "2027-10-11",
       "end": "2027-10-11",
-      "cat": "milestone",
+      "cat": "st_review",
       "crit": false,
       "details": "",
       "id": 306
