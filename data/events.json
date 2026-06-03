@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T18:07:23.519Z",
+  "updatedUtc": "2026-06-03T18:09:34.098Z",
   "events": [
     {
       "id": 1,
@@ -1067,7 +1067,7 @@
       "label": "Consultant: AHJ Comment Disposition ",
       "start": "2027-11-02",
       "end": "2027-11-12",
-      "cat": "milestone",
+      "cat": "consultant_ahj_comment_disposition",
       "crit": false,
       "details": "",
       "id": 323
