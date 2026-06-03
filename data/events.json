@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T17:56:36.824Z",
+  "updatedUtc": "2026-06-03T17:58:23.593Z",
   "events": [
     {
       "id": 1,
@@ -1049,7 +1049,7 @@
       "label": "AHJ Comments Due ",
       "start": "2027-11-01",
       "end": "2027-11-01",
-      "cat": "milestone",
+      "cat": "ahj_sme_review",
       "crit": false,
       "details": "",
       "id": 320
