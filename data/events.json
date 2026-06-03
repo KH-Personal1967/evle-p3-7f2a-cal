@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:17:51.306Z",
+  "updatedUtc": "2026-06-03T16:19:13.599Z",
   "events": [
     {
       "id": 1,
@@ -1251,6 +1251,15 @@
       "crit": false,
       "details": "",
       "id": 341
+    },
+    {
+      "label": "Plans QC Rejected and Deferred Comments Coordination with Checker & Back Checker",
+      "start": "2027-08-12",
+      "end": "2027-08-13",
+      "cat": "plans_qc",
+      "crit": false,
+      "details": "",
+      "id": 342
     }
   ]
 }
