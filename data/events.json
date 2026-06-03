@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:47:33.407Z",
+  "updatedUtc": "2026-06-03T00:48:13.821Z",
   "events": [
     {
       "id": 1,
@@ -1035,6 +1035,15 @@
       "crit": false,
       "details": "",
       "id": 306
+    },
+    {
+      "label": "ST: Complete Submittal Intake Form",
+      "start": "2027-09-20",
+      "end": "2027-09-20",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 307
     }
   ]
 }
