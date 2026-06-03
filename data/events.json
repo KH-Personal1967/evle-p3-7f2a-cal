@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:27:57.206Z",
+  "updatedUtc": "2026-06-03T01:28:00.640Z",
   "events": [
     {
       "id": 1,
@@ -817,15 +817,6 @@
       "start": "2027-10-22",
       "end": "2027-10-22",
       "cat": "milestone",
-      "crit": false,
-      "details": ""
-    },
-    {
-      "id": 95,
-      "label": "Comment Resolution Meetings (Major)",
-      "start": "2027-10-22",
-      "end": "2027-11-05",
-      "cat": "comment",
       "crit": false,
       "details": ""
     },
