@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:36:57.125Z",
+  "updatedUtc": "2026-06-03T00:38:39.477Z",
   "events": [
     {
       "id": 1,
@@ -391,8 +391,8 @@
     {
       "id": 44,
       "label": "Utilities Freeze",
-      "start": "2027-05-26",
-      "end": "2027-05-26",
+      "start": "2027-06-01",
+      "end": "2027-06-01",
       "cat": "disc_freeze",
       "crit": false,
       "details": ""
