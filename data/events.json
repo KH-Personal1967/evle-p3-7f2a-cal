@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:56:28.167Z",
+  "updatedUtc": "2026-06-03T00:58:26.665Z",
   "events": [
     {
       "id": 1,
@@ -1044,6 +1044,15 @@
       "crit": false,
       "details": "",
       "id": 308
+    },
+    {
+      "label": "All Full Parcel Acquisitions Known",
+      "start": "2027-01-22",
+      "end": "2027-01-22",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 309
     }
   ]
 }
