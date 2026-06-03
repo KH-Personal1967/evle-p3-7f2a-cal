@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T17:58:23.593Z",
+  "updatedUtc": "2026-06-03T17:58:31.000Z",
   "events": [
     {
       "id": 1,
@@ -941,7 +941,7 @@
       "label": "AHJ: SME Review",
       "start": "2027-09-21",
       "end": "2027-10-29",
-      "cat": "milestone",
+      "cat": "ahj_sme_review",
       "crit": false,
       "details": "",
       "id": 308
