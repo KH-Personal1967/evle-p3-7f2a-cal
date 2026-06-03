@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:25:19.421Z",
+  "updatedUtc": "2026-06-03T01:25:56.191Z",
   "events": [
     {
       "id": 1,
@@ -687,9 +687,9 @@
     },
     {
       "id": 78,
-      "label": "Plans Verification",
+      "label": "Plans Verification Finish",
       "start": "2027-08-30",
-      "end": "2027-09-05",
+      "end": "2027-08-31",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
