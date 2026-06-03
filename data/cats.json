@@ -17,6 +17,12 @@
     "timelineLane": "ST Review",
     "sortOrder": 90
   },
+  "consultant_comment_disposition": {
+    "label": "Consultant Comment Disposition",
+    "hex": "#f7d83b",
+    "timelineLane": "Consultant Comment Disposition",
+    "sortOrder": 140
+  },
   "disc_freeze": {
     "label": "Discipline Freeze",
     "hex": "#f97316",
@@ -100,11 +106,5 @@
     "hex": "#84cc16",
     "timelineLane": "Station Workbook",
     "sortOrder": 100
-  },
-  "consultant_comment_disposition": {
-    "label": "Consultant Comment Disposition",
-    "hex": "#f7e73b",
-    "timelineLane": "Consultant Comment Disposition",
-    "sortOrder": 140
   }
 }
