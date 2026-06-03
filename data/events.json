@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:48:08.250Z",
+  "updatedUtc": "2026-06-03T01:48:34.573Z",
   "events": [
     {
       "id": 1,
@@ -1179,6 +1179,15 @@
       "crit": false,
       "details": "",
       "id": 333
+    },
+    {
+      "label": "ST Design Submittal Verification ",
+      "start": "2027-12-20",
+      "end": "2027-12-20",
+      "cat": "milestone",
+      "crit": true,
+      "details": "",
+      "id": 334
     }
   ]
 }
