@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:46:51.095Z",
+  "updatedUtc": "2026-06-03T16:49:04.595Z",
   "events": [
     {
       "id": 1,
@@ -1278,6 +1278,15 @@
       "crit": true,
       "details": "",
       "id": 345
+    },
+    {
+      "label": "Submit 30% Rollplots",
+      "start": "2027-09-17",
+      "end": "2027-09-17",
+      "cat": "milestone",
+      "crit": true,
+      "details": "",
+      "id": 346
     }
   ]
 }
