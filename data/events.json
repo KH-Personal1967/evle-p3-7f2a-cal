@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:09:39.798Z",
+  "updatedUtc": "2026-06-03T01:09:57.447Z",
   "events": [
     {
       "id": 1,
@@ -1085,7 +1085,7 @@
       "label": "Systems Freeze",
       "start": "2027-05-28",
       "end": "2027-05-28",
-      "cat": "milestone",
+      "cat": "disc_freeze",
       "crit": false,
       "details": "",
       "id": 313
