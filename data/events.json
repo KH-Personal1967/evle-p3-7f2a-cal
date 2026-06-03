@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:38:39.477Z",
+  "updatedUtc": "2026-06-03T00:39:25.565Z",
   "events": [
     {
       "id": 1,
@@ -283,8 +283,8 @@
     {
       "id": 32,
       "label": "All Discipline Preliminary PL Freeze",
-      "start": "2027-02-26",
-      "end": "2027-02-26",
+      "start": "2027-01-15",
+      "end": "2027-01-15",
       "cat": "freeze",
       "crit": true,
       "details": ""
