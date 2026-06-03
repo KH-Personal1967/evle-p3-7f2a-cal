@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T15:53:14.647Z",
+  "updatedUtc": "2026-06-03T15:54:12.712Z",
   "events": [
     {
       "id": 1,
@@ -535,8 +535,8 @@
     {
       "id": 61,
       "label": "BOD SME Final Input & Exhibits",
-      "start": "2027-07-05",
-      "end": "2027-07-09",
+      "start": "2027-07-12",
+      "end": "2027-07-16",
       "cat": "bod",
       "crit": false,
       "details": ""
