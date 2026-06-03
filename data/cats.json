@@ -94,5 +94,11 @@
     "hex": "#84cc16",
     "timelineLane": "Station Workbook",
     "sortOrder": 100
+  },
+  "ahj_sme_review": {
+    "label": "AHJ: SME Review",
+    "hex": "#c53bf7",
+    "timelineLane": "AHJ: SME Review",
+    "sortOrder": 130
   }
 }
