@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-02T23:57:41.259Z",
+  "updatedUtc": "2026-06-03T00:03:58.158Z",
   "events": [
     {
       "id": 1,
@@ -990,6 +990,15 @@
       "crit": false,
       "details": "",
       "id": 301
+    },
+    {
+      "label": "QA/QC for Specification Submittal",
+      "start": "2027-10-04",
+      "end": "2027-10-07",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 302
     }
   ]
 }
