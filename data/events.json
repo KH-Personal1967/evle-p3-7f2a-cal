@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T18:10:36.209Z",
+  "updatedUtc": "2026-06-03T18:11:17.366Z",
   "events": [
     {
       "id": 1,
@@ -1139,7 +1139,7 @@
       "label": "Package Plans ",
       "start": "2027-11-24",
       "end": "2027-11-24",
-      "cat": "milestone",
+      "cat": "plans_qc",
       "crit": false,
       "details": "",
       "id": 331
