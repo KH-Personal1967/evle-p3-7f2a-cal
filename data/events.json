@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:43:57.096Z",
+  "updatedUtc": "2026-06-03T16:46:10.291Z",
   "events": [
     {
       "id": 1,
@@ -768,7 +768,7 @@
     },
     {
       "id": 88,
-      "label": "SUBMIT 30% Plans / BOD / Roll Plots / Workbook / Memos",
+      "label": "Submit 30% Plans",
       "start": "2027-09-17",
       "end": "2027-09-17",
       "cat": "milestone",
