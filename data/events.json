@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:19:36.381Z",
+  "updatedUtc": "2026-06-03T16:19:51.103Z",
   "events": [
     {
       "id": 1,
@@ -662,7 +662,7 @@
       "id": 75,
       "label": "BOD QA Review / Final Corrections",
       "start": "2027-08-16",
-      "end": "2027-08-22",
+      "end": "2027-08-20",
       "cat": "bod",
       "crit": false,
       "details": ""
