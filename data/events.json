@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:19:13.599Z",
+  "updatedUtc": "2026-06-03T16:19:36.381Z",
   "events": [
     {
       "id": 1,
@@ -633,9 +633,9 @@
     },
     {
       "id": 72,
-      "label": "Plans QC Rejected/Deferred Comments",
-      "start": "2027-08-11",
-      "end": "2027-08-15",
+      "label": "Plans QC Corrections",
+      "start": "2027-08-16",
+      "end": "2027-08-20",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
