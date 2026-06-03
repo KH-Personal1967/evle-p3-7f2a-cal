@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:19:51.103Z",
+  "updatedUtc": "2026-06-03T16:20:04.376Z",
   "events": [
     {
       "id": 1,
@@ -646,15 +646,6 @@
       "start": "2027-08-09",
       "end": "2027-08-13",
       "cat": "bod",
-      "crit": false,
-      "details": ""
-    },
-    {
-      "id": 74,
-      "label": "Plans QC Corrections",
-      "start": "2027-08-16",
-      "end": "2027-08-27",
-      "cat": "plans_qc",
       "crit": false,
       "details": ""
     },
