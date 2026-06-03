@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:54:02.228Z",
+  "updatedUtc": "2026-06-03T01:54:44.384Z",
   "events": [
     {
       "id": 1,
@@ -1224,6 +1224,15 @@
       "crit": false,
       "details": "",
       "id": 338
+    },
+    {
+      "label": "Consultant: Verification ",
+      "start": "2027-12-09",
+      "end": "2027-12-13",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 339
     }
   ]
 }
