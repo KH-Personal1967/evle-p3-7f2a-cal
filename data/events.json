@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:16:33.359Z",
+  "updatedUtc": "2026-06-03T16:16:46.322Z",
   "events": [
     {
       "id": 1,
@@ -626,7 +626,7 @@
       "id": 71,
       "label": "BOD QC Format",
       "start": "2027-08-02",
-      "end": "2027-08-08",
+      "end": "2027-08-06",
       "cat": "bod",
       "crit": false,
       "details": ""
