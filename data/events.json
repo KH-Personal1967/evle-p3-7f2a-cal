@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T18:17:33.944Z",
+  "updatedUtc": "2026-06-03T18:17:47.324Z",
   "events": [
     {
       "id": 1,
@@ -1193,7 +1193,7 @@
       "label": "BB Export: Saved as Part of Project Files",
       "start": "2027-12-17",
       "end": "2027-12-17",
-      "cat": "milestone",
+      "cat": "comment",
       "crit": true,
       "details": "",
       "id": 337
