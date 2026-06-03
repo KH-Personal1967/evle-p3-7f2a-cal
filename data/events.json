@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:36:25.244Z",
+  "updatedUtc": "2026-06-03T01:36:28.464Z",
   "events": [
     {
       "id": 1,
@@ -844,15 +844,6 @@
       "start": "2027-11-25",
       "end": "2027-11-25",
       "cat": "holiday",
-      "crit": false,
-      "details": ""
-    },
-    {
-      "id": 102,
-      "label": "Checkers Review Updated Plans",
-      "start": "2027-11-29",
-      "end": "2027-12-05",
-      "cat": "plans_qc",
       "crit": false,
       "details": ""
     },
