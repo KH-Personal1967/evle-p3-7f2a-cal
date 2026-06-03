@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:05:36.574Z",
+  "updatedUtc": "2026-06-03T01:05:49.664Z",
   "events": [
     {
       "id": 1,
@@ -1076,7 +1076,7 @@
       "label": "Roll Plot Team to Start Plotting for IDR Packaging/Check they are Plotting Correctly",
       "start": "2027-04-22",
       "end": "2027-04-22",
-      "cat": "rollplot",
+      "cat": "idr",
       "crit": false,
       "details": "",
       "id": 312
