@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:43:31.291Z",
+  "updatedUtc": "2026-06-03T16:43:43.330Z",
   "events": [
     {
       "id": 1,
@@ -715,8 +715,8 @@
     {
       "id": 82,
       "label": "MOR Memo Development",
-      "start": "2027-09-08",
-      "end": "2027-09-12",
+      "start": "2027-09-06",
+      "end": "2027-09-07",
       "cat": "mor",
       "crit": false,
       "details": ""
