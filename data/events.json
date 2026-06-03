@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T15:59:04.555Z",
+  "updatedUtc": "2026-06-03T16:16:33.359Z",
   "events": [
     {
       "id": 1,
@@ -615,9 +615,9 @@
     },
     {
       "id": 70,
-      "label": "Plans QC Back Check",
+      "label": "Plans QC Back Check Begin",
       "start": "2027-08-02",
-      "end": "2027-08-13",
+      "end": "2027-08-06",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
