@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T17:49:53.523Z",
+  "updatedUtc": "2026-06-03T17:50:38.075Z",
   "events": [
     {
       "id": 1,
@@ -1228,7 +1228,7 @@
     {
       "label": "Consultant: QA",
       "start": "2027-12-14",
-      "end": "2027-12-16",
+      "end": "2027-12-15",
       "cat": "plans_qc",
       "crit": false,
       "details": "",
