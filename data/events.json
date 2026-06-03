@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:40:24.399Z",
+  "updatedUtc": "2026-06-03T01:41:00.883Z",
   "events": [
     {
       "id": 1,
@@ -1134,6 +1134,15 @@
       "crit": false,
       "details": "",
       "id": 326
+    },
+    {
+      "label": "All Major Comments Resolved",
+      "start": "2027-11-18",
+      "end": "2027-11-18",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 327
     }
   ]
 }
