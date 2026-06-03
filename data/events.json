@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:46:45.446Z",
+  "updatedUtc": "2026-06-03T16:46:51.095Z",
   "events": [
     {
       "id": 1,
@@ -1275,7 +1275,7 @@
       "start": "2027-09-17",
       "end": "2027-09-17",
       "cat": "milestone",
-      "crit": false,
+      "crit": true,
       "details": "",
       "id": 345
     }
