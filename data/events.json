@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:36:28.464Z",
+  "updatedUtc": "2026-06-03T01:36:31.943Z",
   "events": [
     {
       "id": 1,
@@ -844,15 +844,6 @@
       "start": "2027-11-25",
       "end": "2027-11-25",
       "cat": "holiday",
-      "crit": false,
-      "details": ""
-    },
-    {
-      "id": 103,
-      "label": "Back Check Review & Implement Corrections",
-      "start": "2027-12-01",
-      "end": "2027-12-05",
-      "cat": "plans_qc",
       "crit": false,
       "details": ""
     },
