@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:43:17.542Z",
+  "updatedUtc": "2026-06-03T01:44:21.091Z",
   "events": [
     {
       "id": 1,
@@ -1161,6 +1161,15 @@
       "crit": false,
       "details": "",
       "id": 329
+    },
+    {
+      "label": "Consultant: Update Plans for Final PE Submittal",
+      "start": "2027-11-15",
+      "end": "2027-11-23",
+      "cat": "plans_qc",
+      "crit": false,
+      "details": "",
+      "id": 330
     }
   ]
 }
