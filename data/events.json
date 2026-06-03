@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:04:51.941Z",
+  "updatedUtc": "2026-06-03T00:09:41.514Z",
   "events": [
     {
       "id": 1,
@@ -311,7 +311,7 @@
       "id": 35,
       "label": "All Disciplines File Freeze (IDR)",
       "start": "2027-04-19",
-      "end": "2027-04-21",
+      "end": "2027-04-19",
       "cat": "freeze",
       "crit": true,
       "details": ""
