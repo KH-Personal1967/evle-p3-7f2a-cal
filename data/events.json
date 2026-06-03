@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:12:10.710Z",
+  "updatedUtc": "2026-06-03T01:12:39.994Z",
   "events": [
     {
       "id": 1,
@@ -472,8 +472,8 @@
     {
       "id": 54,
       "label": "Develop IDR Memo",
-      "start": "2027-06-23",
-      "end": "2027-06-30",
+      "start": "2027-06-24",
+      "end": "2027-06-25",
       "cat": "idr",
       "crit": false,
       "details": ""
