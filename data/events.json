@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:18:10.697Z",
+  "updatedUtc": "2026-06-03T01:18:32.956Z",
   "events": [
     {
       "id": 1,
@@ -543,18 +543,18 @@
     },
     {
       "id": 62,
-      "label": "QC Plans Due & QC Packaging",
+      "label": "QC Plans Due",
       "start": "2027-07-07",
-      "end": "2027-07-09",
+      "end": "2027-07-07",
       "cat": "plans_qc",
       "crit": true,
       "details": ""
     },
     {
       "id": 63,
-      "label": "QC Checker Onboarding",
-      "start": "2027-07-07",
-      "end": "2027-07-11",
+      "label": "QC Checker Onboarding/Familiarization with Project/Standards and Expectations",
+      "start": "2027-07-08",
+      "end": "2027-07-09",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
@@ -794,6 +794,15 @@
       "details": ""
     },
     {
+      "id": 90,
+      "label": "ST 30% SME Review Comments Due",
+      "start": "2027-10-08",
+      "end": "2027-10-08",
+      "cat": "milestone",
+      "crit": true,
+      "details": ""
+    },
+    {
       "id": 91,
       "label": "Columbus Day",
       "start": "2027-10-13",
@@ -804,7 +813,7 @@
     },
     {
       "id": 92,
-      "label": "ST: Project Design Manager Comment Validation ",
+      "label": "ST: Design Manager Review of Comments",
       "start": "2027-10-12",
       "end": "2027-10-24",
       "cat": "st_review",
@@ -1098,6 +1107,15 @@
       "crit": false,
       "details": "",
       "id": 315
+    },
+    {
+      "label": "QC Packaging ",
+      "start": "2027-07-08",
+      "end": "2027-07-09",
+      "cat": "plans_qc",
+      "crit": false,
+      "details": "",
+      "id": 316
     }
   ]
 }
