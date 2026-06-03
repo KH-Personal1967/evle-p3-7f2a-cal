@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:18:35.590Z",
+  "updatedUtc": "2026-06-03T00:20:07.901Z",
   "events": [
     {
       "id": 1,
@@ -1008,6 +1008,15 @@
       "crit": false,
       "details": "",
       "id": 303
+    },
+    {
+      "label": "Corridor Grading Freeze",
+      "start": "2027-05-25",
+      "end": "2027-05-25",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 304
     }
   ]
 }
