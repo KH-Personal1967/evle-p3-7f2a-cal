@@ -391,7 +391,7 @@ function parseImportCSV(text, cats){
    UI CONSTANTS
    ============================ */
 
-const LH=23, DAY_H=30, MAX_LANES=4;
+const LH=23, DAY_H=30;
 
 /* ============================
    COMPONENTS
@@ -451,21 +451,14 @@ function EventBar({bar,dark,onClick}){
 function WeekRow({week,events,dark,onSelect,editMode,onEdit}){
   const th=dark?TH.dark:TH.light;
   const {bars,lanes}=useMemo(()=>layoutWeek(week,events),[week,events]);
-  const visible = bars.filter(b=>b.track<MAX_LANES);
-
-  const overByCol={};
-  bars.filter(b=>b.track>=MAX_LANES).forEach(b=>{
-    for(let i=b.colStart;i<=b.colEnd;i++) overByCol[i]=(overByCol[i]||0)+1;
-  });
-
-  const eaH = Math.min(lanes,MAX_LANES)*LH;
+  const visible = bars;
+  const eaH = Math.max(1, lanes) * LH;
 
   return(
     <div style={{borderBottom:`1px solid ${th.border}`,background:th.card,flex:1,display:"flex",flexDirection:"column"}}>
       <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",flexShrink:0}}>
         {week.map((day,i)=>{
           const isWknd=day.dow===0 || day.dow===6;
-          const ov=overByCol[i];
           return(
             <div
               key={i}
@@ -490,13 +483,12 @@ function WeekRow({week,events,dark,onSelect,editMode,onEdit}){
               }}>
                 {day.inMonth?day.n:""}
               </span>
-              {ov && <span style={{fontSize:10,color:th.muted,background:th.pillBg,borderRadius:3,padding:"1px 4px"}}>+{ov}</span>}
             </div>
           );
         })}
       </div>
 
-      <div style={{position:"relative",height:eaH,flexShrink:0,overflow:"hidden"}}>
+      <div style={{position:"relative",height:eaH,flexShrink:0,overflow:"visible"}}>
         <div style={{position:"absolute",inset:0,display:"grid",gridTemplateColumns:"repeat(7,1fr)",zIndex:0,pointerEvents:"none"}}>
           {[0,1,2,3,4,5,6].map(i=>(
             <div key={i} style={{borderRight:`1px solid ${th.border}`}} />
@@ -557,7 +549,7 @@ function MonthGrid({year,month,events,dark,onSelect,editMode,onEdit,todayStr}){
         ))}
       </div>
 
-      <div style={{display:"flex",flexDirection:"column",flex:1}}>
+      <div style={{display:"flex",flexDirection:"column",flex:1,minHeight:0,overflowY:"auto"}}>
         {weeks.map((wk,i)=>(
           <WeekRow
             key={i}
