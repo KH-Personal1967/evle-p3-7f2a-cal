@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:46:10.291Z",
+  "updatedUtc": "2026-06-03T16:46:45.446Z",
   "events": [
     {
       "id": 1,
@@ -1269,6 +1269,15 @@
       "crit": false,
       "details": "",
       "id": 344
+    },
+    {
+      "label": "Submit 30% BOD",
+      "start": "2027-09-17",
+      "end": "2027-09-17",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 345
     }
   ]
 }
