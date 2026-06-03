@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:39:25.565Z",
+  "updatedUtc": "2026-06-03T00:40:20.145Z",
   "events": [
     {
       "id": 1,
@@ -417,9 +417,9 @@
     },
     {
       "id": 47,
-      "label": "Drainage & Structures Freeze",
-      "start": "2027-06-01",
-      "end": "2027-06-02",
+      "label": "Drainage Freeze",
+      "start": "2027-06-07",
+      "end": "2027-06-07",
       "cat": "disc_freeze",
       "crit": false,
       "details": ""
