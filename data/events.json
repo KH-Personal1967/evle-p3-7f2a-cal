@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:23:03.019Z",
+  "updatedUtc": "2026-06-03T01:23:14.114Z",
   "events": [
     {
       "id": 1,
@@ -543,18 +543,18 @@
     },
     {
       "id": 62,
-      "label": "QC Plans Due & QC Packaging",
+      "label": "QC Plans Due",
       "start": "2027-07-07",
-      "end": "2027-07-09",
+      "end": "2027-07-07",
       "cat": "plans_qc",
       "crit": true,
       "details": ""
     },
     {
       "id": 63,
-      "label": "QC Checker Onboarding",
-      "start": "2027-07-07",
-      "end": "2027-07-11",
+      "label": "QC Checker Onboarding/Familiarization with Project/Standards and Expectations",
+      "start": "2027-07-08",
+      "end": "2027-07-09",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
@@ -590,7 +590,7 @@
       "id": 67,
       "label": "Plans Technical QC Check",
       "start": "2027-07-19",
-      "end": "2027-08-01",
+      "end": "2027-07-30",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
@@ -608,16 +608,16 @@
       "id": 69,
       "label": "BOD QC Correct",
       "start": "2027-07-26",
-      "end": "2027-08-01",
+      "end": "2027-07-30",
       "cat": "bod",
       "crit": false,
       "details": ""
     },
     {
       "id": 70,
-      "label": "Plans QC Back Check",
+      "label": "Plans QC Back Check Begin",
       "start": "2027-08-02",
-      "end": "2027-08-13",
+      "end": "2027-08-06",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
@@ -626,16 +626,16 @@
       "id": 71,
       "label": "BOD QC Format",
       "start": "2027-08-02",
-      "end": "2027-08-08",
+      "end": "2027-08-06",
       "cat": "bod",
       "crit": false,
       "details": ""
     },
     {
       "id": 72,
-      "label": "Plans QC Rejected/Deferred Comments",
-      "start": "2027-08-11",
-      "end": "2027-08-15",
+      "label": "Plans QC Rejected and Deferred Comments Coordination with Checked & Back Checker",
+      "start": "2027-08-12",
+      "end": "2027-08-13",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
@@ -644,7 +644,7 @@
       "id": 73,
       "label": "BOD QC Verify",
       "start": "2027-08-09",
-      "end": "2027-08-15",
+      "end": "2027-08-13",
       "cat": "bod",
       "crit": false,
       "details": ""
@@ -653,7 +653,7 @@
       "id": 74,
       "label": "Plans QC Corrections",
       "start": "2027-08-16",
-      "end": "2027-08-27",
+      "end": "2027-08-20",
       "cat": "plans_qc",
       "crit": false,
       "details": ""
@@ -794,6 +794,15 @@
       "details": ""
     },
     {
+      "id": 90,
+      "label": "ST 30% SME Review Comments Due",
+      "start": "2027-10-08",
+      "end": "2027-10-08",
+      "cat": "milestone",
+      "crit": true,
+      "details": ""
+    },
+    {
       "id": 91,
       "label": "Columbus Day",
       "start": "2027-10-13",
@@ -804,10 +813,19 @@
     },
     {
       "id": 92,
-      "label": "ST: Project Design Manager Comment Validation ",
+      "label": "ST: Design Manager Review of Comments",
       "start": "2027-10-12",
       "end": "2027-10-24",
       "cat": "st_review",
+      "crit": false,
+      "details": ""
+    },
+    {
+      "id": 93,
+      "label": "Consultant: Draft Comment Responses",
+      "start": "2027-10-13",
+      "end": "2027-10-22",
+      "cat": "plans_qc",
       "crit": false,
       "details": ""
     },
@@ -1091,31 +1109,22 @@
       "id": 315
     },
     {
-      "label": "Bluebeam Session Opened up to Consultant (EOD)",
-      "start": "2027-10-18",
-      "end": "2027-10-18",
-      "cat": "milestone",
+      "label": "QC Packaging ",
+      "start": "2027-07-08",
+      "end": "2027-07-09",
+      "cat": "plans_qc",
       "crit": false,
       "details": "",
       "id": 316
     },
     {
-      "label": "Consultant: Comment Disposition (Major and Minor)",
-      "start": "2027-10-19",
-      "end": "2027-10-28",
-      "cat": "milestone",
+      "label": "Plans QC Back Check Finish",
+      "start": "2027-08-09",
+      "end": "2027-08-11",
+      "cat": "plans_qc",
       "crit": false,
       "details": "",
       "id": 317
-    },
-    {
-      "label": "Consultant: Comment Responses Due in BB Session (EOD)",
-      "start": "2027-10-28",
-      "end": "2027-10-28",
-      "cat": "milestone",
-      "crit": false,
-      "details": "",
-      "id": 318
     }
   ]
 }
