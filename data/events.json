@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:14:26.939Z",
+  "updatedUtc": "2026-06-03T01:14:44.016Z",
   "events": [
     {
       "id": 1,
@@ -500,7 +500,7 @@
       "id": 57,
       "label": "IDR Memo QA Review",
       "start": "2027-06-28",
-      "end": "2027-07-02",
+      "end": "2027-06-29",
       "cat": "idr",
       "crit": false,
       "details": ""
