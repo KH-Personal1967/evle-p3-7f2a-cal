@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:47:48.112Z",
+  "updatedUtc": "2026-06-03T01:47:50.630Z",
   "events": [
     {
       "id": 1,
@@ -846,15 +846,6 @@
       "cat": "holiday",
       "crit": false,
       "details": ""
-    },
-    {
-      "id": 105,
-      "label": "QA Review & Final Corrections",
-      "start": "2027-12-13",
-      "end": "2027-12-16",
-      "cat": "plans_qc",
-      "crit": false,
-      "details": "As Necessary"
     },
     {
       "id": 106,
