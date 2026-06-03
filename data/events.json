@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:16:30.404Z",
+  "updatedUtc": "2026-06-03T01:17:43.367Z",
   "events": [
     {
       "id": 1,
@@ -543,9 +543,9 @@
     },
     {
       "id": 62,
-      "label": "QC Plans Due",
+      "label": "QC Plans Due & QC Packaging",
       "start": "2027-07-07",
-      "end": "2027-07-07",
+      "end": "2027-07-09",
       "cat": "plans_qc",
       "crit": true,
       "details": ""
@@ -791,15 +791,6 @@
       "end": "2027-10-11",
       "cat": "st_review",
       "crit": false,
-      "details": ""
-    },
-    {
-      "id": 90,
-      "label": "ST 30% SME Review Comments Due",
-      "start": "2027-10-08",
-      "end": "2027-10-08",
-      "cat": "milestone",
-      "crit": true,
       "details": ""
     },
     {
