@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T01:01:42.341Z",
+  "updatedUtc": "2026-06-03T01:02:21.268Z",
   "events": [
     {
       "id": 1,
@@ -310,8 +310,8 @@
     {
       "id": 36,
       "label": "KH Consistency Review of Plans",
-      "start": "2027-04-19",
-      "end": "2027-05-07",
+      "start": "2027-04-16",
+      "end": "2027-05-23",
       "cat": "kh_review",
       "crit": false,
       "details": ""
