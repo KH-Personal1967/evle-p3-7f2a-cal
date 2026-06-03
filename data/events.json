@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:09:41.514Z",
+  "updatedUtc": "2026-06-03T00:18:35.590Z",
   "events": [
     {
       "id": 1,
@@ -426,7 +426,7 @@
     },
     {
       "id": 48,
-      "label": "Roadway & Corridor Grading Freeze",
+      "label": "Roadway Freeze",
       "start": "2027-06-07",
       "end": "2027-06-07",
       "cat": "disc_freeze",
