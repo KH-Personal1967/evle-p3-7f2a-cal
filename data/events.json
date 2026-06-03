@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:53:41.517Z",
+  "updatedUtc": "2026-06-03T00:54:27.050Z",
   "events": [
     {
       "id": 1,
@@ -84,7 +84,7 @@
     },
     {
       "id": 10,
-      "label": "30% Track Pencils Down",
+      "label": "30% Track Freeze",
       "start": "2026-08-14",
       "end": "2026-08-14",
       "cat": "freeze",
