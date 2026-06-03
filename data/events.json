@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T00:55:56.482Z",
+  "updatedUtc": "2026-06-03T00:56:28.167Z",
   "events": [
     {
       "id": 1,
@@ -151,15 +151,6 @@
       "start": "2026-11-11",
       "end": "2026-11-11",
       "cat": "holiday",
-      "crit": false,
-      "details": ""
-    },
-    {
-      "id": 18,
-      "label": "ST Roll Plots Due",
-      "start": "2026-11-20",
-      "end": "2026-11-20",
-      "cat": "rollplot",
       "crit": false,
       "details": ""
     },
