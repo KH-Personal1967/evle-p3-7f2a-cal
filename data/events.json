@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:49:31.381Z",
+  "updatedUtc": "2026-06-03T16:50:02.298Z",
   "events": [
     {
       "id": 1,
@@ -1296,6 +1296,15 @@
       "crit": true,
       "details": "",
       "id": 347
+    },
+    {
+      "label": "Submit IDR/MOR Memo",
+      "start": "2027-09-17",
+      "end": "2027-09-17",
+      "cat": "milestone",
+      "crit": true,
+      "details": "",
+      "id": 348
     }
   ]
 }
