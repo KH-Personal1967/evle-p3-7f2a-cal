@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:50:31.559Z",
+  "updatedUtc": "2026-06-03T17:44:42.174Z",
   "events": [
     {
       "id": 1,
@@ -1066,7 +1066,7 @@
     {
       "label": "ST/ Consultant: Comment Resolution Meetings (Major)",
       "start": "2027-11-01",
-      "end": "2027-11-12",
+      "end": "2027-11-19",
       "cat": "comment",
       "crit": false,
       "details": "",
