@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-03T16:24:28.453Z",
+  "updatedUtc": "2026-06-03T16:24:39.466Z",
   "events": [
     {
       "id": 1,
@@ -671,7 +671,7 @@
       "id": 77,
       "label": "BOD Packaging",
       "start": "2027-08-23",
-      "end": "2027-08-29",
+      "end": "2027-08-27",
       "cat": "bod",
       "crit": false,
       "details": ""
