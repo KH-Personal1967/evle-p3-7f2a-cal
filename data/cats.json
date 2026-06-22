@@ -17,6 +17,12 @@
     "timelineLane": "ST Review",
     "sortOrder": 90
   },
+  "consultant_ahj_comment_disposition": {
+    "label": "Consultant AHJ Comment Disposition",
+    "hex": "#3beaf7",
+    "timelineLane": "Consultant AHJ Comment Disposition",
+    "sortOrder": 150
+  },
   "consultant_comment_disposition": {
     "label": "Consultant Comment Disposition",
     "hex": "#f7d83b",
@@ -106,11 +112,5 @@
     "hex": "#84cc16",
     "timelineLane": "Station Workbook",
     "sortOrder": 100
-  },
-  "consultant_ahj_comment_disposition": {
-    "label": "Consultant AHJ Comment Disposition",
-    "hex": "#3beaf7",
-    "timelineLane": "Consultant AHJ Comment Disposition",
-    "sortOrder": 150
   }
 }
