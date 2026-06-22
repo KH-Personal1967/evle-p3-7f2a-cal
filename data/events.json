@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-22T21:06:36.834Z",
+  "updatedUtc": "2026-06-22T21:07:09.958Z",
   "events": [
     {
       "id": 1,
@@ -1377,6 +1377,15 @@
       "crit": false,
       "details": "",
       "id": 357
+    },
+    {
+      "label": "WB KH QA",
+      "start": "2026-07-27",
+      "end": "2026-07-28",
+      "cat": "stn_wb",
+      "crit": false,
+      "details": "",
+      "id": 358
     }
   ]
 }
