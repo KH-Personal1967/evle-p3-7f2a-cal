@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-22T21:08:42.923Z",
+  "updatedUtc": "2026-06-22T21:12:46.077Z",
   "events": [
     {
       "id": 1,
@@ -1379,7 +1379,7 @@
       "id": 357
     },
     {
-      "label": "WB KH QA",
+      "label": "WB KH QA (Step 6)",
       "start": "2026-07-27",
       "end": "2026-07-28",
       "cat": "stn_wb",
