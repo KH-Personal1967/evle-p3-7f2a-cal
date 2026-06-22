@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-09T00:20:44.201Z",
+  "updatedUtc": "2026-06-22T17:07:41.362Z",
   "events": [
     {
       "id": 1,
@@ -98,7 +98,7 @@
       "end": "2026-08-21",
       "cat": "rollplot",
       "crit": false,
-      "details": ""
+      "details": "Due EOD on ST SP"
     },
     {
       "id": 12,
