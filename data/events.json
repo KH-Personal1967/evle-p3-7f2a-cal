@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-22T20:30:23.508Z",
+  "updatedUtc": "2026-06-22T20:31:34.145Z",
   "events": [
     {
       "id": 1,
@@ -1323,6 +1323,15 @@
       "crit": false,
       "details": "",
       "id": 351
+    },
+    {
+      "label": "Clean Up Station Workbooks",
+      "start": "2026-07-15",
+      "end": "2026-07-16",
+      "cat": "stn_wb",
+      "crit": false,
+      "details": "",
+      "id": 352
     }
   ]
 }
