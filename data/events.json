@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-22T20:59:23.049Z",
+  "updatedUtc": "2026-06-22T21:02:09.853Z",
   "events": [
     {
       "id": 1,
@@ -1341,6 +1341,15 @@
       "crit": false,
       "details": "",
       "id": 353
+    },
+    {
+      "label": "Workbook Review (Step 2)",
+      "start": "2026-07-20",
+      "end": "2026-07-21",
+      "cat": "stn_wb",
+      "crit": false,
+      "details": "",
+      "id": 354
     }
   ]
 }
