@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-22T20:31:34.145Z",
+  "updatedUtc": "2026-06-22T20:59:23.049Z",
   "events": [
     {
       "id": 1,
@@ -1332,6 +1332,15 @@
       "crit": false,
       "details": "",
       "id": 352
+    },
+    {
+      "label": "Plot Workbooks (Step 1)",
+      "start": "2026-07-17",
+      "end": "2026-07-17",
+      "cat": "stn_wb",
+      "crit": false,
+      "details": "",
+      "id": 353
     }
   ]
 }
