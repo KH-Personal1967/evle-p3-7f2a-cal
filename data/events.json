@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-22T17:07:46.500Z",
+  "updatedUtc": "2026-06-22T20:26:27.600Z",
   "events": [
     {
       "id": 1,
@@ -1305,6 +1305,15 @@
       "crit": true,
       "details": "",
       "id": 349
+    },
+    {
+      "label": "Clean CAD Files by EOD",
+      "start": "2026-07-13",
+      "end": "2026-07-13",
+      "cat": "milestone",
+      "crit": false,
+      "details": "",
+      "id": 350
     }
   ]
 }
