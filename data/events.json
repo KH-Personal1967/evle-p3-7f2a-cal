@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-06-23T15:36:29.599Z",
+  "updatedUtc": "2026-06-23T15:36:45.150Z",
   "events": [
     {
       "id": 1,
@@ -296,7 +296,7 @@
       "end": "2027-04-23",
       "cat": "rollplot",
       "crit": false,
-      "details": ""
+      "details": "Uploaded to ST SP by EOD"
     },
     {
       "id": 35,
