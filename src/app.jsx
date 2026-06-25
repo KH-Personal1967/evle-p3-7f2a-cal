@@ -256,8 +256,8 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
   const availableH = pageH - gridY - margin - footerH;
   const weekH = availableH / Math.max(1, weeks.length);
   const dayH = 11;
-  const trackPad = 3;
-  const laneH = 9.5;
+  const trackPad = 4;
+  const laneH = 11;
   const borderRgb = hexToRgb(th.border);
   const textRgb = hexToRgb(th.text);
   const mutedRgb = hexToRgb(th.muted);
@@ -328,7 +328,7 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
       const fill = blendHex(hex, "#ffffff", 0.82);
       const x = gridX + bar.colStart * colW + 1.5;
       const w = (bar.colEnd - bar.colStart + 1) * colW - 3;
-      const h = 7.5;
+      const h = 9;
       const top = eventTop + bar.track * laneH;
       if(top + h > weekBottom - 2) return;
 
@@ -338,10 +338,10 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
 
       if(w >= 28){
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(6.75);
+        doc.setFontSize(7.25);
         doc.setTextColor(border.r, border.g, border.b);
         const label = truncatePdfText(doc, `${ev.crit ? "(!) " : ""}${ev.label}`, w - 8);
-        doc.text(label, x + 4, top + 5.2);
+        doc.text(label, x + 4, top + 6.1);
       }
     });
 
