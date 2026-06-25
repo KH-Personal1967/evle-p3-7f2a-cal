@@ -341,7 +341,7 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
         doc.setFontSize(7.25);
         doc.setTextColor(border.r, border.g, border.b);
         const label = truncatePdfText(doc, `${ev.crit ? "(!) " : ""}${ev.label}`, w - 8);
-        doc.text(label, x + 4, top + 6.1);
+        doc.text(label, x + 4, top + h / 2 + 2.1);
       }
     });
 
