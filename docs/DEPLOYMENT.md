@@ -55,6 +55,23 @@ npm install
 npm run build
 ```
 
+## Static Fallback Data
+
+The GitHub Pages build must publish:
+
+```text
+dist/data/events.json
+dist/data/cats.json
+```
+
+The current build does this by copying the repository `data/` folder into `dist/data/` after `vite build`.
+
+Implications:
+
+- If the Cloudflare Worker can be reached, the app reads shared live data from the Worker.
+- If the Worker is blocked, the app falls back to the published static JSON files in read-only mode.
+- Because successful Worker writes commit back to the repository JSON files, the next GitHub Pages deployment republishes the updated static fallback data.
+
 ## Backend Hosting
 
 The backend is a Cloudflare Worker.

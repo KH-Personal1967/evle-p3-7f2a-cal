@@ -157,6 +157,12 @@ async function loadSharedEvents(){
 async function loadSharedCats(){
   return fetchJson(`${SAVE_SERVICE_BASE}/cats`);
 }
+async function loadStaticEvents(){
+  return fetchJson(`${import.meta.env.BASE_URL}data/events.json`);
+}
+async function loadStaticCats(){
+  return fetchJson(`${import.meta.env.BASE_URL}data/cats.json`);
+}
 async function saveSharedEvents(payload, editorKey){
   return putJson(`${SAVE_SERVICE_BASE}/events`, payload, editorKey);
 }
@@ -1303,6 +1309,7 @@ function App(){
 
   // Shared status
   const [sharedUpdatedUtc,setSharedUpdatedUtc]=useState(null);
+  const [sharedApiAvailable,setSharedApiAvailable]=useState(true);
   const [loadBusy,setLoadBusy]=useState(true);
   const [loadErr,setLoadErr]=useState("");
   const [saveBusy,setSaveBusy]=useState(false);
@@ -1329,7 +1336,17 @@ function App(){
     toastRef.current=setTimeout(()=>setToast(null),2600);
   }
 
-  // Initial load: fail closed instead of rendering stale embedded fallback data.
+  function applyLoadedCalendarData(nextCats, nextEvents, updatedUtc=null){
+    setCats(nextCats);
+    setFilters(new Set(Object.keys(nextCats || {})));
+    setEvents(nextEvents);
+    setSharedUpdatedUtc(updatedUtc || null);
+
+    const maxId = nextEvents.reduce((m,x)=>Math.max(m, Number(x.id)||0), 0);
+    setNextId(Math.max(300, maxId+1));
+  }
+
+  // Initial load: prefer shared API, then fall back to published static JSON.
   useEffect(()=>{
     (async ()=>{
       setLoadBusy(true);
@@ -1338,16 +1355,20 @@ function App(){
         const [c, ev] = await Promise.all([loadSharedCats(), loadSharedEvents()]);
         if(!c || typeof c !== "object" || Array.isArray(c)) throw new Error("Invalid categories response.");
         if(!ev?.events || !Array.isArray(ev.events)) throw new Error("Invalid events response.");
-
-        setCats(c);
-        setFilters(new Set(Object.keys(c)));
-        setEvents(ev.events);
-        if(ev.updatedUtc) setSharedUpdatedUtc(ev.updatedUtc);
-
-        const maxId = ev.events.reduce((m,x)=>Math.max(m, Number(x.id)||0), 0);
-        setNextId(Math.max(300, maxId+1));
-      }catch(e){
-        setLoadErr(e?.message || String(e));
+        applyLoadedCalendarData(c, ev.events, ev.updatedUtc);
+        setSharedApiAvailable(true);
+      }catch(sharedErr){
+        try{
+          const [c, ev] = await Promise.all([loadStaticCats(), loadStaticEvents()]);
+          if(!c || typeof c !== "object" || Array.isArray(c)) throw new Error("Invalid static categories response.");
+          if(!ev?.events || !Array.isArray(ev.events)) throw new Error("Invalid static events response.");
+          applyLoadedCalendarData(c, ev.events, ev.updatedUtc);
+          setSharedApiAvailable(false);
+        }catch(staticErr){
+          const sharedMsg = sharedErr?.message || String(sharedErr);
+          const staticMsg = staticErr?.message || String(staticErr);
+          setLoadErr(`Shared API load failed: ${sharedMsg}\nStatic fallback load failed: ${staticMsg}`);
+        }
       }finally{
         setLoadBusy(false);
       }
@@ -1357,6 +1378,8 @@ function App(){
    
 // AUTO-REFRESH USEEFFECT
 useEffect(() => {
+  if (!sharedApiAvailable) return;
+
   const base = SAVE_SERVICE_BASE.replace(/\/+$/, "");
   const intervalMs = 120000;
 
@@ -1382,7 +1405,7 @@ useEffect(() => {
 
   const id = setInterval(tick, intervalMs);
   return () => clearInterval(id);
-}, [editMode, editing, saveBusy, sharedUpdatedUtc]);
+}, [editMode, editing, saveBusy, sharedApiAvailable, sharedUpdatedUtc]);
 
   // Keep filters in sync with cats (add new keys)
   useEffect(()=>{
@@ -1429,6 +1452,10 @@ useEffect(() => {
     if(editMode){
       setEditMode(false);
       editorKeyRef.current = "";
+      return;
+    }
+    if(!sharedApiAvailable){
+      showToast("Editing requires access to the shared API.");
       return;
     }
     setShowPwModal(true);

@@ -13,6 +13,12 @@ Use this file to record every material change made to the project.
 - Added `docs/REPO_MAP.md` for repository navigation.
 - Added `worker/README.md` for Cloudflare Worker operational context.
 
+## 2026-06-25
+
+- Added static read-only fallback loading from published `data/events.json` and `data/cats.json` when the Cloudflare Worker API cannot be reached.
+- Blocked entry into edit mode when the shared API is unavailable, with an edit-button warning instead of a persistent status banner.
+- Updated the build script to copy `data/` into `dist/data/` for GitHub Pages fallback reads.
+
 ## Prior Context From Development Discussions
 
 - App migrated from single-file local HTML/React/Babel toward Vite + React.
