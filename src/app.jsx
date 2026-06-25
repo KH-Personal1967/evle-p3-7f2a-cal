@@ -227,6 +227,18 @@ function buildPdfFilename(months, scopeLabel="filtered"){
     ? `EVLE_Phase3_Calendar_${scope}_${start}.pdf`
     : `EVLE_Phase3_Calendar_${scope}_${start}_to_${end}.pdf`;
 }
+function truncatePdfText(doc, text, maxWidth){
+  const value = String(text || "").trim();
+  if(!value || maxWidth <= 8) return "";
+  if(doc.getTextWidth(value) <= maxWidth) return value;
+
+  const ellipsis = "...";
+  let out = value;
+  while(out.length > 1 && doc.getTextWidth(out + ellipsis) > maxWidth){
+    out = out.slice(0, -1);
+  }
+  return out.length < value.length ? `${out}${ellipsis}` : out;
+}
 function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
   const th = TH.light;
   const pageW = doc.internal.pageSize.getWidth();
@@ -242,17 +254,17 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
   const weeks = buildWeeks(year, month, todayStr);
   const weekLayouts = weeks.map(week=>layoutWeek(week, events));
   const availableH = pageH - gridY - margin - footerH;
-  const minDayH = 16;
-  const minLaneH = 11;
-  const minWeekPad = 8;
+  const minDayH = 11;
+  const minLaneH = 10;
+  const minWeekPad = 5;
   const totalLaneCount = weekLayouts.reduce((sum, layout)=>sum + Math.max(1, layout.lanes), 0);
-  const dayWeight = weeks.length * 1.4;
+  const dayWeight = weeks.length * 0.9;
   const laneWeight = totalLaneCount;
-  const padWeight = weeks.length * 0.75;
+  const padWeight = weeks.length * 0.35;
   const weightUnit = availableH / Math.max(1, dayWeight + laneWeight + padWeight);
-  const dayH = Math.max(minDayH, weightUnit * 1.4);
+  const dayH = Math.max(minDayH, weightUnit * 0.9);
   const laneH = Math.max(minLaneH, weightUnit);
-  const weekPad = Math.max(minWeekPad, weightUnit * 0.75);
+  const weekPad = Math.max(minWeekPad, weightUnit * 0.35);
   const borderRgb = hexToRgb(th.border);
   const textRgb = hexToRgb(th.text);
   const mutedRgb = hexToRgb(th.muted);
@@ -309,16 +321,15 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
       }
 
       if(dayIdx>0) doc.line(cellX, y, cellX, y + weekH);
-      doc.line(cellX, y + dayH, cellX + colW, y + dayH);
 
-        doc.setFont("helvetica", day.isToday ? "bold" : "normal");
-        doc.setFontSize(Math.min(11, Math.max(9, dayH * 0.55)));
-        const dayTextRgb = day.isToday ? hexToRgb(th.todayBorder) : (day.inMonth ? textRgb : subRgb);
-        doc.setTextColor(dayTextRgb.r, dayTextRgb.g, dayTextRgb.b);
-        if(day.inMonth){
-        doc.text(String(day.n), cellX + colW - 8, y + Math.min(dayH - 4, 11 + Math.max(0, dayH - minDayH) * 0.35), { align:"right" });
-        }
-      });
+      doc.setFont("helvetica", day.isToday ? "bold" : "normal");
+      doc.setFontSize(Math.min(10, Math.max(8, dayH * 0.62)));
+      const dayTextRgb = day.isToday ? hexToRgb(th.todayBorder) : (day.inMonth ? textRgb : subRgb);
+      doc.setTextColor(dayTextRgb.r, dayTextRgb.g, dayTextRgb.b);
+      if(day.inMonth){
+        doc.text(String(day.n), cellX + colW - 8, y + Math.max(9, dayH - 2), { align:"right" });
+      }
+    });
 
     layout.bars.forEach(bar=>{
       const ev = bar.ev;
@@ -336,10 +347,10 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
 
       if(w >= 28){
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(Math.min(9, Math.max(7, laneH * 0.58)));
+        doc.setFontSize(Math.min(8, Math.max(6.5, laneH * 0.52)));
         doc.setTextColor(border.r, border.g, border.b);
-        const label = `${ev.crit ? "(!) " : ""}${ev.label}`;
-        doc.text(label, x + 4, top + h/2 + 2, { maxWidth: w - 7 });
+        const label = truncatePdfText(doc, `${ev.crit ? "(!) " : ""}${ev.label}`, w - 8);
+        doc.text(label, x + 4, top + h/2 + 1.5);
       }
     });
 
