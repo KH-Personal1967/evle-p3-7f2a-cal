@@ -254,17 +254,14 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
   const weeks = buildWeeks(year, month, todayStr);
   const weekLayouts = weeks.map(week=>layoutWeek(week, events));
   const availableH = pageH - gridY - margin - footerH;
-  const minDayH = 11;
-  const minLaneH = 10;
-  const minWeekPad = 5;
+  const fixedDayH = 12;
+  const fixedWeekPad = 5;
+  const minLaneH = 7;
   const totalLaneCount = weekLayouts.reduce((sum, layout)=>sum + Math.max(1, layout.lanes), 0);
-  const dayWeight = weeks.length * 0.9;
-  const laneWeight = totalLaneCount;
-  const padWeight = weeks.length * 0.35;
-  const weightUnit = availableH / Math.max(1, dayWeight + laneWeight + padWeight);
-  const dayH = Math.max(minDayH, weightUnit * 0.9);
-  const laneH = Math.max(minLaneH, weightUnit);
-  const weekPad = Math.max(minWeekPad, weightUnit * 0.35);
+  const reservedH = weeks.length * (fixedDayH + fixedWeekPad);
+  const laneH = Math.max(minLaneH, (availableH - reservedH) / Math.max(1, totalLaneCount));
+  const dayH = fixedDayH;
+  const weekPad = fixedWeekPad;
   const borderRgb = hexToRgb(th.border);
   const textRgb = hexToRgb(th.text);
   const mutedRgb = hexToRgb(th.muted);
@@ -327,7 +324,7 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
       const dayTextRgb = day.isToday ? hexToRgb(th.todayBorder) : (day.inMonth ? textRgb : subRgb);
       doc.setTextColor(dayTextRgb.r, dayTextRgb.g, dayTextRgb.b);
       if(day.inMonth){
-        doc.text(String(day.n), cellX + colW - 8, y + Math.max(9, dayH - 2), { align:"right" });
+        doc.text(String(day.n), cellX + colW - 8, y + 9, { align:"right" });
       }
     });
 
