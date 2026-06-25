@@ -232,25 +232,27 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const margin = 24;
-  const titleH = 28;
-  const subTitleH = 12;
+  const titleBlockH = 46;
   const weekHdrH = 18;
   const footerH = 14;
   const gridX = margin;
-  const gridY = margin + titleH + subTitleH + 10 + weekHdrH;
+  const gridY = margin + titleBlockH + 16 + weekHdrH;
   const gridW = pageW - margin * 2;
   const colW = gridW / 7;
   const weeks = buildWeeks(year, month, todayStr);
   const weekLayouts = weeks.map(week=>layoutWeek(week, events));
   const availableH = pageH - gridY - margin - footerH;
-  const baseDayH = 16;
-  const baseLaneH = 11;
-  const baseWeekPad = 8;
-  const rawTotalH = weekLayouts.reduce((sum, layout)=>sum + baseDayH + Math.max(1, layout.lanes) * baseLaneH + baseWeekPad, 0);
-  const scale = Math.min(1, availableH / rawTotalH);
-  const dayH = Math.max(12, baseDayH * scale);
-  const laneH = Math.max(8, baseLaneH * scale);
-  const weekPad = Math.max(5, baseWeekPad * scale);
+  const minDayH = 16;
+  const minLaneH = 11;
+  const minWeekPad = 8;
+  const totalLaneCount = weekLayouts.reduce((sum, layout)=>sum + Math.max(1, layout.lanes), 0);
+  const dayWeight = weeks.length * 1.4;
+  const laneWeight = totalLaneCount;
+  const padWeight = weeks.length * 0.75;
+  const weightUnit = availableH / Math.max(1, dayWeight + laneWeight + padWeight);
+  const dayH = Math.max(minDayH, weightUnit * 1.4);
+  const laneH = Math.max(minLaneH, weightUnit);
+  const weekPad = Math.max(minWeekPad, weightUnit * 0.75);
   const borderRgb = hexToRgb(th.border);
   const textRgb = hexToRgb(th.text);
   const mutedRgb = hexToRgb(th.muted);
@@ -262,14 +264,14 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
   const hdrTextRgb = hexToRgb(th.hdrText);
 
   doc.setFillColor(hdrRgb.r, hdrRgb.g, hdrRgb.b);
-  doc.roundedRect(margin, margin, gridW, titleH + 6, 6, 6, "F");
+  doc.roundedRect(margin, margin, gridW, titleBlockH, 6, 6, "F");
   doc.setTextColor(hdrTextRgb.r, hdrTextRgb.g, hdrTextRgb.b);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
-  doc.text(`${MN[month]} ${year}`, margin + 14, margin + 20);
+  doc.text(`${MN[month]} ${year}`, margin + 14, margin + 19);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
-  doc.text("EVLE Phase 3 Production Calendar", margin + 14, margin + 34);
+  doc.text("EVLE Phase 3 Production Calendar", margin + 14, margin + 38);
 
   doc.setFillColor(wkHdrRgb.r, wkHdrRgb.g, wkHdrRgb.b);
   doc.rect(gridX, gridY - weekHdrH, gridW, weekHdrH, "F");
@@ -309,14 +311,14 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
       if(dayIdx>0) doc.line(cellX, y, cellX, y + weekH);
       doc.line(cellX, y + dayH, cellX + colW, y + dayH);
 
-      doc.setFont("helvetica", day.isToday ? "bold" : "normal");
-      doc.setFontSize(10);
-      const dayTextRgb = day.isToday ? hexToRgb(th.todayBorder) : (day.inMonth ? textRgb : subRgb);
-      doc.setTextColor(dayTextRgb.r, dayTextRgb.g, dayTextRgb.b);
-      if(day.inMonth){
-        doc.text(String(day.n), cellX + colW - 8, y + 11, { align:"right" });
-      }
-    });
+        doc.setFont("helvetica", day.isToday ? "bold" : "normal");
+        doc.setFontSize(Math.min(11, Math.max(9, dayH * 0.55)));
+        const dayTextRgb = day.isToday ? hexToRgb(th.todayBorder) : (day.inMonth ? textRgb : subRgb);
+        doc.setTextColor(dayTextRgb.r, dayTextRgb.g, dayTextRgb.b);
+        if(day.inMonth){
+        doc.text(String(day.n), cellX + colW - 8, y + Math.min(dayH - 4, 11 + Math.max(0, dayH - minDayH) * 0.35), { align:"right" });
+        }
+      });
 
     layout.bars.forEach(bar=>{
       const ev = bar.ev;
@@ -334,7 +336,7 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
 
       if(w >= 28){
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(8);
+        doc.setFontSize(Math.min(9, Math.max(7, laneH * 0.58)));
         doc.setTextColor(border.r, border.g, border.b);
         const label = `${ev.crit ? "(!) " : ""}${ev.label}`;
         doc.text(label, x + 4, top + h/2 + 2, { maxWidth: w - 7 });
@@ -866,7 +868,7 @@ function PasswordModal({onSuccess,onClose,dark}){
 
 function PdfExportModal({dark,busy,currentMonth,allEvents,filteredEvents,onClose,onExport}){
   const th=dark?TH.dark:TH.light;
-  const [scope,setScope]=useState("filtered");
+  const [scope,setScope]=useState("all");
   const [paper,setPaper]=useState("letter");
   const [startMonth,setStartMonth]=useState(monthRefToKey(currentMonth));
   const [endMonth,setEndMonth]=useState(monthRefToKey(currentMonth));
@@ -915,11 +917,11 @@ function PdfExportModal({dark,busy,currentMonth,allEvents,filteredEvents,onClose
 
         <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:8}}>Events to Include</label>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
-          <button onClick={()=>setScope("filtered")} style={{background:scope==="filtered"?(dark?"#1e40af":"#dbeafe"):"transparent",border:`1px solid ${scope==="filtered"?"#3b82f6":th.border}`,borderRadius:7,padding:"10px 12px",color:scope==="filtered"?"#1d4ed8":th.text,fontSize:13,fontWeight:700,textAlign:"left"}}>
-            Current Filtered Events
-          </button>
           <button onClick={()=>setScope("all")} style={{background:scope==="all"?(dark?"#1e40af":"#dbeafe"):"transparent",border:`1px solid ${scope==="all"?"#3b82f6":th.border}`,borderRadius:7,padding:"10px 12px",color:scope==="all"?"#1d4ed8":th.text,fontSize:13,fontWeight:700,textAlign:"left"}}>
             All Events
+          </button>
+          <button onClick={()=>setScope("filtered")} style={{background:scope==="filtered"?(dark?"#1e40af":"#dbeafe"):"transparent",border:`1px solid ${scope==="filtered"?"#3b82f6":th.border}`,borderRadius:7,padding:"10px 12px",color:scope==="filtered"?"#1d4ed8":th.text,fontSize:13,fontWeight:700,textAlign:"left"}}>
+            Current Filtered Events
           </button>
         </div>
 
