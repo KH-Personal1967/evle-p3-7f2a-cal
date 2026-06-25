@@ -18,6 +18,8 @@ Use this file to record every material change made to the project.
 - Added static read-only fallback loading from published `data/events.json` and `data/cats.json` when the Cloudflare Worker API cannot be reached.
 - Blocked entry into edit mode when the shared API is unavailable, with an edit-button warning instead of a persistent status banner.
 - Updated the build script to copy `data/` into `dist/data/` for GitHub Pages fallback reads.
+- Replaced the generic print action with a calendar-only PDF export that generates one landscape letter page per month.
+- Added a PDF export options dialog for choosing all vs. filtered events, month range, and 8.5x11 vs. 11x17 landscape output.
 
 ## Prior Context From Development Discussions
 

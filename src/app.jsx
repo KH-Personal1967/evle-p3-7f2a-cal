@@ -125,6 +125,230 @@ function advM({year,month},n){
   while(m>11){ m-=12; y++; }
   return {year:y,month:m};
 }
+function hexToRgb(hex){
+  const raw = String(hex || "").trim().replace("#", "");
+  const normalized = raw.length===3 ? raw.split("").map(c=>c+c).join("") : raw;
+  if(!/^[0-9a-fA-F]{6}$/.test(normalized)) return { r:136, g:136, b:136 };
+  return {
+    r: Number.parseInt(normalized.slice(0,2), 16),
+    g: Number.parseInt(normalized.slice(2,4), 16),
+    b: Number.parseInt(normalized.slice(4,6), 16)
+  };
+}
+function blendHex(hex, bg="#ffffff", ratio=0.84){
+  const fgRgb = hexToRgb(hex);
+  const bgRgb = hexToRgb(bg);
+  const mix = key => Math.round(fgRgb[key] * (1-ratio) + bgRgb[key] * ratio);
+  return { r: mix("r"), g: mix("g"), b: mix("b") };
+}
+function buildMonthExportRange(events, fallbackMonth){
+  const dated = (events || []).filter(e=>e?.start && e?.end);
+  if(!dated.length){
+    return [{ year:fallbackMonth.year, month:fallbackMonth.month }];
+  }
+
+  const minStart = dated.reduce((m,e)=>toD(e.start)<m?toD(e.start):m, toD(dated[0].start));
+  const maxEnd = dated.reduce((m,e)=>toD(e.end)>m?toD(e.end):m, toD(dated[0].end));
+  const months = [];
+  let cursor = monthStart(minStart);
+  const end = monthStart(maxEnd);
+
+  while(cursor <= end){
+    months.push({ year:cursor.getFullYear(), month:cursor.getMonth() });
+    cursor = addMonthsDate(cursor, 1);
+  }
+
+  return months;
+}
+function compareMonthRefs(a,b){
+  if(a.year !== b.year) return a.year - b.year;
+  return a.month - b.month;
+}
+function monthRefToKey({year,month}){
+  return `${year}-${pad2(month+1)}`;
+}
+function monthKeyToRef(key){
+  const [year, month] = String(key || "").split("-").map(Number);
+  if(!Number.isFinite(year) || !Number.isFinite(month)) return null;
+  return { year, month: month-1 };
+}
+function formatMonthRef({year,month}){
+  return `${MN[month]} ${year}`;
+}
+function clampMonthRange(startRef, endRef){
+  if(compareMonthRefs(startRef, endRef) <= 0) return { startRef, endRef };
+  return { startRef:endRef, endRef };
+}
+function buildAvailableMonthOptions(events, fallbackMonth){
+  const months = buildMonthExportRange(events, fallbackMonth);
+  const first = months[0];
+  const last = months[months.length-1];
+  const start = compareMonthRefs(fallbackMonth, first) < 0 ? fallbackMonth : first;
+  const end = compareMonthRefs(fallbackMonth, last) > 0 ? fallbackMonth : last;
+  const options = [];
+  let cursor = { year:start.year, month:start.month };
+
+  while(compareMonthRefs(cursor, end) <= 0){
+    options.push(cursor);
+    cursor = advM(cursor, 1);
+  }
+
+  return options;
+}
+function getDefaultPdfRange(events, fallbackMonth){
+  const availableMonths = buildAvailableMonthOptions(events, fallbackMonth);
+  const lastMonth = availableMonths[availableMonths.length-1] || fallbackMonth;
+  const startRef = compareMonthRefs(fallbackMonth, lastMonth) <= 0 ? fallbackMonth : lastMonth;
+  return clampMonthRange(startRef, lastMonth);
+}
+function selectEventsForMonthRange(events, startRef, endRef){
+  const start = toS(monthStart(new Date(startRef.year, startRef.month, 1)));
+  const end = toS(monthEnd(new Date(endRef.year, endRef.month, 1)));
+  return (events || []).filter(ev=>ev.end >= start && ev.start <= end);
+}
+function enumerateMonthRange(startRef, endRef){
+  const clamped = clampMonthRange(startRef, endRef);
+  const months = [];
+  let cursor = { year:clamped.startRef.year, month:clamped.startRef.month };
+  while(compareMonthRefs(cursor, clamped.endRef) <= 0){
+    months.push(cursor);
+    cursor = advM(cursor, 1);
+  }
+  return months;
+}
+function buildPdfFilename(months, scopeLabel="filtered"){
+  if(!months.length) return "EVLE_Phase3_Calendar.pdf";
+  const first = months[0];
+  const last = months[months.length-1];
+  const start = `${first.year}-${pad2(first.month+1)}`;
+  const end = `${last.year}-${pad2(last.month+1)}`;
+  const scope = scopeLabel === "all" ? "all-events" : "filtered-events";
+  return start===end
+    ? `EVLE_Phase3_Calendar_${scope}_${start}.pdf`
+    : `EVLE_Phase3_Calendar_${scope}_${start}_to_${end}.pdf`;
+}
+function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
+  const th = TH.light;
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 24;
+  const titleH = 28;
+  const subTitleH = 12;
+  const weekHdrH = 18;
+  const footerH = 14;
+  const gridX = margin;
+  const gridY = margin + titleH + subTitleH + 10 + weekHdrH;
+  const gridW = pageW - margin * 2;
+  const colW = gridW / 7;
+  const weeks = buildWeeks(year, month, todayStr);
+  const weekLayouts = weeks.map(week=>layoutWeek(week, events));
+  const availableH = pageH - gridY - margin - footerH;
+  const baseDayH = 16;
+  const baseLaneH = 11;
+  const baseWeekPad = 8;
+  const rawTotalH = weekLayouts.reduce((sum, layout)=>sum + baseDayH + Math.max(1, layout.lanes) * baseLaneH + baseWeekPad, 0);
+  const scale = Math.min(1, availableH / rawTotalH);
+  const dayH = Math.max(12, baseDayH * scale);
+  const laneH = Math.max(8, baseLaneH * scale);
+  const weekPad = Math.max(5, baseWeekPad * scale);
+  const borderRgb = hexToRgb(th.border);
+  const textRgb = hexToRgb(th.text);
+  const mutedRgb = hexToRgb(th.muted);
+  const subRgb = hexToRgb(th.sub);
+  const wkndRgb = hexToRgb(th.wkndBg);
+  const todayBgRgb = hexToRgb(th.todayBg);
+  const wkHdrRgb = hexToRgb(th.wkHdrBg);
+  const hdrRgb = hexToRgb(th.hdrBg);
+  const hdrTextRgb = hexToRgb(th.hdrText);
+
+  doc.setFillColor(hdrRgb.r, hdrRgb.g, hdrRgb.b);
+  doc.roundedRect(margin, margin, gridW, titleH + 6, 6, 6, "F");
+  doc.setTextColor(hdrTextRgb.r, hdrTextRgb.g, hdrTextRgb.b);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text(`${MN[month]} ${year}`, margin + 14, margin + 20);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text("EVLE Phase 3 Production Calendar", margin + 14, margin + 34);
+
+  doc.setFillColor(wkHdrRgb.r, wkHdrRgb.g, wkHdrRgb.b);
+  doc.rect(gridX, gridY - weekHdrH, gridW, weekHdrH, "F");
+  doc.setDrawColor(borderRgb.r, borderRgb.g, borderRgb.b);
+  doc.setLineWidth(0.75);
+  doc.rect(gridX, gridY - weekHdrH, gridW, weekHdrH);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(mutedRgb.r, mutedRgb.g, mutedRgb.b);
+  DN.forEach((label, i)=>{
+    const x = gridX + i * colW;
+    if(i>0) doc.line(x, gridY - weekHdrH, x, gridY);
+    doc.text(label, x + colW/2, gridY - 6, { align:"center" });
+  });
+
+  let y = gridY;
+  weeks.forEach((week, weekIdx)=>{
+    const layout = weekLayouts[weekIdx];
+    const lanes = Math.max(1, layout.lanes);
+    const weekH = dayH + lanes * laneH + weekPad;
+    const eventTop = y + dayH;
+
+    doc.setDrawColor(borderRgb.r, borderRgb.g, borderRgb.b);
+    doc.setLineWidth(0.6);
+    doc.rect(gridX, y, gridW, weekH);
+
+    week.forEach((day, dayIdx)=>{
+      const cellX = gridX + dayIdx * colW;
+      const isWknd = day.dow===0 || day.dow===6;
+      const fill = day.isToday ? todayBgRgb : (isWknd ? wkndRgb : null);
+
+      if(fill){
+        doc.setFillColor(fill.r, fill.g, fill.b);
+        doc.rect(cellX, y, colW, dayH, "F");
+      }
+
+      if(dayIdx>0) doc.line(cellX, y, cellX, y + weekH);
+      doc.line(cellX, y + dayH, cellX + colW, y + dayH);
+
+      doc.setFont("helvetica", day.isToday ? "bold" : "normal");
+      doc.setFontSize(10);
+      const dayTextRgb = day.isToday ? hexToRgb(th.todayBorder) : (day.inMonth ? textRgb : subRgb);
+      doc.setTextColor(dayTextRgb.r, dayTextRgb.g, dayTextRgb.b);
+      if(day.inMonth){
+        doc.text(String(day.n), cellX + colW - 8, y + 11, { align:"right" });
+      }
+    });
+
+    layout.bars.forEach(bar=>{
+      const ev = bar.ev;
+      const hex = cats?.[ev.cat]?.hex || "#888888";
+      const border = hexToRgb(hex);
+      const fill = blendHex(hex, "#ffffff", 0.82);
+      const x = gridX + bar.colStart * colW + 1.5;
+      const w = (bar.colEnd - bar.colStart + 1) * colW - 3;
+      const h = Math.max(6, laneH - 2.5);
+      const top = eventTop + bar.track * laneH + 1.2;
+
+      doc.setFillColor(fill.r, fill.g, fill.b);
+      doc.setDrawColor(border.r, border.g, border.b);
+      doc.roundedRect(x, top, w, h, 2, 2, "FD");
+
+      if(w >= 28){
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8);
+        doc.setTextColor(border.r, border.g, border.b);
+        const label = `${ev.crit ? "(!) " : ""}${ev.label}`;
+        doc.text(label, x + 4, top + h/2 + 2, { maxWidth: w - 7 });
+      }
+    });
+
+    y += weekH;
+  });
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(subRgb.r, subRgb.g, subRgb.b);
+  doc.text(`Generated ${new Date().toLocaleString()}`, margin, pageH - margin + 2);
+}
 
 /* ============================
    SHARED STORE (SAVE SERVICE)
@@ -634,6 +858,111 @@ function PasswordModal({onSuccess,onClose,dark}){
         <div style={{display:"flex",gap:9}}>
           <button onClick={attempt} disabled={checking} style={{flex:1,background:"#1e40af",border:"none",borderRadius:6,padding:"10px 0",color:"#fff",fontSize:13,fontWeight:700,opacity:checking ? 0.65 : 1}}>{checking?"Checking...":"Unlock"}</button>
           <button onClick={onClose} style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:6,padding:"10px 14px",color:th.muted,fontSize:13}}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PdfExportModal({dark,busy,currentMonth,allEvents,filteredEvents,onClose,onExport}){
+  const th=dark?TH.dark:TH.light;
+  const [scope,setScope]=useState("filtered");
+  const [paper,setPaper]=useState("letter");
+  const [startMonth,setStartMonth]=useState(monthRefToKey(currentMonth));
+  const [endMonth,setEndMonth]=useState(monthRefToKey(currentMonth));
+
+  const sourceEvents = scope==="all" ? allEvents : filteredEvents;
+  const monthOptions = useMemo(()=>buildAvailableMonthOptions(sourceEvents, currentMonth),[sourceEvents,currentMonth]);
+  const defaultRange = useMemo(()=>getDefaultPdfRange(sourceEvents, currentMonth),[sourceEvents,currentMonth]);
+
+  useEffect(()=>{
+    setStartMonth(monthRefToKey(defaultRange.startRef));
+    setEndMonth(monthRefToKey(defaultRange.endRef));
+  },[defaultRange]);
+
+  const effectiveStart = monthKeyToRef(startMonth) || defaultRange.startRef;
+  const effectiveEnd = monthKeyToRef(endMonth) || defaultRange.endRef;
+  const monthCount = enumerateMonthRange(effectiveStart, effectiveEnd).length;
+
+  function submit(){
+    onExport({
+      scope,
+      paper,
+      startRef: effectiveStart,
+      endRef: effectiveEnd
+    });
+  }
+
+  const inputStyle = {
+    width:"100%",
+    boxSizing:"border-box",
+    background:th.card2,
+    border:`1px solid ${th.border}`,
+    borderRadius:6,
+    padding:"8px 11px",
+    color:th.text,
+    fontSize:13,
+    outline:"none"
+  };
+
+  return(
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.55)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:610}} onClick={onClose}>
+      <div style={{background:th.card,border:`1px solid ${th.border}`,borderRadius:10,padding:24,width:430,maxWidth:"94vw",boxShadow:"0 20px 60px rgba(0,0,0,.45)"}} onClick={e=>e.stopPropagation()}>
+        <div style={{fontWeight:700,fontSize:17,color:th.text,marginBottom:6}}>Export Calendar PDF</div>
+        <div style={{fontSize:13,color:th.muted,lineHeight:1.45,marginBottom:18}}>
+          Export one monthly calendar page per month in landscape orientation.
+        </div>
+
+        <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:8}}>Events to Include</label>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+          <button onClick={()=>setScope("filtered")} style={{background:scope==="filtered"?(dark?"#1e40af":"#dbeafe"):"transparent",border:`1px solid ${scope==="filtered"?"#3b82f6":th.border}`,borderRadius:7,padding:"10px 12px",color:scope==="filtered"?"#1d4ed8":th.text,fontSize:13,fontWeight:700,textAlign:"left"}}>
+            Current Filtered Events
+          </button>
+          <button onClick={()=>setScope("all")} style={{background:scope==="all"?(dark?"#1e40af":"#dbeafe"):"transparent",border:`1px solid ${scope==="all"?"#3b82f6":th.border}`,borderRadius:7,padding:"10px 12px",color:scope==="all"?"#1d4ed8":th.text,fontSize:13,fontWeight:700,textAlign:"left"}}>
+            All Events
+          </button>
+        </div>
+
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:16}}>
+          <div>
+            <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:6}}>Start Month</label>
+            <select value={startMonth} onChange={e=>setStartMonth(e.target.value)} style={{...inputStyle,cursor:"pointer"}}>
+              {monthOptions.map(ref=>(
+                <option key={monthRefToKey(ref)} value={monthRefToKey(ref)}>{formatMonthRef(ref)}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:6}}>End Month</label>
+            <select value={endMonth} onChange={e=>setEndMonth(e.target.value)} style={{...inputStyle,cursor:"pointer"}}>
+              {monthOptions.map(ref=>(
+                <option key={monthRefToKey(ref)} value={monthRefToKey(ref)}>{formatMonthRef(ref)}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <label style={{fontSize:11,color:th.muted,fontWeight:700,textTransform:"uppercase",letterSpacing:".09em",display:"block",marginBottom:8}}>Paper Size</label>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+          <button onClick={()=>setPaper("letter")} style={{background:paper==="letter"?(dark?"#1e40af":"#dbeafe"):"transparent",border:`1px solid ${paper==="letter"?"#3b82f6":th.border}`,borderRadius:7,padding:"10px 12px",color:paper==="letter"?"#1d4ed8":th.text,fontSize:13,fontWeight:700,textAlign:"left"}}>
+            8.5 x 11
+          </button>
+          <button onClick={()=>setPaper("tabloid")} style={{background:paper==="tabloid"?(dark?"#1e40af":"#dbeafe"):"transparent",border:`1px solid ${paper==="tabloid"?"#3b82f6":th.border}`,borderRadius:7,padding:"10px 12px",color:paper==="tabloid"?"#1d4ed8":th.text,fontSize:13,fontWeight:700,textAlign:"left"}}>
+            11 x 17
+          </button>
+        </div>
+
+        <div style={{fontSize:12,color:th.muted,background:th.card2,border:`1px solid ${th.border}`,borderRadius:7,padding:"10px 12px",marginBottom:18}}>
+          Export will include {monthCount} month{monthCount===1?"":"s"} from {formatMonthRef(clampMonthRange(effectiveStart,effectiveEnd).startRef)} through {formatMonthRef(clampMonthRange(effectiveStart,effectiveEnd).endRef)}.
+        </div>
+
+        <div style={{display:"flex",gap:9}}>
+          <button onClick={submit} disabled={busy} style={{flex:1,background:"#1e40af",border:"none",borderRadius:6,padding:"10px 0",color:"#fff",fontSize:13,fontWeight:700,opacity:busy?0.7:1}}>
+            {busy ? "Generating..." : "Export PDF"}
+          </button>
+          <button onClick={onClose} disabled={busy} style={{background:"transparent",border:`1px solid ${th.border}`,borderRadius:6,padding:"10px 14px",color:th.muted,fontSize:13}}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>
@@ -1288,6 +1617,7 @@ function App(){
 
   const [editMode,setEditMode]=useState(false);
   const [showPwModal,setShowPwModal]=useState(false);
+  const [showPdfModal,setShowPdfModal]=useState(false);
   const [showAdmin,setShowAdmin]=useState(false);
   const [showCatMgr,setShowCatMgr]=useState(false);
   const [showPanel,setShowPanel]=useState(true);
@@ -1305,6 +1635,7 @@ function App(){
 
   const [lookahead,setLookahead]=useState(30);
   const [toast,setToast]=useState(null);
+  const [pdfBusy,setPdfBusy]=useState(false);
   const toastRef=useRef();
 
   // Shared status
@@ -1424,6 +1755,8 @@ useEffect(() => {
     for(let i=0;i<span;i++){ res.push(cur); cur=advM(cur,1); }
     return res;
   },[vs,span]);
+
+  const currentMonthRef = useMemo(()=>({year:todayD.getFullYear(), month:todayD.getMonth()}),[todayD]);
 
   /* -------- Filter pill logic with isolation -------- */
   function handleFilterClick(k, additive=false){
@@ -1566,6 +1899,48 @@ useEffect(() => {
   function handleExport(){
     exportCSV(events);
     showToast(`Exported ${events.length} events.`);
+  }
+
+  async function handleExportPdf(config){
+    const scope = config?.scope || "filtered";
+    const sourceEvents = scope==="all" ? events : filteredEvs;
+    const clampedRange = clampMonthRange(config?.startRef || currentMonthRef, config?.endRef || currentMonthRef);
+    const monthsToExport = enumerateMonthRange(clampedRange.startRef, clampedRange.endRef);
+    const exportEvents = selectEventsForMonthRange(sourceEvents, clampedRange.startRef, clampedRange.endRef);
+    const paperFormat = config?.paper === "tabloid" ? "tabloid" : "letter";
+    if(!monthsToExport.length){
+      showToast("No calendar months available for PDF export.");
+      return;
+    }
+
+    setPdfBusy(true);
+    try{
+      const { jsPDF } = await import("jspdf");
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "pt",
+        format: paperFormat,
+        compress: true
+      });
+
+      monthsToExport.forEach((monthDef, idx)=>{
+        if(idx>0) doc.addPage(paperFormat, "landscape");
+        drawMonthPdfPage(doc, {
+          ...monthDef,
+          events: exportEvents,
+          cats,
+          todayStr
+        });
+      });
+
+      doc.save(buildPdfFilename(monthsToExport, scope));
+      setShowPdfModal(false);
+      showToast(`Exported PDF for ${monthsToExport.length} month${monthsToExport.length===1?"":"s"}.`);
+    }catch(e){
+      showToast("PDF export failed.");
+    }finally{
+      setPdfBusy(false);
+    }
   }
 
   function handleImport(file){
@@ -1712,9 +2087,17 @@ useEffect(() => {
               ↓ CSV
             </button>
 
-            <button onClick={()=>window.print()} title="Print" style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:5,padding:"6px 11px",color:th.muted,fontSize:12,fontWeight:600}}>
+            {view==="calendar" && (
+            <>
+            <button onClick={()=>setShowPdfModal(true)} title="Choose PDF export options" disabled={pdfBusy} style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:5,padding:"6px 11px",color:pdfBusy?th.sub:th.muted,fontSize:12,fontWeight:600,opacity:pdfBusy?0.7:1}}>
+              {pdfBusy ? "Generating PDF..." : "PDF Export"}
+            </button>
+            <button onClick={()=>setShowPdfModal(true)} title="Choose PDF export options" disabled={pdfBusy} aria-hidden="true" tabIndex={-1} style={{display:"none",background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:5,padding:"6px 11px",color:pdfBusy?th.sub:th.muted,fontSize:0,fontWeight:600,opacity:pdfBusy?0.7:1}}>
+              <span style={{fontSize:12}}>{pdfBusy ? "Generating PDF..." : "PDF Export"}</span>
               🖨 Print
             </button>
+            </>
+            )}
 
             <button onClick={()=>setShowPanel(p=>!p)} title={showPanel?"Collapse panel":"Expand panel"} style={{background:th.pillBg,border:`1px solid ${th.border}`,borderRadius:5,padding:"6px 10px",color:th.muted,fontSize:12}}>
               {showPanel?"▶":"◀"}
@@ -1871,6 +2254,18 @@ useEffect(() => {
             dark={dark}
             onSuccess={onPasswordSuccess}
             onClose={()=>setShowPwModal(false)}
+          />
+        )}
+
+        {showPdfModal && (
+          <PdfExportModal
+            dark={dark}
+            busy={pdfBusy}
+            currentMonth={currentMonthRef}
+            allEvents={events}
+            filteredEvents={filteredEvs}
+            onClose={()=>setShowPdfModal(false)}
+            onExport={handleExportPdf}
           />
         )}
 
