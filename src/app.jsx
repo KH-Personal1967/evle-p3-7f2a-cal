@@ -244,24 +244,20 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const margin = 24;
-  const titleBlockH = 46;
-  const weekHdrH = 18;
+  const titleBlockH = 28;
+  const weekHdrH = 16;
   const footerH = 14;
   const gridX = margin;
-  const gridY = margin + titleBlockH + 16 + weekHdrH;
+  const gridY = margin + titleBlockH + weekHdrH;
   const gridW = pageW - margin * 2;
   const colW = gridW / 7;
   const weeks = buildWeeks(year, month, todayStr);
   const weekLayouts = weeks.map(week=>layoutWeek(week, events));
   const availableH = pageH - gridY - margin - footerH;
-  const fixedDayH = 12;
-  const fixedWeekPad = 5;
-  const minLaneH = 7;
-  const totalLaneCount = weekLayouts.reduce((sum, layout)=>sum + Math.max(1, layout.lanes), 0);
-  const reservedH = weeks.length * (fixedDayH + fixedWeekPad);
-  const laneH = Math.max(minLaneH, (availableH - reservedH) / Math.max(1, totalLaneCount));
-  const dayH = fixedDayH;
-  const weekPad = fixedWeekPad;
+  const weekH = availableH / Math.max(1, weeks.length);
+  const dayH = 11;
+  const trackPad = 3;
+  const laneH = 9.5;
   const borderRgb = hexToRgb(th.border);
   const textRgb = hexToRgb(th.text);
   const mutedRgb = hexToRgb(th.muted);
@@ -276,32 +272,29 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
   doc.roundedRect(margin, margin, gridW, titleBlockH, 6, 6, "F");
   doc.setTextColor(hdrTextRgb.r, hdrTextRgb.g, hdrTextRgb.b);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
-  doc.text(`${MN[month]} ${year}`, margin + 14, margin + 19);
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  doc.text("EVLE Phase 3 Production Calendar", margin + 14, margin + 38);
+  doc.setFontSize(16);
+  doc.text(`${MN[month]} ${year}`, margin + 14, margin + 18);
 
   doc.setFillColor(wkHdrRgb.r, wkHdrRgb.g, wkHdrRgb.b);
-  doc.rect(gridX, gridY - weekHdrH, gridW, weekHdrH, "F");
+  doc.rect(gridX, margin + titleBlockH, gridW, weekHdrH, "F");
   doc.setDrawColor(borderRgb.r, borderRgb.g, borderRgb.b);
   doc.setLineWidth(0.75);
-  doc.rect(gridX, gridY - weekHdrH, gridW, weekHdrH);
+  doc.rect(gridX, margin + titleBlockH, gridW, weekHdrH);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(9);
+  doc.setFontSize(8.5);
   doc.setTextColor(mutedRgb.r, mutedRgb.g, mutedRgb.b);
   DN.forEach((label, i)=>{
     const x = gridX + i * colW;
-    if(i>0) doc.line(x, gridY - weekHdrH, x, gridY);
-    doc.text(label, x + colW/2, gridY - 6, { align:"center" });
+    if(i>0) doc.line(x, margin + titleBlockH, x, gridY);
+    doc.text(label, x + colW/2, gridY - 5, { align:"center" });
   });
 
   let y = gridY;
   weeks.forEach((week, weekIdx)=>{
     const layout = weekLayouts[weekIdx];
     const lanes = Math.max(1, layout.lanes);
-    const weekH = dayH + lanes * laneH + weekPad;
-    const eventTop = y + dayH;
+    const weekBottom = y + weekH;
+    const eventTop = y + dayH + trackPad;
 
     doc.setDrawColor(borderRgb.r, borderRgb.g, borderRgb.b);
     doc.setLineWidth(0.6);
@@ -320,11 +313,11 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
       if(dayIdx>0) doc.line(cellX, y, cellX, y + weekH);
 
       doc.setFont("helvetica", day.isToday ? "bold" : "normal");
-      doc.setFontSize(Math.min(10, Math.max(8, dayH * 0.62)));
+      doc.setFontSize(8.5);
       const dayTextRgb = day.isToday ? hexToRgb(th.todayBorder) : (day.inMonth ? textRgb : subRgb);
       doc.setTextColor(dayTextRgb.r, dayTextRgb.g, dayTextRgb.b);
       if(day.inMonth){
-        doc.text(String(day.n), cellX + colW - 8, y + 9, { align:"right" });
+        doc.text(String(day.n), cellX + colW - 8, y + 8.5, { align:"right" });
       }
     });
 
@@ -335,8 +328,9 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
       const fill = blendHex(hex, "#ffffff", 0.82);
       const x = gridX + bar.colStart * colW + 1.5;
       const w = (bar.colEnd - bar.colStart + 1) * colW - 3;
-      const h = Math.max(6, laneH - 2.5);
-      const top = eventTop + bar.track * laneH + 1.2;
+      const h = 7.5;
+      const top = eventTop + bar.track * laneH;
+      if(top + h > weekBottom - 2) return;
 
       doc.setFillColor(fill.r, fill.g, fill.b);
       doc.setDrawColor(border.r, border.g, border.b);
@@ -344,20 +338,21 @@ function drawMonthPdfPage(doc, { year, month, events, cats, todayStr }){
 
       if(w >= 28){
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(Math.min(8, Math.max(6.5, laneH * 0.52)));
+        doc.setFontSize(6.75);
         doc.setTextColor(border.r, border.g, border.b);
         const label = truncatePdfText(doc, `${ev.crit ? "(!) " : ""}${ev.label}`, w - 8);
-        doc.text(label, x + 4, top + h/2 + 1.5);
+        doc.text(label, x + 4, top + 5.2);
       }
     });
 
-    y += weekH;
+    y = weekBottom;
   });
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(subRgb.r, subRgb.g, subRgb.b);
   doc.text(`Generated ${new Date().toLocaleString()}`, margin, pageH - margin + 2);
+  doc.text("EVLE Phase 3 Production Calendar", pageW - margin, pageH - margin + 2, { align:"right" });
 }
 
 /* ============================
