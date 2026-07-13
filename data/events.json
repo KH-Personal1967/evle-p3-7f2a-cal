@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-07-13T20:08:11.913Z",
+  "updatedUtc": "2026-07-13T20:09:00.354Z",
   "events": [
     {
       "id": 1,
@@ -1431,6 +1431,15 @@
       "crit": false,
       "details": "",
       "id": 363
+    },
+    {
+      "label": "SME Check (Qjan (MAR-D), Rachel Haase (DEIS))",
+      "start": "2026-07-15",
+      "end": "2026-07-16",
+      "cat": "station_area_summary_report",
+      "crit": false,
+      "details": "",
+      "id": 364
     }
   ]
 }
