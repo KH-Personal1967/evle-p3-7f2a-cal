@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-07-13T20:53:28.025Z",
+  "updatedUtc": "2026-07-13T20:59:16.997Z",
   "events": [
     {
       "id": 1,
@@ -1521,6 +1521,15 @@
       "crit": false,
       "details": "",
       "id": 373
+    },
+    {
+      "label": "Graphic clean up and sheet layout: SWI-C, SWI-A, EGN, EVT (Gary, Keegan, Alex)",
+      "start": "2026-08-10",
+      "end": "2026-08-14",
+      "cat": "station_area_summary_report",
+      "crit": false,
+      "details": "",
+      "id": 374
     }
   ]
 }
