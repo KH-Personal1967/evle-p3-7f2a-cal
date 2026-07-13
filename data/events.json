@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-07-13T20:01:00.649Z",
+  "updatedUtc": "2026-07-13T20:01:15.684Z",
   "events": [
     {
       "id": 1,
@@ -1398,8 +1398,8 @@
     },
     {
       "label": "Writing Revisions: Intro Sheets & MAR",
-      "start": "2026-07-13",
-      "end": "2026-07-13",
+      "start": "2026-07-06",
+      "end": "2026-07-10",
       "cat": "station_area_summary_report",
       "crit": false,
       "details": "",
