@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-07-13T21:03:44.966Z",
+  "updatedUtc": "2026-07-13T21:06:29.834Z",
   "events": [
     {
       "id": 1,
@@ -1557,6 +1557,15 @@
       "crit": false,
       "details": "",
       "id": 377
+    },
+    {
+      "label": "Corrections: SWI-C, SWI-A, EGN, ALD (Keegan, Alex)",
+      "start": "2026-08-24",
+      "end": "2026-08-24",
+      "cat": "station_area_summary_report",
+      "crit": false,
+      "details": "",
+      "id": 378
     }
   ]
 }
