@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-07-13T21:15:43.819Z",
+  "updatedUtc": "2026-07-13T21:24:13.569Z",
   "events": [
     {
       "id": 1,
@@ -1620,6 +1620,15 @@
       "crit": false,
       "details": "",
       "id": 384
+    },
+    {
+      "label": "Plot Station Area Summary Report",
+      "start": "2026-09-10",
+      "end": "2026-09-11",
+      "cat": "station_area_summary_report",
+      "crit": false,
+      "details": "",
+      "id": 385
     }
   ]
 }
