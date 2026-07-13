@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-07-13T20:19:09.344Z",
+  "updatedUtc": "2026-07-13T20:19:39.622Z",
   "events": [
     {
       "id": 1,
@@ -1467,6 +1467,15 @@
       "crit": false,
       "details": "",
       "id": 367
+    },
+    {
+      "label": "Verify (Beth Bartz)",
+      "start": "2026-07-21",
+      "end": "2026-07-21",
+      "cat": "station_area_summary_report",
+      "crit": false,
+      "details": "",
+      "id": 368
     }
   ]
 }
