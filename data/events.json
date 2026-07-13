@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-07-13T20:07:38.808Z",
+  "updatedUtc": "2026-07-13T20:08:11.913Z",
   "events": [
     {
       "id": 1,
@@ -1422,6 +1422,15 @@
       "crit": false,
       "details": "",
       "id": 362
+    },
+    {
+      "label": "Intro & MAR-D Graphic Updates (Keegan, Gary, (intro), Alex)",
+      "start": "2026-07-13",
+      "end": "2026-07-14",
+      "cat": "station_area_summary_report",
+      "crit": false,
+      "details": "",
+      "id": 363
     }
   ]
 }
