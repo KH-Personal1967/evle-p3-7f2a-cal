@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-07-13T21:00:15.889Z",
+  "updatedUtc": "2026-07-13T21:02:42.043Z",
   "events": [
     {
       "id": 1,
@@ -1539,6 +1539,15 @@
       "crit": false,
       "details": "",
       "id": 375
+    },
+    {
+      "label": "Station Lead Review: SWI-C, SWI-A, EGN, EVT (Max, Alan, Qjan)",
+      "start": "2026-08-17",
+      "end": "2026-08-19",
+      "cat": "station_area_summary_report",
+      "crit": false,
+      "details": "",
+      "id": 376
     }
   ]
 }
