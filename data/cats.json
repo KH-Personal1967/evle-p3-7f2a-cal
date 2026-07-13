@@ -112,5 +112,11 @@
     "hex": "#84cc16",
     "timelineLane": "Station Workbook",
     "sortOrder": 100
+  },
+  "station_area_summary_report": {
+    "label": "Station Area Summary Report",
+    "hex": "#5a3bf7",
+    "timelineLane": "Station Area Summary Report",
+    "sortOrder": 160
   }
 }
