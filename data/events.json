@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-19T23:43:44.991Z",
+  "updatedUtc": "2026-10-19T23:59:27.903Z",
   "events": [
     {
       "id": 1,
@@ -1782,6 +1782,15 @@
       "crit": false,
       "details": "",
       "id": 402
+    },
+    {
+      "label": "Composite Surface Freeze ",
+      "start": "2027-06-18",
+      "end": "2027-06-18",
+      "cat": "disc_freeze",
+      "crit": false,
+      "details": "",
+      "id": 403
     }
   ]
 }
