@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-19T23:59:27.903Z",
+  "updatedUtc": "2026-10-19T23:59:54.571Z",
   "events": [
     {
       "id": 1,
@@ -462,9 +462,9 @@
     },
     {
       "id": 53,
-      "label": "Demo Wipeout Freeze",
-      "start": "2027-06-21",
-      "end": "2027-06-21",
+      "label": "Demo and Wipeout Freeze",
+      "start": "2027-06-18",
+      "end": "2027-06-18",
       "cat": "disc_freeze",
       "crit": false,
       "details": ""
