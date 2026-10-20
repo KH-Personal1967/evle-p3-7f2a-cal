@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-19T23:59:54.571Z",
+  "updatedUtc": "2026-10-20T00:02:33.760Z",
   "events": [
     {
       "id": 1,
@@ -420,15 +420,6 @@
       "label": "Roadway Freeze",
       "start": "2027-06-07",
       "end": "2027-06-07",
-      "cat": "disc_freeze",
-      "crit": false,
-      "details": ""
-    },
-    {
-      "id": 49,
-      "label": "Demo Freeze",
-      "start": "2027-06-10",
-      "end": "2027-06-10",
       "cat": "disc_freeze",
       "crit": false,
       "details": ""
