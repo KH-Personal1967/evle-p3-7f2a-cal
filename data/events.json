@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-20T00:14:55.886Z",
+  "updatedUtc": "2026-10-20T00:17:13.385Z",
   "events": [
     {
       "id": 1,
@@ -390,7 +390,7 @@
     },
     {
       "id": 45,
-      "label": "Stations Freeze",
+      "label": "Stations Arch/Site/Civil Freeze",
       "start": "2027-05-28",
       "end": "2027-05-28",
       "cat": "disc_freeze",
