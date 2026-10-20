@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-20T00:02:48.430Z",
+  "updatedUtc": "2026-10-20T00:14:55.886Z",
   "events": [
     {
       "id": 1,
@@ -1782,6 +1782,15 @@
       "crit": false,
       "details": "",
       "id": 403
+    },
+    {
+      "label": "Landscape Freeze",
+      "start": "2027-06-10",
+      "end": "2027-06-10",
+      "cat": "disc_freeze",
+      "crit": false,
+      "details": "",
+      "id": 404
     }
   ]
 }
