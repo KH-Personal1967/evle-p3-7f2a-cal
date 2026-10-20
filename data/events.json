@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-20T00:17:13.385Z",
+  "updatedUtc": "2026-10-20T00:34:58.058Z",
   "events": [
     {
       "id": 1,
@@ -893,7 +893,7 @@
       "id": 304
     },
     {
-      "label": "Structures Freeze",
+      "label": "Structures (Aerial Columns) Freeze",
       "start": "2027-06-01",
       "end": "2027-06-01",
       "cat": "disc_freeze",
