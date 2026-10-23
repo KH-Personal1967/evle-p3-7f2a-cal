@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-20T00:40:17.282Z",
+  "updatedUtc": "2026-10-23T17:48:15.631Z",
   "events": [
     {
       "id": 1,
@@ -319,8 +319,8 @@
     {
       "id": 37,
       "label": "IDR Roll Plots Due – Virtual Review",
-      "start": "2027-04-23",
-      "end": "2027-04-23",
+      "start": "2027-04-19",
+      "end": "2027-04-19",
       "cat": "idr",
       "crit": true,
       "details": ""
