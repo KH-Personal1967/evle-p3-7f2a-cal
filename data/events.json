@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-23T17:48:51.234Z",
+  "updatedUtc": "2026-10-23T17:49:05.481Z",
   "events": [
     {
       "id": 1,
@@ -337,8 +337,8 @@
     {
       "id": 39,
       "label": "Review IDR Comments / Travel",
-      "start": "2027-05-03",
-      "end": "2027-05-04",
+      "start": "2027-04-26",
+      "end": "2027-04-30",
       "cat": "idr",
       "crit": false,
       "details": ""
