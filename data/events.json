@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-10-23T17:49:05.481Z",
+  "updatedUtc": "2026-10-23T17:49:32.246Z",
   "events": [
     {
       "id": 1,
@@ -346,8 +346,8 @@
     {
       "id": 40,
       "label": "In-Person IDR Workshop",
-      "start": "2027-05-05",
-      "end": "2027-05-07",
+      "start": "2027-04-28",
+      "end": "2027-04-30",
       "cat": "meeting",
       "crit": true,
       "details": ""
