@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T18:48:28.413Z",
+  "updatedUtc": "2026-11-06T18:48:42.474Z",
   "events": [
     {
       "id": 1,
@@ -1803,7 +1803,7 @@
     },
     {
       "label": "Refine Corridor Grading: Optimization Freeze",
-      "start": "2027-01-26",
+      "start": "2027-02-26",
       "end": "2027-02-26",
       "cat": "freeze",
       "crit": false,
