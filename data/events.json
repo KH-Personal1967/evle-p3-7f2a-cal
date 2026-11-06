@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T19:09:04.708Z",
+  "updatedUtc": "2026-11-06T19:12:31.739Z",
   "events": [
     {
       "id": 1,
@@ -1881,6 +1881,15 @@
       "crit": false,
       "details": "",
       "id": 414
+    },
+    {
+      "label": "Refine Traffic Design: Optimization Freeze",
+      "start": "2027-01-29",
+      "end": "2027-01-29",
+      "cat": "freeze",
+      "crit": false,
+      "details": "",
+      "id": 415
     }
   ]
 }
