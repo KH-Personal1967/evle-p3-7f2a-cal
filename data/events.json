@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T19:01:52.739Z",
+  "updatedUtc": "2026-11-06T19:02:32.275Z",
   "events": [
     {
       "id": 1,
@@ -1845,6 +1845,15 @@
       "crit": false,
       "details": "",
       "id": 410
+    },
+    {
+      "label": "Refine Drainage Design: Optimization Freeze",
+      "start": "2027-04-02",
+      "end": "2027-04-02",
+      "cat": "freeze",
+      "crit": false,
+      "details": "",
+      "id": 411
     }
   ]
 }
