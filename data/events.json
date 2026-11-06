@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T18:48:42.474Z",
+  "updatedUtc": "2026-11-06T18:49:24.531Z",
   "events": [
     {
       "id": 1,
@@ -1802,7 +1802,7 @@
       "id": 405
     },
     {
-      "label": "Refine Corridor Grading: Optimization Freeze",
+      "label": "Systems and Systemwide Electrical Design: Optimization Freeze",
       "start": "2027-02-26",
       "end": "2027-02-26",
       "cat": "freeze",
