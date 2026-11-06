@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T18:50:58.874Z",
+  "updatedUtc": "2026-11-06T18:52:07.442Z",
   "events": [
     {
       "id": 1,
@@ -1827,6 +1827,15 @@
       "crit": false,
       "details": "",
       "id": 408
+    },
+    {
+      "label": "Refine Utilities Design: Optimization Freeze",
+      "start": "2027-04-16",
+      "end": "2027-04-16",
+      "cat": "freeze",
+      "crit": false,
+      "details": "",
+      "id": 409
     }
   ]
 }
