@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T21:16:49.665Z",
+  "updatedUtc": "2026-11-06T21:19:24.336Z",
   "events": [
     {
       "id": 1,
@@ -1926,6 +1926,15 @@
       "crit": false,
       "details": "",
       "id": 419
+    },
+    {
+      "label": "Refine Station Civil Design: Optimization Freeze",
+      "start": "2027-02-26",
+      "end": "2027-02-26",
+      "cat": "freeze",
+      "crit": false,
+      "details": "",
+      "id": 420
     }
   ]
 }
