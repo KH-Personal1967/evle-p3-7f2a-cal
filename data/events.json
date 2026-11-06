@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T19:12:31.739Z",
+  "updatedUtc": "2026-11-06T19:21:23.142Z",
   "events": [
     {
       "id": 1,
@@ -1890,6 +1890,15 @@
       "crit": false,
       "details": "",
       "id": 415
+    },
+    {
+      "label": "Refine Ecosystem Design: Optimization Freeze",
+      "start": "2027-04-02",
+      "end": "2027-04-02",
+      "cat": "freeze",
+      "crit": false,
+      "details": "",
+      "id": 416
     }
   ]
 }
