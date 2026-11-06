@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T20:31:06.548Z",
+  "updatedUtc": "2026-11-06T21:16:49.665Z",
   "events": [
     {
       "id": 1,
@@ -1917,6 +1917,15 @@
       "crit": false,
       "details": "",
       "id": 418
+    },
+    {
+      "label": "Refine Station Structure Design: Optimization Freeze",
+      "start": "2027-02-26",
+      "end": "2027-02-26",
+      "cat": "freeze",
+      "crit": false,
+      "details": "",
+      "id": 419
     }
   ]
 }
