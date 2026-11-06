@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-06T18:50:13.672Z",
+  "updatedUtc": "2026-11-06T18:50:58.874Z",
   "events": [
     {
       "id": 1,
@@ -1818,6 +1818,15 @@
       "crit": false,
       "details": "",
       "id": 407
+    },
+    {
+      "label": "Refine Demo Limits: Optimization Freeze ",
+      "start": "2027-04-02",
+      "end": "2027-04-02",
+      "cat": "freeze",
+      "crit": false,
+      "details": "",
+      "id": 408
     }
   ]
 }
