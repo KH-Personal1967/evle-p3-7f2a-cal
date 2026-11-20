@@ -1,5 +1,5 @@
 {
-  "updatedUtc": "2026-11-20T19:08:52.853Z",
+  "updatedUtc": "2026-11-20T19:09:31.651Z",
   "events": [
     {
       "id": 1,
@@ -1953,6 +1953,15 @@
       "crit": false,
       "details": "",
       "id": 422
+    },
+    {
+      "label": "Roll plot updates due EOD",
+      "start": "2026-12-17",
+      "end": "2026-12-17",
+      "cat": "rollplot",
+      "crit": false,
+      "details": "",
+      "id": 423
     }
   ]
 }
